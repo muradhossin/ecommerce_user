@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'address_model.dart';
 const String collectionUser='User';
-
 const String userFieldId='userId';
 const String userFieldDisplayName='displayName';
 const String userFieldAddressModel='addressModel';
@@ -11,10 +10,11 @@ const String userFieldGender='gender';
 const String userFieldAge='age';
 const String userFieldPhone='phone';
 const String userFieldEmail='email';
+const String userFieldImageUrl='imageUrl';
 
 
 class UserModel{
-  String? userId;
+  String userId;
   String? displayName;
   AddressModel? addressModel;
   Timestamp? userCreationTime;
@@ -22,15 +22,17 @@ class UserModel{
   String? age;
   String? phone;
   String email;
+  String? imageUrl;
 
   UserModel({
-    this.userId,
+    required this.userId,
     this.displayName,
     this.addressModel,
     this.userCreationTime,
     this.gender,
     this.age,
     this.phone,
+    this.imageUrl,
     required this.email
   });
 
@@ -44,6 +46,7 @@ class UserModel{
       userFieldAge:age,
       userFieldPhone:phone,
       userFieldEmail:email,
+      userFieldImageUrl:imageUrl,
     };
   }
   factory UserModel.fromMap(Map<String,dynamic>map)=>UserModel(
@@ -55,5 +58,6 @@ class UserModel{
     age: map[userFieldAge],
     phone: map[userFieldPhone],
     email: map[userFieldEmail],
+    imageUrl: map[userFieldImageUrl],
   );
 }
