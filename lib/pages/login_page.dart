@@ -113,7 +113,9 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             TextButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                _signInWithGoogleAccount();
+              },
               icon: const Icon(
                 Icons.g_mobiledata,
                 size: 35,
@@ -140,10 +142,9 @@ class _LoginPageState extends State<LoginPage> {
         if (tag) {
           await AuthService.login(email, password);
           EasyLoading.dismiss();
-          if(mounted){
+          if (mounted) {
             Navigator.pushReplacementNamed(context, LauncherPage.routeName);
           }
-
         } else {
           await AuthService.register(email, password);
         }
@@ -152,14 +153,15 @@ class _LoginPageState extends State<LoginPage> {
           final userModel = UserModel(
             userId: AuthService.currentUser!.uid,
             email: AuthService.currentUser!.email!,
-            userCreationTime: Timestamp.fromDate(AuthService.currentUser!.metadata.creationTime!),
+            userCreationTime: Timestamp.fromDate(
+                AuthService.currentUser!.metadata.creationTime!),
           );
           userProvider.addUser(userModel).then((value) {
             EasyLoading.dismiss();
-            if(mounted){
+            if (mounted) {
               Navigator.pushReplacementNamed(context, LauncherPage.routeName);
             }
-          }).catchError((error){
+          }).catchError((error) {
             EasyLoading.dismiss();
             showMsg(context, "Could not save user info");
           });
@@ -170,6 +172,32 @@ class _LoginPageState extends State<LoginPage> {
           _errMsg = error.message!;
         });
       }
+    }
+  }
+
+  void _signInWithGoogleAccount() async {
+    try {
+      final credential = await AuthService.signInWithGoogle();
+      final userExists = await userProvider.doesUserExist(credential.user!.uid);
+      if (!userExists) {
+        EasyLoading.show(status: "Redirecting user...");
+        final userModel = UserModel(
+          userId: credential.user!.uid,
+          email: credential.user!.email!,
+          userCreationTime: Timestamp.fromDate(DateTime.now()),
+          displayName: credential.user!.displayName,
+          imageUrl: credential.user!.photoURL,
+          phone: credential.user!.phoneNumber,
+        );
+        await userProvider.addUser(userModel);
+        EasyLoading.dismiss();
+      }
+      if(mounted){
+        Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+      }
+    } catch (error) {
+      EasyLoading.dismiss();
+      rethrow;
     }
   }
 }

@@ -47,6 +47,7 @@ dependencies:
   connectivity_plus:
   cloud_firestore: ^4.0.5
   pin_code_fields:
+  google_sign_in:
 
 dev_dependencies:
   flutter_test:
