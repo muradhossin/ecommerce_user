@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_user/auth/auth_service.dart';
+import 'package:ecommerce_user/customwidgets/main_drawer.dart';
 import 'package:ecommerce_user/pages/launcher_page.dart';
 import 'package:ecommerce_user/pages/product_details_page.dart';
 import 'package:flutter/material.dart';
@@ -34,22 +35,9 @@ class _ViewProductPageState extends State<ViewProductPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const MainDrawer(),
       appBar: AppBar(
         title: const Text('All Product'),
-        actions: [
-          IconButton(
-            onPressed: () async{
-              EasyLoading.show(status: "Signing out...");
-              await AuthService.logout();
-              if(mounted){
-                EasyLoading.dismiss();
-                Navigator.pushReplacementNamed(context, LauncherPage.routeName);
-              }
-
-            },
-            icon: const Icon(Icons.logout),
-          ),
-        ],
       ),
       body: Consumer<ProductProvider>(
         builder: (context, provider, child) => Column(
