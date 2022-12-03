@@ -1,5 +1,6 @@
 import 'package:ecommerce_user/auth/auth_service.dart';
 import 'package:ecommerce_user/pages/launcher_page.dart';
+import 'package:ecommerce_user/pages/user_profile_page.dart';
 import 'package:flutter/material.dart';
 
 class MainDrawer extends StatelessWidget {
@@ -15,7 +16,10 @@ class MainDrawer extends StatelessWidget {
             color: Theme.of(context).primaryColor,
           ),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, UserProfilePage.routeName);
+            },
             leading: const Icon(Icons.person),
             title: const Text('My Profile'),
           ),

@@ -43,6 +43,8 @@ class DbHelper {
     wb.update(catDoc, {categoryFieldProductCount: updatedCount});
     return wb.commit();
   }
+  static Stream<DocumentSnapshot<Map<String, dynamic>>> getUserInfo(String uid) =>
+      _db.collection(collectionUser).doc(uid).snapshots();
 
   static Stream<DocumentSnapshot<Map<String, dynamic>>> getOrderConstants() =>
       _db.collection(collectionUtils).doc(documentOrderConstants).snapshots();
