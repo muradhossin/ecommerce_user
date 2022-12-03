@@ -123,7 +123,12 @@ class _LoginPageState extends State<LoginPage> {
               label: const Text("Sing in with Google"),
             ),
             TextButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                AuthService.signInAnonymously().then(
+                  (value) => Navigator.pushReplacementNamed(
+                      context, LauncherPage.routeName),
+                );
+              },
               icon: const Icon(Icons.account_circle_outlined),
               label: const Text("Login as Guest"),
             ),
@@ -192,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
         await userProvider.addUser(userModel);
         EasyLoading.dismiss();
       }
-      if(mounted){
+      if (mounted) {
         Navigator.pushReplacementNamed(context, LauncherPage.routeName);
       }
     } catch (error) {

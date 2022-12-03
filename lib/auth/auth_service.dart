@@ -39,6 +39,9 @@ class AuthService {
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
+  static Future<UserCredential> signInAnonymously() =>
+    _auth.signInAnonymously();
+
   static Future<void> logout() {
     return _auth.signOut();
   }
