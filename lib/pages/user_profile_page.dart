@@ -1,5 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecommerce_user/models/address_model.dart';
+import 'package:ecommerce_user/models/user_model.dart';
 import 'package:ecommerce_user/providers/user_provider.dart';
+import 'package:ecommerce_user/utils/widget_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,9 +29,7 @@ class UserProfilePage extends StatelessWidget {
                   leading: const Icon(Icons.call),
                   title: Text(userProvider.userModel!.phone ?? 'Not set yet'),
                   trailing: IconButton(
-                    onPressed: (){
-
-                    },
+                    onPressed: () {},
                     icon: const Icon(Icons.edit),
                   ),
                 ),
@@ -37,9 +38,7 @@ class UserProfilePage extends StatelessWidget {
                   title: Text(userProvider.userModel!.age ?? 'Not set yet'),
                   subtitle: const Text('Date of Birth'),
                   trailing: IconButton(
-                    onPressed: (){
-
-                    },
+                    onPressed: () {},
                     icon: const Icon(Icons.edit),
                   ),
                 ),
@@ -48,52 +47,72 @@ class UserProfilePage extends StatelessWidget {
                   title: Text(userProvider.userModel!.gender ?? 'Not set yet'),
                   subtitle: const Text('Gender'),
                   trailing: IconButton(
-                    onPressed: (){
-
-                    },
+                    onPressed: () {},
                     icon: const Icon(Icons.edit),
                   ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.location_on),
-                  title: Text(userProvider.userModel!.addressModel?.addressLine1 ?? 'Not set yet'),
+                  title: Text(
+                      userProvider.userModel!.addressModel?.addressLine1 ??
+                          'Not set yet'),
                   subtitle: const Text('Address Line 1'),
                   trailing: IconButton(
-                    onPressed: (){
-
+                    onPressed: () {
+                      showSingleTextFieldInputDialog(
+                        context: context,
+                        title: 'Set Address Line 1',
+                        onSubmit: (value){
+                          userProvider.updateUserProfileField('$userFieldAddressModel.$addressFieldAddressLine1', value);
+                        },
+                      );
                     },
                     icon: const Icon(Icons.edit),
                   ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.location_on),
-                  title: Text(userProvider.userModel!.addressModel?.addressLine2 ?? 'Not set yet'),
+                  title: Text(
+                      userProvider.userModel!.addressModel?.addressLine2 ??
+                          'Not set yet'),
                   subtitle: const Text('Address Line 2'),
                   trailing: IconButton(
-                    onPressed: (){
-
+                    onPressed: () {
+                      showSingleTextFieldInputDialog(
+                        context: context,
+                        title: 'Set Address Line 2',
+                        onSubmit: (value){
+                          userProvider.updateUserProfileField('$userFieldAddressModel.$addressFieldAddressLine2', value);
+                        },
+                      );
                     },
                     icon: const Icon(Icons.edit),
                   ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.location_city),
-                  title: Text(userProvider.userModel!.addressModel?.city ?? 'Not set yet'),
+                  title: Text(userProvider.userModel!.addressModel?.city ??
+                      'Not set yet'),
                   subtitle: const Text('City'),
                   trailing: IconButton(
-                    onPressed: (){
-
-                    },
+                    onPressed: () {},
                     icon: const Icon(Icons.edit),
                   ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.location_city),
-                  title: Text(userProvider.userModel!.addressModel?.zipcode ?? 'Not set yet'),
+                  title: Text(userProvider.userModel!.addressModel?.zipcode ??
+                      'Not set yet'),
                   subtitle: const Text('Zip Code'),
                   trailing: IconButton(
-                    onPressed: (){
-
+                    onPressed: () {
+                      showSingleTextFieldInputDialog(
+                        context: context,
+                        title: 'Set Zip Code',
+                        onSubmit: (value){
+                          userProvider.updateUserProfileField('$userFieldAddressModel.$addressFieldZipcode', value);
+                        },
+                      );
                     },
                     icon: const Icon(Icons.edit),
                   ),

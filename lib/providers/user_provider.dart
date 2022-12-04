@@ -19,4 +19,8 @@ class UserProvider extends ChangeNotifier {
       }
     });
   }
+
+  Future<void> updateUserProfileField(String field, dynamic value){
+    return DbHelper.updateUserProfileField(AuthService.currentUser!.uid, {field : value});
+  }
 }

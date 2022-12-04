@@ -63,8 +63,8 @@ class DbHelper {
           .where('$productFieldCategory.$categoryFieldName', isEqualTo: categoryName)
           .snapshots();
 
-  static Future<void> updateProductField(String productId, Map<String, dynamic>map){
-    return _db.collection(collectionProduct).doc(productId).update(map);
+  static Future<void> updateUserProfileField(String uid, Map<String, dynamic>map){
+    return _db.collection(collectionUser).doc(uid).update(map);
   }
 
 

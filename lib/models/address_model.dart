@@ -5,16 +5,16 @@ const String addressFieldCity='city';
 const String addressFieldZipcode='zipcode';
 
 class AddressModel{
-  String addressLine1;
+  String? addressLine1;
   String? addressLine2;
-  String city;
-  String zipcode;
+  String? city;
+  String? zipcode;
 
   AddressModel({
-    required this.addressLine1,
+    this.addressLine1,
     this.addressLine2,
-    required this.city,
-    required this.zipcode
+    this.city,
+    this.zipcode
   });
 
   Map<String,dynamic>toMap(){

@@ -81,9 +81,6 @@ class ProductProvider extends ChangeNotifier {
     return FirebaseStorage.instance.refFromURL(url).delete();
   }
 
-  Future<void> updateProductField(String productId, String field, dynamic value){
-    return DbHelper.updateProductField(productId, {field : value});
-  }
 
   Future<void>addNewProduct(ProductModel productModel, PurchaseModel purchaseModel) {
     return DbHelper.addNewProduct(productModel, purchaseModel);
