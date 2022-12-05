@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_user/models/product_model.dart';
+import 'package:ecommerce_user/pages/product_details_page.dart';
 import 'package:ecommerce_user/utils/constants.dart';
 import 'package:ecommerce_user/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,9 @@ class ProductGridItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, ProductDetailsPage.routeName, arguments: productModel);
+      },
       child: Card(
         child: Stack(
           children: [

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../models/product_model.dart';
@@ -19,12 +20,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   late ProductModel productModel;
   late ProductProvider productProvider;
   late Size size;
+  String photoUrl = '';
 
   @override
   void didChangeDependencies() {
     size = MediaQuery.of(context).size;
     productProvider = Provider.of<ProductProvider>(context, listen: false);
     productModel = ModalRoute.of(context)!.settings.arguments as ProductModel;
+    photoUrl = productModel.thumbnailImageModel.imageDownloadUrl;
     super.didChangeDependencies();
   }
 
@@ -40,10 +43,71 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             width: double.infinity,
             height: 200,
             fit: BoxFit.cover,
-            imageUrl: productModel.thumbnailImageModel.imageDownloadUrl,
+            imageUrl: photoUrl,
             placeholder: (context, url) =>
-                Center(child: CircularProgressIndicator()),
+                const Center(child: CircularProgressIndicator()),
             errorWidget: (context, url, error) => Icon(Icons.error),
+          ),
+          Row(children: [
+            InkWell(
+              onTap: () {
+                setState(() {
+                  photoUrl = productModel.thumbnailImageModel.imageDownloadUrl;
+                });
+              },
+              child: Card(
+                child: CachedNetworkImage(
+                  width: 70,
+                  height: 100,
+                  fit: BoxFit.cover,
+                  imageUrl: productModel.thumbnailImageModel.imageDownloadUrl,
+                  placeholder: (context, url) =>
+                      const Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
+              ),
+            ),
+            ...productModel.additionalImageModels.map((url) {
+              return url.isEmpty
+                  ? const SizedBox()
+                  : InkWell(
+                      onTap: () {
+                        setState(() {
+                          photoUrl = url;
+                        });
+                      },
+                      child: Card(
+                        child: CachedNetworkImage(
+                          width: 70,
+                          height: 100,
+                          fit: BoxFit.cover,
+                          imageUrl: url,
+                          placeholder: (context, url) =>
+                              const Center(child: CircularProgressIndicator()),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
+                        ),
+                      ),
+                    );
+            }).toList(),
+          ]),
+          Row(
+            children: [
+              Expanded(
+                child: TextButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.favorite),
+                  label: const Text('Add to Favorite'),
+                ),
+              ),
+              Expanded(
+                child: TextButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.shopping_cart),
+                  label: const Text('Add to Cart'),
+                ),
+              ),
+            ],
           ),
           ListTile(
             title: Text(productModel.productName),
@@ -54,6 +118,42 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             subtitle: Text('Discount: ${productModel.productDiscount}%'),
             trailing: Text(
                 '$currencySymbol${productProvider.priceAfterDiscount(productModel.salePrice, productModel.productDiscount)}'),
+          ),
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('Rate this product'),
+                  Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: RatingBar.builder(
+                      initialRating: 3,
+                      minRating: 0.0,
+                      direction: Axis.horizontal,
+                      allowHalfRating: true,
+                      itemCount: 5,
+                      ignoreGestures: false,
+                      itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      onRatingUpdate: (rating) {
+                        print(rating);
+                      },
+                    ),
+                  ),
+                  OutlinedButton(
+                    onPressed: (){
+                      
+                    },
+                    child: const Text('SUBMIT'),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
