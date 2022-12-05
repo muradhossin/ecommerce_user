@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_user/models/address_model.dart';
 import 'package:ecommerce_user/models/user_model.dart';
+import 'package:ecommerce_user/pages/otp_verification_page.dart';
 import 'package:ecommerce_user/providers/user_provider.dart';
 import 'package:ecommerce_user/utils/widget_functions.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,15 @@ class UserProfilePage extends StatelessWidget {
                   leading: const Icon(Icons.call),
                   title: Text(userProvider.userModel!.phone ?? 'Not set yet'),
                   trailing: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showSingleTextFieldInputDialog(
+                        context: context,
+                        title: 'Mobile Number',
+                        onSubmit: (value){
+                          Navigator.pushNamed(context, OtpVerificationPage.routeName, arguments: value);
+                        }
+                      );
+                    },
                     icon: const Icon(Icons.edit),
                   ),
                 ),
@@ -62,8 +71,10 @@ class UserProfilePage extends StatelessWidget {
                       showSingleTextFieldInputDialog(
                         context: context,
                         title: 'Set Address Line 1',
-                        onSubmit: (value){
-                          userProvider.updateUserProfileField('$userFieldAddressModel.$addressFieldAddressLine1', value);
+                        onSubmit: (value) {
+                          userProvider.updateUserProfileField(
+                              '$userFieldAddressModel.$addressFieldAddressLine1',
+                              value);
                         },
                       );
                     },
@@ -81,8 +92,10 @@ class UserProfilePage extends StatelessWidget {
                       showSingleTextFieldInputDialog(
                         context: context,
                         title: 'Set Address Line 2',
-                        onSubmit: (value){
-                          userProvider.updateUserProfileField('$userFieldAddressModel.$addressFieldAddressLine2', value);
+                        onSubmit: (value) {
+                          userProvider.updateUserProfileField(
+                              '$userFieldAddressModel.$addressFieldAddressLine2',
+                              value);
                         },
                       );
                     },
@@ -109,8 +122,10 @@ class UserProfilePage extends StatelessWidget {
                       showSingleTextFieldInputDialog(
                         context: context,
                         title: 'Set Zip Code',
-                        onSubmit: (value){
-                          userProvider.updateUserProfileField('$userFieldAddressModel.$addressFieldZipcode', value);
+                        onSubmit: (value) {
+                          userProvider.updateUserProfileField(
+                              '$userFieldAddressModel.$addressFieldZipcode',
+                              value);
                         },
                       );
                     },
