@@ -1,5 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecommerce_user/providers/user_provider.dart';
+import 'package:ecommerce_user/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
@@ -19,13 +22,16 @@ class ProductDetailsPage extends StatefulWidget {
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   late ProductModel productModel;
   late ProductProvider productProvider;
+  late UserProvider userProvider;
   late Size size;
   String photoUrl = '';
+  double userRating = 0.0;
 
   @override
   void didChangeDependencies() {
     size = MediaQuery.of(context).size;
     productProvider = Provider.of<ProductProvider>(context, listen: false);
+    userProvider = Provider.of<UserProvider>(context, listen: false);
     productModel = ModalRoute.of(context)!.settings.arguments as ProductModel;
     photoUrl = productModel.thumbnailImageModel.imageDownloadUrl;
     super.didChangeDependencies();
@@ -135,19 +141,28 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       allowHalfRating: true,
                       itemCount: 5,
                       ignoreGestures: false,
-                      itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 0.0),
                       itemBuilder: (context, _) => const Icon(
                         Icons.star,
                         color: Colors.amber,
                       ),
                       onRatingUpdate: (rating) {
-                        print(rating);
+                        userRating = rating;
                       },
                     ),
                   ),
                   OutlinedButton(
-                    onPressed: (){
-                      
+                    onPressed: () async {
+                      EasyLoading.show(status: 'Please wait');
+                      await productProvider.addRating(
+                        productModel.productId!,
+                        userRating,
+                        userProvider.userModel!,
+                      );
+
+                      EasyLoading.dismiss();
+                      if(mounted) showMsg(context, 'Thanks for your rating');
+
                     },
                     child: const Text('SUBMIT'),
                   ),

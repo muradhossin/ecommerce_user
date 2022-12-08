@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:ecommerce_user/auth/auth_service.dart';
+import 'package:ecommerce_user/models/rating_model.dart';
+import 'package:ecommerce_user/models/user_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
@@ -25,14 +28,14 @@ class ProductProvider extends ChangeNotifier {
   getAllCategories() {
     DbHelper.getAllCategories().listen((snapshot) {
       categoryList = List.generate(snapshot.docs.length,
-              (index) => CategoryModel.fromMap(snapshot.docs[index].data()));
+          (index) => CategoryModel.fromMap(snapshot.docs[index].data()));
       categoryList.sort((model1, model2) =>
           model1.categoryName.compareTo(model2.categoryName));
       notifyListeners();
     });
   }
 
-  List<CategoryModel> getCategoriesForFiltering(){
+  List<CategoryModel> getCategoriesForFiltering() {
     return <CategoryModel>[
       CategoryModel(categoryName: "All"),
       ...categoryList,
@@ -42,7 +45,7 @@ class ProductProvider extends ChangeNotifier {
   getAllProducts() {
     DbHelper.getAllProducts().listen((snapshot) {
       productList = List.generate(snapshot.docs.length,
-              (index) => ProductModel.fromMap(snapshot.docs[index].data()));
+          (index) => ProductModel.fromMap(snapshot.docs[index].data()));
       notifyListeners();
     });
   }
@@ -50,7 +53,7 @@ class ProductProvider extends ChangeNotifier {
   getAllPurchases() {
     DbHelper.getAllPurchases().listen((snapshot) {
       purchaseList = List.generate(snapshot.docs.length,
-              (index) => PurchaseModel.fromMap(snapshot.docs[index].data()));
+          (index) => PurchaseModel.fromMap(snapshot.docs[index].data()));
       notifyListeners();
     });
   }
@@ -58,7 +61,7 @@ class ProductProvider extends ChangeNotifier {
   getAllProductsByCategory(String categoryName) {
     DbHelper.getAllProductsByCategory(categoryName).listen((snapshot) {
       productList = List.generate(snapshot.docs.length,
-              (index) => ProductModel.fromMap(snapshot.docs[index].data()));
+          (index) => ProductModel.fromMap(snapshot.docs[index].data()));
       notifyListeners();
     });
   }
@@ -77,24 +80,50 @@ class ProductProvider extends ChangeNotifier {
     );
   }
 
-  Future<void> deleteImage(String url){
+  Future<void> deleteImage(String url) {
     return FirebaseStorage.instance.refFromURL(url).delete();
   }
 
-
-  Future<void>addNewProduct(ProductModel productModel, PurchaseModel purchaseModel) {
+  Future<void> addNewProduct(
+      ProductModel productModel, PurchaseModel purchaseModel) {
     return DbHelper.addNewProduct(productModel, purchaseModel);
   }
 
-  List<PurchaseModel> getPurchaseByProductId(String productId) {
-    return purchaseList.where((element) => element.productId == productId).toList();
+  Future<void> addRating(String productId, double rating, UserModel userModel) async{
+    final ratingModel = RatingModel(
+      ratingId: AuthService.currentUser!.uid,
+      userModel: userModel,
+      productId: productId,
+      rating: rating,
+    );
+    await DbHelper.addRating(ratingModel);
+    final snapshot = await DbHelper.getRatingsByProduct(productId);
+    final ratingModelList = List.generate(snapshot.docs.length,
+            (index) => RatingModel.fromMap(snapshot.docs[index].data()));
+    double totalRating = 0.0;
+    for(var model in ratingModelList){
+      totalRating += model.rating;
+    }
+    final avgRating = totalRating / ratingModelList.length;
+    return updateProductField(ratingModel.productId, productFieldAvgRating, avgRating);
   }
 
-  Future<void> repurchase(PurchaseModel purchaseModel, ProductModel productModel) {
+  Future<void> updateProductField(String productId, String field, dynamic value){
+    return DbHelper.updateProductField(productId, {field : value});
+  }
+
+  List<PurchaseModel> getPurchaseByProductId(String productId) {
+    return purchaseList
+        .where((element) => element.productId == productId)
+        .toList();
+  }
+
+  Future<void> repurchase(
+      PurchaseModel purchaseModel, ProductModel productModel) {
     return DbHelper.repurchase(purchaseModel, productModel);
   }
 
-  double priceAfterDiscount(num price, num discount){
+  double priceAfterDiscount(num price, num discount) {
     final discountAmount = (price * discount) / 100;
     return price - discountAmount;
   }

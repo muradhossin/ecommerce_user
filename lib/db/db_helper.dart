@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_user/models/rating_model.dart';
 import 'package:ecommerce_user/models/user_model.dart';
 
 import '../models/category_model.dart';
@@ -19,6 +20,11 @@ class DbHelper {
   static Future<void> addUser(UserModel userModel) {
     final doc = _db.collection(collectionUser).doc(userModel.userId!);
     return doc.set(userModel.toMap());
+  }
+
+  static Future<void> addRating(RatingModel ratingModel){
+    final ratingDoc = _db.collection(collectionProduct).doc(ratingModel.productId).collection(collectionRating).doc(ratingModel.userModel.userId);
+    return ratingDoc.set(ratingModel.toMap());
   }
 
 
@@ -51,6 +57,9 @@ class DbHelper {
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllCategories() =>
       _db.collection(collectionCategory).snapshots();
+
+  static Future<QuerySnapshot<Map<String, dynamic>>> getRatingsByProduct(String productId) =>
+      _db.collection(collectionProduct).doc(productId).collection(collectionRating).get();
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProducts() =>
       _db.collection(collectionProduct).snapshots();
@@ -91,10 +100,9 @@ class DbHelper {
     return _db.collection(collectionUtils).doc(documentOrderConstants).update(model.toMAp());
   }
 
+  static Future<void> updateProductField(String productId, Map<String, dynamic> map) {
+    return _db.collection(collectionProduct).doc(productId).update(map);
+  }
 
-
-
-
-
-
+  
 }
