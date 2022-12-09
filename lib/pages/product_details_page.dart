@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecommerce_user/auth/auth_service.dart';
+import 'package:ecommerce_user/pages/login_page.dart';
 import 'package:ecommerce_user/providers/user_provider.dart';
 import 'package:ecommerce_user/utils/helper_functions.dart';
+import 'package:ecommerce_user/utils/widget_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -153,16 +156,27 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   ),
                   OutlinedButton(
                     onPressed: () async {
-                      EasyLoading.show(status: 'Please wait');
-                      await productProvider.addRating(
-                        productModel.productId!,
-                        userRating,
-                        userProvider.userModel!,
-                      );
+                      if (AuthService.currentUser!.isAnonymous) {
+                        showCustomDialog(
+                          context: context,
+                          title: 'Unregistered User',
+                          positiveButtonText: 'Login',
+                          content: 'To rate this product, you need to login with your email and password or Google account. To login with your account, go to Login Page',
+                          onPressed: (){
+                            Navigator.pushNamed(context, LoginPage.routeName);
+                          },
+                        );
+                      } else {
+                        EasyLoading.show(status: 'Please wait');
+                        await productProvider.addRating(
+                          productModel.productId!,
+                          userRating,
+                          userProvider.userModel!,
+                        );
 
-                      EasyLoading.dismiss();
-                      if(mounted) showMsg(context, 'Thanks for your rating');
-
+                        EasyLoading.dismiss();
+                        if (mounted) showMsg(context, 'Thanks for your rating');
+                      }
                     },
                     child: const Text('SUBMIT'),
                   ),

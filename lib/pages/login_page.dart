@@ -24,6 +24,15 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   late UserProvider userProvider;
+  bool isAnonymous = false;
+
+  @override
+  void initState() {
+    isAnonymous = AuthService.currentUser == null
+        ? false
+        : AuthService.currentUser!.isAnonymous;
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() {
@@ -151,7 +160,13 @@ class _LoginPageState extends State<LoginPage> {
             Navigator.pushReplacementNamed(context, LauncherPage.routeName);
           }
         } else {
-          await AuthService.register(email, password);
+          if (AuthService.currentUser != null) {
+            final credential =
+                EmailAuthProvider.credential(email: email, password: password);
+            await convertAnonymousUserIntoRealAccount(credential);
+          } else {
+            await AuthService.register(email, password);
+          }
         }
 
         if (!tag) {
@@ -164,7 +179,11 @@ class _LoginPageState extends State<LoginPage> {
           userProvider.addUser(userModel).then((value) {
             EasyLoading.dismiss();
             if (mounted) {
-              Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+              if (isAnonymous) {
+                Navigator.pop(context);
+              } else {
+                Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+              }
             }
           }).catchError((error) {
             EasyLoading.dismiss();
@@ -182,8 +201,14 @@ class _LoginPageState extends State<LoginPage> {
 
   void _signInWithGoogleAccount() async {
     try {
+      EasyLoading.show(status: "Please wait");
       final credential = await AuthService.signInWithGoogle();
       final userExists = await userProvider.doesUserExist(credential.user!.uid);
+      if (AuthService.currentUser != null) {
+        final credential1 = GoogleAuthProvider.credential(idToken: credential.credential!.token.toString());
+        await convertAnonymousUserIntoRealAccount(credential1);
+      }
+
       if (!userExists) {
         EasyLoading.show(status: "Redirecting user...");
         final userModel = UserModel(
@@ -198,11 +223,41 @@ class _LoginPageState extends State<LoginPage> {
         EasyLoading.dismiss();
       }
       if (mounted) {
-        Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+        if (isAnonymous) {
+          EasyLoading.dismiss();
+          Navigator.pop(context);
+        } else {
+          EasyLoading.dismiss();
+          Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+        }
       }
     } catch (error) {
       EasyLoading.dismiss();
       rethrow;
+    }
+  }
+
+  Future<void> convertAnonymousUserIntoRealAccount(
+      AuthCredential credential) async {
+    try {
+      final userCredential = await FirebaseAuth.instance.currentUser
+          ?.linkWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "provider-already-linked":
+          print("The provider has already been linked to the user.");
+          break;
+        case "invalid-credential":
+          print("The provider's credential is not valid.");
+          break;
+        case "credential-already-in-use":
+          print("The account corresponding to the credential already exists, "
+              "or is already linked to a Firebase User.");
+          break;
+        // See the API reference for the full list of error codes.
+        default:
+          print("Unknown error.");
+      }
     }
   }
 }

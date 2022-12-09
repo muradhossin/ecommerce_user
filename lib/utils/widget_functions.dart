@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 void showSingleTextFieldInputDialog({
@@ -12,32 +11,63 @@ void showSingleTextFieldInputDialog({
   showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Padding(
-          padding: const EdgeInsets.all(8),
-          child: TextField(
-            controller: txtController,
-            decoration: InputDecoration(
-              border: const OutlineInputBorder(),
-              hintText: "Enter $title",
+            title: Text(title),
+            content: Padding(
+              padding: const EdgeInsets.all(8),
+              child: TextField(
+                controller: txtController,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  hintText: "Enter $title",
+                ),
+              ),
             ),
-          ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(negativeButton),
+              ),
+              TextButton(
+                onPressed: () {
+                  if (txtController.text.isEmpty) return;
+                  Navigator.pop(context);
+                  onSubmit(txtController.text);
+                },
+                child: Text(positiveButton),
+              ),
+            ],
+          ));
+}
+
+showCustomDialog({
+  required BuildContext context,
+  required String title,
+  required String content,
+  String positiveButtonText = 'OK',
+  required VoidCallback onPressed,
+}) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(title),
+      content: Text(content),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('CLOSE'),
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text(negativeButton),
-          ),
-          TextButton(
-            onPressed: (){
-              if(txtController.text.isEmpty) return;
-              Navigator.pop(context);
-              onSubmit(txtController.text);
-            },
-            child: Text(positiveButton),
-          ),
-        ],
-      ));
+        TextButton(
+          onPressed: (){
+            Navigator.pop(context);
+            onPressed();
+          },
+          child: Text(positiveButtonText),
+        ),
+      ],
+    ),
+  );
 }
