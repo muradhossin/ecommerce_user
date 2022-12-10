@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:ecommerce_user/auth/auth_service.dart';
+import 'package:ecommerce_user/models/comment_model.dart';
 import 'package:ecommerce_user/models/rating_model.dart';
 import 'package:ecommerce_user/models/user_model.dart';
+import 'package:ecommerce_user/utils/helper_functions.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
@@ -66,6 +68,12 @@ class ProductProvider extends ChangeNotifier {
     });
   }
 
+  Future<List<CommentModel>> getCommentsByProduct(String productId) async{
+    final snapshot = await DbHelper.getCommentsByProduct(productId);
+    final commentList = List.generate(snapshot.docs.length, (index) => CommentModel.fromMap(snapshot.docs[index].data()));
+    return commentList;
+  }
+
   Future<ImageModel> uploadImage(String path) async {
     final imageName = 'pro_${DateTime.now().millisecondsSinceEpoch}';
     final imageRef = FirebaseStorage.instance
@@ -89,7 +97,8 @@ class ProductProvider extends ChangeNotifier {
     return DbHelper.addNewProduct(productModel, purchaseModel);
   }
 
-  Future<void> addRating(String productId, double rating, UserModel userModel) async{
+  Future<void> addRating(
+      String productId, double rating, UserModel userModel) async {
     final ratingModel = RatingModel(
       ratingId: AuthService.currentUser!.uid,
       userModel: userModel,
@@ -99,17 +108,19 @@ class ProductProvider extends ChangeNotifier {
     await DbHelper.addRating(ratingModel);
     final snapshot = await DbHelper.getRatingsByProduct(productId);
     final ratingModelList = List.generate(snapshot.docs.length,
-            (index) => RatingModel.fromMap(snapshot.docs[index].data()));
+        (index) => RatingModel.fromMap(snapshot.docs[index].data()));
     double totalRating = 0.0;
-    for(var model in ratingModelList){
+    for (var model in ratingModelList) {
       totalRating += model.rating;
     }
     final avgRating = totalRating / ratingModelList.length;
-    return updateProductField(ratingModel.productId, productFieldAvgRating, avgRating);
+    return updateProductField(
+        ratingModel.productId, productFieldAvgRating, avgRating);
   }
 
-  Future<void> updateProductField(String productId, String field, dynamic value){
-    return DbHelper.updateProductField(productId, {field : value});
+  Future<void> updateProductField(
+      String productId, String field, dynamic value) {
+    return DbHelper.updateProductField(productId, {field: value});
   }
 
   List<PurchaseModel> getPurchaseByProductId(String productId) {
@@ -126,5 +137,15 @@ class ProductProvider extends ChangeNotifier {
   double priceAfterDiscount(num price, num discount) {
     final discountAmount = (price * discount) / 100;
     return price - discountAmount;
+  }
+
+  Future<void> addComment(String productId, String comment, UserModel userModel) {
+    final commentModel = CommentModel(
+      userModel: userModel,
+      productId: productId,
+      comment: comment,
+      date: getFormattedDate(DateTime.now(), pattern: 'dd/MM/yyyy hh:mm:ss a'),
+    );
+    return DbHelper.addComment(commentModel);
   }
 }

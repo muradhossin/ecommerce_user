@@ -7,20 +7,24 @@ const String commentFieldUserModel = 'userModel';
 const String commentFieldProductId = 'productId';
 const String commentFieldComment = 'comment';
 const String commentFieldApproved = 'approved';
+const String commentFieldDate = 'date';
 
 class CommentModel {
-  String commentId;
+  String? commentId;
   UserModel userModel;
   String productId;
   String comment;
   bool approved;
+  String date;
 
   CommentModel({
-    required this.commentId,
+    this.commentId,
     required this.userModel,
     required this.productId,
     required this.comment,
+    required this.date,
     this.approved = false,
+
   });
 
   Map<String, dynamic> toMap() {
@@ -28,6 +32,8 @@ class CommentModel {
       commentFieldId: commentId,
       commentFieldUserModel: userModel.toMap(),
       commentFieldProductId: productId,
+      commentFieldDate : date,
+      commentFieldApproved : approved,
       commentFieldComment: comment,
     };
   }
@@ -36,6 +42,8 @@ class CommentModel {
         commentId: map[commentFieldId],
         userModel: UserModel.fromMap(map[commentFieldUserModel]),
         productId: map[commentFieldProductId],
+        date: map[commentFieldDate],
+        approved: map[commentFieldApproved],
         comment: map[commentFieldComment],
       );
 }
