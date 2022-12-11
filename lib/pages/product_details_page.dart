@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_user/auth/auth_service.dart';
 import 'package:ecommerce_user/models/comment_model.dart';
 import 'package:ecommerce_user/pages/login_page.dart';
+import 'package:ecommerce_user/providers/cart_provider.dart';
 import 'package:ecommerce_user/providers/user_provider.dart';
 import 'package:ecommerce_user/utils/helper_functions.dart';
 import 'package:ecommerce_user/utils/widget_functions.dart';
@@ -113,11 +114,34 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 ),
               ),
               Expanded(
-                child: TextButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.shopping_cart),
-                  label: const Text('Add to Cart'),
-                ),
+                child:
+                    Consumer<CartProvider>(builder: (context, provider, child) {
+                  final isInCart =
+                      provider.isProductInCart(productModel.productId!);
+                  return TextButton.icon(
+                    onPressed: () async{
+                      EasyLoading.show(status: "Please wait");
+                      if (isInCart) {
+                        await provider.removeFromCart(productModel.productId!);
+                        if(mounted) showMsg(context, "Removed from Cart");
+                      } else {
+                        await provider.addToCart(
+                          productId: productModel.productId!,
+                          productName: productModel.productName,
+                          url: productModel.thumbnailImageModel.imageDownloadUrl,
+                          salePrice: num.parse(getPriceAfterDiscount(productModel.salePrice, productModel.productDiscount)),
+                        );
+
+                        if(mounted) showMsg(context, "Added to Cart");
+                      }
+                      EasyLoading.dismiss();
+                    },
+                    icon: Icon(isInCart
+                        ? Icons.remove_shopping_cart
+                        : Icons.shopping_cart),
+                    label: Text(isInCart ? 'Remove from Cart' : 'Add to Cart'),
+                  );
+                }),
               ),
             ],
           ),
@@ -238,7 +262,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         EasyLoading.dismiss();
                         focusNode.unfocus();
                         if (mounted)
-                          showMsg(context, 'Thanks for your comment. Your comment is waiting for admin approval');
+                          showMsg(context,
+                              'Thanks for your comment. Your comment is waiting for admin approval');
                       }
                     },
                     child: const Text('SUBMIT'),
@@ -267,31 +292,38 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 } else {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: commentList.map((comment) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ListTile(
-                          title: Text(comment.userModel.displayName ?? comment.userModel.email),
-                          subtitle: Text(comment.date),
-                          leading: comment.userModel.imageUrl == null ? const Icon(Icons.person) : CachedNetworkImage(
-                            width: 70,
-                            height: 100,
-                            fit: BoxFit.cover,
-                            imageUrl: comment.userModel.imageUrl!,
-                            placeholder: (context, url) =>
-                            const Center(child: CircularProgressIndicator()),
-                            errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Text(
-                            comment.comment,
-                          ),
-                        ),
-                      ],
-                    )).toList(),
+                    children: commentList
+                        .map((comment) => Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ListTile(
+                                  title: Text(comment.userModel.displayName ??
+                                      comment.userModel.email),
+                                  subtitle: Text(comment.date),
+                                  leading: comment.userModel.imageUrl == null
+                                      ? const Icon(Icons.person)
+                                      : CachedNetworkImage(
+                                          width: 70,
+                                          height: 100,
+                                          fit: BoxFit.cover,
+                                          imageUrl: comment.userModel.imageUrl!,
+                                          placeholder: (context, url) =>
+                                              const Center(
+                                                  child:
+                                                      CircularProgressIndicator()),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
+                                        ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Text(
+                                    comment.comment,
+                                  ),
+                                ),
+                              ],
+                            ))
+                        .toList(),
                   );
                 }
               }

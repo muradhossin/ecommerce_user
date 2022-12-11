@@ -4,6 +4,7 @@ import 'package:ecommerce_user/customwidgets/main_drawer.dart';
 import 'package:ecommerce_user/customwidgets/product_grid_item_view.dart';
 import 'package:ecommerce_user/pages/launcher_page.dart';
 import 'package:ecommerce_user/pages/product_details_page.dart';
+import 'package:ecommerce_user/providers/cart_provider.dart';
 import 'package:ecommerce_user/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -32,6 +33,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
     Provider.of<ProductProvider>(context, listen: false).getAllPurchases();
     Provider.of<OrderProvider>(context, listen: false).getOrderConstants();
     Provider.of<UserProvider>(context, listen: false).getUserInfo();
+    Provider.of<CartProvider>(context, listen: false).getAllCartItemsByUser();
     super.didChangeDependencies();
   }
 

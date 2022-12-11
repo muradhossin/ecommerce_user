@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_user/models/cart_model.dart';
 import 'package:ecommerce_user/models/comment_model.dart';
 import 'package:ecommerce_user/models/rating_model.dart';
 import 'package:ecommerce_user/models/user_model.dart';
@@ -155,4 +156,30 @@ class DbHelper {
           .collection(collectionComment)
           .where(commentFieldApproved, isEqualTo: true)
           .get();
+
+  static Future<void> addToCart(String uid, CartModel cartModel) {
+    return _db
+        .collection(collectionUser)
+        .doc(uid)
+        .collection(collectionCart)
+        .doc(cartModel.productId)
+        .set(cartModel.toMap());
+  }
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getCartItemsByUser(
+          String uid) =>
+      _db
+          .collection(collectionUser)
+          .doc(uid)
+          .collection(collectionCart)
+          .snapshots();
+
+  static Future<void> removeFromCart(String uid, String productId) {
+    return _db
+        .collection(collectionUser)
+        .doc(uid)
+        .collection(collectionCart)
+        .doc(productId)
+        .delete();
+  }
 }
