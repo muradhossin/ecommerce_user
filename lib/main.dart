@@ -5,6 +5,7 @@ import 'package:ecommerce_user/pages/otp_verification_page.dart';
 import 'package:ecommerce_user/pages/product_details_page.dart';
 import 'package:ecommerce_user/pages/user_profile_page.dart';
 import 'package:ecommerce_user/pages/view_product_page.dart';
+import 'package:ecommerce_user/providers/cart_provider.dart';
 import 'package:ecommerce_user/providers/order_provider.dart';
 import 'package:ecommerce_user/providers/product_provider.dart';
 import 'package:ecommerce_user/providers/user_provider.dart';
@@ -25,6 +26,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ProductProvider()),
         ChangeNotifierProvider(create: (_) => OrderProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
       ],
       child: const MyApp()));
 }
