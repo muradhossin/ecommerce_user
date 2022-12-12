@@ -1,4 +1,5 @@
 import 'package:ecommerce_user/auth/auth_service.dart';
+import 'package:ecommerce_user/pages/cart_page.dart';
 import 'package:ecommerce_user/pages/launcher_page.dart';
 import 'package:ecommerce_user/pages/user_profile_page.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,9 @@ class MainDrawer extends StatelessWidget {
             title: const Text('My Profile'),
           ),
           if(!AuthService.currentUser!.isAnonymous) ListTile(
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, CartPage.routeName);
+            },
             leading: const Icon(Icons.shopping_cart),
             title: const Text('My Cart'),
           ),
