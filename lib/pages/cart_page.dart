@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecommerce_user/customwidgets/cart_item_view.dart';
 import 'package:ecommerce_user/providers/cart_provider.dart';
 import 'package:ecommerce_user/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -30,21 +31,7 @@ class CartPage extends StatelessWidget {
                 itemCount: provider.cartList.length,
                 itemBuilder: (context, index) {
                   final cartModel = provider.cartList[index];
-                  return ListTile(
-                    leading: CachedNetworkImage(
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.fill,
-                      imageUrl: cartModel.productImageUrl,
-                      placeholder: (context, url) =>
-                          const Center(child: CircularProgressIndicator()),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                    ),
-                    title: Text(cartModel.productName),
-                    subtitle: Text("Quantity: ${cartModel.quantity}"),
-                    trailing: Text('$currencySymbol${cartModel.salePrice}'),
-                  );
+                  return CartItemView(cartModel: cartModel, cartProvider: provider);
                 },
               ),
             ),
