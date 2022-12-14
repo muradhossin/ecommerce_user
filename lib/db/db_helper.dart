@@ -75,8 +75,10 @@ class DbHelper {
           .collection(collectionRating)
           .get();
 
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProducts() =>
-      _db.collection(collectionProduct).snapshots();
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProducts() => _db
+      .collection(collectionProduct)
+      .where(productFieldAvailable, isEqualTo: true)
+      .snapshots();
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllPurchases() =>
       _db.collection(collectionPurchase).snapshots();
@@ -181,5 +183,27 @@ class DbHelper {
         .collection(collectionCart)
         .doc(productId)
         .delete();
+  }
+
+  static Future<void> updateCartQuantity(String uid, CartModel cartModel) {
+    return _db
+        .collection(collectionUser)
+        .doc(uid)
+        .collection(collectionCart)
+        .doc(cartModel.productId)
+        .set(cartModel.toMap());
+  }
+
+  static Future<void> clearCart(String uid, List<CartModel> cartList) {
+    final wb = _db.batch();
+    for (final cartModel in cartList) {
+      final doc = _db
+          .collection(collectionUser)
+          .doc(uid)
+          .collection(collectionCart)
+          .doc(cartModel.productId);
+      wb.delete(doc);
+    }
+    return wb.commit();
   }
 }

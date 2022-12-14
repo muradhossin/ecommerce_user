@@ -7,6 +7,10 @@ import '../models/cart_model.dart';
 class CartProvider extends ChangeNotifier {
   List<CartModel> cartList = [];
 
+  num priceWithQuantity(CartModel cartModel) {
+    return cartModel.quantity * cartModel.salePrice;
+  }
+
   getAllCartItemsByUser() {
     DbHelper.getCartItemsByUser(AuthService.currentUser!.uid)
         .listen((snapshot) {
@@ -45,6 +49,30 @@ class CartProvider extends ChangeNotifier {
 
   Future<void> removeFromCart(String productId) {
     return DbHelper.removeFromCart(AuthService.currentUser!.uid, productId);
+  }
+
+  void decreaseQuantity(CartModel cartModel) {
+    if(cartModel.quantity > 1){
+      cartModel.quantity -= 1;
+      DbHelper.updateCartQuantity(AuthService.currentUser!.uid, cartModel);
+    }
+  }
+
+  void increaseQuantity(CartModel cartModel) {
+    cartModel.quantity += 1;
+    DbHelper.updateCartQuantity(AuthService.currentUser!.uid, cartModel);
+  }
+
+  num getCartSubTotal(){
+    num total = 0;
+    for(final cartModel in cartList){
+      total += priceWithQuantity(cartModel);
+    }
+    return total;
+  }
+
+  Future<void> clearCart() {
+    return DbHelper.clearCart(AuthService.currentUser!.uid, cartList);
   }
 
 }

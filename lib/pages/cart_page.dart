@@ -18,7 +18,9 @@ class CartPage extends StatelessWidget {
         actions: [
           TextButton(
             style: TextButton.styleFrom(foregroundColor: Colors.white),
-            onPressed: () {},
+            onPressed: () {
+              Provider.of<CartProvider>(context, listen: false).clearCart();
+            },
             child: const Text('CLEAR'),
           ),
         ],
@@ -31,7 +33,8 @@ class CartPage extends StatelessWidget {
                 itemCount: provider.cartList.length,
                 itemBuilder: (context, index) {
                   final cartModel = provider.cartList[index];
-                  return CartItemView(cartModel: cartModel, cartProvider: provider);
+                  return CartItemView(
+                      cartModel: cartModel, cartProvider: provider);
                 },
               ),
             ),
@@ -40,13 +43,14 @@ class CartPage extends StatelessWidget {
                 padding: const EdgeInsets.all(12),
                 child: Row(
                   children: [
-                    const Expanded(
-                      child: Text('SUBTOTAL: $currencySymbol 235545'),
+                    Expanded(
+                      child: Text(
+                        'SUBTOTAL: $currencySymbol${provider.getCartSubTotal()}',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
                     ),
                     OutlinedButton(
-                      onPressed: provider.cartList.isEmpty ? null : () {
-
-                      },
+                      onPressed: provider.cartList.isEmpty ? null : () {},
                       child: const Text("CHECKOUT"),
                     ),
                   ],

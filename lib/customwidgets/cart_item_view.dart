@@ -32,14 +32,18 @@ class CartItemView extends StatelessWidget {
               title: Text(cartModel.productName),
               subtitle: Text('Unit Price: ${cartModel.salePrice}'),
               trailing: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  cartProvider.removeFromCart(cartModel.productId);
+                },
                 icon: const Icon(Icons.delete),
               ),
             ),
             Row(
               children: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    cartProvider.decreaseQuantity(cartModel);
+                  },
                   icon: const Icon(
                     Icons.remove_circle,
                     size: 30,
@@ -53,7 +57,9 @@ class CartItemView extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    cartProvider.increaseQuantity(cartModel);
+                  },
                   icon: const Icon(
                     Icons.add_circle,
                     size: 30,
@@ -61,7 +67,7 @@ class CartItemView extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  '$currencySymbol',
+                  '$currencySymbol${cartProvider.priceWithQuantity(cartModel)}',
                   style: Theme.of(context).textTheme.headline6,
                 )
               ],
