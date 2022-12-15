@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_user/customwidgets/cart_item_view.dart';
+import 'package:ecommerce_user/pages/checkout_page.dart';
 import 'package:ecommerce_user/providers/cart_provider.dart';
 import 'package:ecommerce_user/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,9 @@ class CartPage extends StatelessWidget {
                       ),
                     ),
                     OutlinedButton(
-                      onPressed: provider.cartList.isEmpty ? null : () {},
+                      onPressed: provider.cartList.isEmpty ? null : () {
+                        Navigator.pushNamed(context, CheckoutPage.routeName);
+                      },
                       child: const Text("CHECKOUT"),
                     ),
                   ],
