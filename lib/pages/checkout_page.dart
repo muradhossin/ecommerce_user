@@ -18,6 +18,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
   late OrderProvider orderProvider;
   late CartProvider cartProvider;
   late UserProvider userProvider;
+  final addressLine1Controller = TextEditingController();
+  final addressLine2Controller = TextEditingController();
+  final zipController = TextEditingController();
+  String? city;
   String paymentMethodGroupValue = PaymentMethod.cod;
 
   @override
@@ -25,6 +29,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     orderProvider = Provider.of<OrderProvider>(context, listen: true);
     cartProvider = Provider.of<CartProvider>(context, listen: false);
     userProvider = Provider.of<UserProvider>(context, listen: false);
+    setAddressIfExists();
     super.didChangeDependencies();
   }
 
@@ -41,6 +46,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
           buildProductInfoSection(),
           buildHeader('Order Summary'),
           buildOrderSummarySection(),
+          buildHeader('Delivery Address'),
+          buildDeliveryAddressSection(),
+          buildHeader('Payment Method'),
+          buildPaymentMethodSection(),
+          buildOrderButtonSection(),
         ],
       ),
     );
@@ -118,5 +128,116 @@ class _CheckoutPageState extends State<CheckoutPage> {
         ),
       ),
     );
+  }
+
+  Widget buildDeliveryAddressSection() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: [
+            TextField(
+              controller: addressLine1Controller,
+              decoration: const InputDecoration(
+                hintText: 'Address Line 1',
+              ),
+            ),
+            TextField(
+              controller: addressLine2Controller,
+              decoration: const InputDecoration(
+                hintText: 'Address Line 2',
+              ),
+            ),
+            TextField(
+              controller: zipController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                hintText: 'Zip Code',
+              ),
+            ),
+            DropdownButton<String>(
+              value: city,
+              isExpanded: true,
+              hint: const Text('Select your city'),
+              items: cities
+                  .map((city) => DropdownMenuItem<String>(
+                        value: city,
+                        child: Text(city),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  city = value;
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    addressLine1Controller.dispose();
+    addressLine2Controller.dispose();
+    zipController.dispose();
+    super.dispose();
+  }
+
+  Widget buildPaymentMethodSection() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Row(
+          children: [
+            Radio<String>(
+              value: PaymentMethod.cod,
+              groupValue: paymentMethodGroupValue,
+              onChanged: (value) {
+                setState(() {
+                  paymentMethodGroupValue = value!;
+                });
+              },
+            ),
+            const Text(PaymentMethod.cod),
+            Radio<String>(
+              value: PaymentMethod.online,
+              groupValue: paymentMethodGroupValue,
+              onChanged: (value) {
+                setState(() {
+                  paymentMethodGroupValue = value!;
+                });
+              },
+            ),
+            const Text(PaymentMethod.online),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildOrderButtonSection() {
+    return ElevatedButton(
+      onPressed: (){
+        _saveOrder();
+      },
+      child: const Text('PLACE ORDER'),
+    );
+  }
+
+  void _saveOrder() {}
+
+  void setAddressIfExists() {
+    final userModel = userProvider.userModel;
+    if(userModel != null){
+      if(userModel.addressModel != null){
+        final address = userModel.addressModel!;
+        addressLine1Controller.text = address.addressLine1!;
+        addressLine2Controller.text = address.addressLine2!;
+        zipController.text = address.zipcode!;
+        city = address.city;
+      }
+    }
   }
 }

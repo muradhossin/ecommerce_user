@@ -13,3 +13,17 @@ abstract class PaymentMethod{
   static const String cod = 'Cash on Delivery';
   static const String online = 'Online Payment';
 }
+
+const cities = [
+  'Dhaka',
+  'Chittagong',
+  'Rajshahi',
+  'Barishal',
+  'Comila',
+  'Noakhali',
+  'Khulna',
+  'Satkhira',
+  'Patuakhali',
+  'Syllet',
+  'Coz Bazar'
+];
