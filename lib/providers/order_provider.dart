@@ -1,3 +1,4 @@
+import 'package:ecommerce_user/models/order_model.dart';
 import 'package:flutter/material.dart';
 
 import '../db/db_helper.dart';
@@ -32,5 +33,10 @@ class OrderProvider extends ChangeNotifier {
     return ((cartSubTotal - getDiscountAmount(cartSubTotal)) +
         getVatAmount(cartSubTotal) +
         orderConstantModel.deliveryCharge).round();
+  }
+
+  Future<void> saveOrder(OrderModel orderModel) async {
+    await DbHelper.saveOrder(orderModel);
+    return DbHelper.clearCart(orderModel.userId, orderModel.productDetails);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_user/models/cart_model.dart';
 import 'package:ecommerce_user/models/comment_model.dart';
+import 'package:ecommerce_user/models/order_model.dart';
 import 'package:ecommerce_user/models/rating_model.dart';
 import 'package:ecommerce_user/models/user_model.dart';
 
@@ -204,6 +205,37 @@ class DbHelper {
           .doc(cartModel.productId);
       wb.delete(doc);
     }
+    return wb.commit();
+  }
+
+  static Future<void> saveOrder(OrderModel orderModel) async {
+    final wb = _db.batch();
+    final orderDoc = _db.collection(collectionOrder).doc(orderModel.orderId);
+    wb.set(orderDoc, orderModel.toMap());
+    for (final cardModel in orderModel.productDetails) {
+      final proSnapshot = await _db
+          .collection(collectionProduct)
+          .doc(cardModel.productId)
+          .get();
+      final productModel = ProductModel.fromMap(proSnapshot.data()!);
+      final catSnapshot = await _db
+          .collection(collectionCategory)
+          .doc(productModel.category.categoryId)
+          .get();
+      final categoryModel = CategoryModel.fromMap(catSnapshot.data()!);
+      final newStock = productModel.stock - cardModel.quantity;
+      final newProductCountInCategory =
+          categoryModel.productCount - cardModel.quantity;
+      final proDoc = _db.collection(collectionProduct).doc(cardModel.productId);
+      final catDoc = _db
+          .collection(collectionCategory)
+          .doc(productModel.category.categoryId);
+      wb.update(proDoc, {productFieldStock: newStock});
+      wb.update(catDoc, {categoryFieldProductCount: newProductCountInCategory});
+    }
+    final userDoc = _db.collection(collectionUser).doc(orderModel.userId);
+    wb.update(
+        userDoc, {userFieldAddressModel: orderModel.deliveryAddress.toMap()});
     return wb.commit();
   }
 }

@@ -1,9 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_user/auth/auth_service.dart';
+import 'package:ecommerce_user/models/address_model.dart';
+import 'package:ecommerce_user/models/date_model.dart';
+import 'package:ecommerce_user/models/order_model.dart';
+import 'package:ecommerce_user/pages/view_product_page.dart';
 import 'package:ecommerce_user/providers/cart_provider.dart';
 import 'package:ecommerce_user/providers/order_provider.dart';
 import 'package:ecommerce_user/providers/user_provider.dart';
 import 'package:ecommerce_user/utils/constants.dart';
+import 'package:ecommerce_user/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
+
+import 'order_successful_page.dart';
 
 class CheckoutPage extends StatefulWidget {
   static const String routeName = '/checkout';
@@ -219,19 +229,69 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   Widget buildOrderButtonSection() {
     return ElevatedButton(
-      onPressed: (){
+      onPressed: () {
         _saveOrder();
       },
       child: const Text('PLACE ORDER'),
     );
   }
 
-  void _saveOrder() {}
+  Future<void> _saveOrder() async {
+    if (addressLine1Controller.text.isEmpty) {
+      showMsg(context, "Please provide address line 1");
+      return;
+    }
+    if (zipController.text.isEmpty) {
+      showMsg(context, "Please provide zipcode");
+      return;
+    }
+    if (city == null) {
+      showMsg(context, "Please provide your city");
+      return;
+    }
+    EasyLoading.show(status: 'Please Wait');
+    final orderModel = OrderModel(
+      orderId: generateOrderId,
+      userId: AuthService.currentUser!.uid,
+      orderStatus: OrderStatus.pending,
+      paymentMethod: paymentMethodGroupValue,
+      grandTotal: orderProvider.getGrandTotal(cartProvider.getCartSubTotal()),
+      discount: orderProvider.orderConstantModel.discount,
+      VAT: orderProvider.orderConstantModel.vat,
+      deliveryCharge: orderProvider.orderConstantModel.deliveryCharge,
+      orderDate: DateModel(
+        timestamp: Timestamp.fromDate(DateTime.now()),
+        day: DateTime.now().day,
+        month: DateTime.now().month,
+        year: DateTime.now().year,
+      ),
+      deliveryAddress: AddressModel(
+        addressLine1: addressLine1Controller.text,
+        addressLine2: addressLine2Controller.text,
+        zipcode: zipController.text,
+        city: city
+      ),
+      productDetails: cartProvider.cartList,
+    );
+
+    try{
+      await orderProvider.saveOrder(orderModel);
+      EasyLoading.dismiss();
+      if(mounted){
+        Navigator.pushNamedAndRemoveUntil(context, OrderSuccessfulPage.routeName, ModalRoute.withName(ViewProductPage.routeName));
+      }
+
+    }catch(error){
+      EasyLoading.dismiss();
+      showMsg(context, "Failed to save order");
+
+    }
+  }
 
   void setAddressIfExists() {
     final userModel = userProvider.userModel;
-    if(userModel != null){
-      if(userModel.addressModel != null){
+    if (userModel != null) {
+      if (userModel.addressModel != null) {
         final address = userModel.addressModel!;
         addressLine1Controller.text = address.addressLine1!;
         addressLine2Controller.text = address.addressLine2!;
