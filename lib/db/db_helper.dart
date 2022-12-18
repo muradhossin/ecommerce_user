@@ -238,4 +238,11 @@ class DbHelper {
         userDoc, {userFieldAddressModel: orderModel.deliveryAddress.toMap()});
     return wb.commit();
   }
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getOrdersByUser(
+          String uid) =>
+      _db
+          .collection(collectionOrder)
+          .where(orderFieldUserId, isEqualTo: uid)
+          .snapshots();
 }

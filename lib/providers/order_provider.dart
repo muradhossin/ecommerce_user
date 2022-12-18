@@ -1,3 +1,5 @@
+import 'package:ecommerce_user/auth/auth_service.dart';
+import 'package:ecommerce_user/models/order_item_model.dart';
 import 'package:ecommerce_user/models/order_model.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +8,8 @@ import '../models/order_constant_model.dart';
 
 class OrderProvider extends ChangeNotifier {
   OrderConstantModel orderConstantModel = OrderConstantModel();
+  List<OrderModel> orderList = [];
+  List<OrderItem> orderItemList = [];
 
   getOrderConstants() {
     DbHelper.getOrderConstants().listen((snapshot) {
@@ -13,6 +17,14 @@ class OrderProvider extends ChangeNotifier {
         orderConstantModel = OrderConstantModel.fromMap(snapshot.data()!);
         notifyListeners();
       }
+    });
+  }
+
+  getOrdersByUser() {
+    DbHelper.getOrdersByUser(AuthService.currentUser!.uid).listen((snapshot) {
+      orderList = List.generate(snapshot.docs.length, (index) => OrderModel.fromMap(snapshot.docs[index].data()));
+      orderItemList = orderList.map((order) => OrderItem(orderModel: order)).toList();
+      notifyListeners();
     });
   }
 
@@ -39,4 +51,5 @@ class OrderProvider extends ChangeNotifier {
     await DbHelper.saveOrder(orderModel);
     return DbHelper.clearCart(orderModel.userId, orderModel.productDetails);
   }
+
 }
