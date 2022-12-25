@@ -8,6 +8,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 
 import '../auth/auth_service.dart';
+import '../models/notification_model.dart';
+import '../utils/constants.dart';
 import 'launcher_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -220,6 +222,13 @@ class _LoginPageState extends State<LoginPage> {
           phone: credential.user!.phoneNumber,
         );
         await userProvider.addUser(userModel);
+        final notification = NotificationModel(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          type: NotificationType.user,
+          message: 'A new user is created, UserID: ${userModel.userId}',
+          userModel: userModel,
+        );
+        await userProvider.addNotification(notification);
         EasyLoading.dismiss();
       }
       if (mounted) {

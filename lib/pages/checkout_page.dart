@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_user/auth/auth_service.dart';
 import 'package:ecommerce_user/models/address_model.dart';
 import 'package:ecommerce_user/models/date_model.dart';
+import 'package:ecommerce_user/models/notification_model.dart';
 import 'package:ecommerce_user/models/order_model.dart';
 import 'package:ecommerce_user/pages/view_product_page.dart';
 import 'package:ecommerce_user/providers/cart_provider.dart';
@@ -266,25 +267,33 @@ class _CheckoutPageState extends State<CheckoutPage> {
         year: DateTime.now().year,
       ),
       deliveryAddress: AddressModel(
-        addressLine1: addressLine1Controller.text,
-        addressLine2: addressLine2Controller.text,
-        zipcode: zipController.text,
-        city: city
-      ),
+          addressLine1: addressLine1Controller.text,
+          addressLine2: addressLine2Controller.text,
+          zipcode: zipController.text,
+          city: city),
       productDetails: cartProvider.cartList,
     );
 
-    try{
+    try {
       await orderProvider.saveOrder(orderModel);
-      EasyLoading.dismiss();
-      if(mounted){
-        Navigator.pushNamedAndRemoveUntil(context, OrderSuccessfulPage.routeName, ModalRoute.withName(ViewProductPage.routeName));
-      }
 
-    }catch(error){
+      final notification = NotificationModel(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        type: NotificationType.order,
+        message: 'You have a new order #${orderModel.orderId}',
+        orderModel: orderModel,
+      );
+      await orderProvider.addNotification(notification);
+      EasyLoading.dismiss();
+      if (mounted) {
+        Navigator.pushNamedAndRemoveUntil(
+            context,
+            OrderSuccessfulPage.routeName,
+            ModalRoute.withName(ViewProductPage.routeName));
+      }
+    } catch (error) {
       EasyLoading.dismiss();
       showMsg(context, "Failed to save order");
-
     }
   }
 

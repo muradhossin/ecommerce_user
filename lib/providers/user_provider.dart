@@ -1,5 +1,6 @@
 import 'package:ecommerce_user/auth/auth_service.dart';
 import 'package:ecommerce_user/db/db_helper.dart';
+import 'package:ecommerce_user/models/notification_model.dart';
 import 'package:ecommerce_user/models/user_model.dart';
 import 'package:flutter/material.dart';
 
@@ -22,5 +23,9 @@ class UserProvider extends ChangeNotifier {
 
   Future<void> updateUserProfileField(String field, dynamic value){
     return DbHelper.updateUserProfileField(AuthService.currentUser!.uid, {field : value});
+  }
+
+  addNotification(NotificationModel notification) {
+    return DbHelper.addNotification(notification);
   }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:ecommerce_user/auth/auth_service.dart';
 import 'package:ecommerce_user/models/comment_model.dart';
+import 'package:ecommerce_user/models/notification_model.dart';
 import 'package:ecommerce_user/models/rating_model.dart';
 import 'package:ecommerce_user/models/user_model.dart';
 import 'package:ecommerce_user/utils/helper_functions.dart';
@@ -139,13 +140,11 @@ class ProductProvider extends ChangeNotifier {
     return price - discountAmount;
   }
 
-  Future<void> addComment(String productId, String comment, UserModel userModel) {
-    final commentModel = CommentModel(
-      userModel: userModel,
-      productId: productId,
-      comment: comment,
-      date: getFormattedDate(DateTime.now(), pattern: 'dd/MM/yyyy hh:mm:ss a'),
-    );
+  Future<void> addComment(CommentModel commentModel) {
     return DbHelper.addComment(commentModel);
+  }
+
+  addNotification(NotificationModel notification) {
+    return DbHelper.addNotification(notification);
   }
 }

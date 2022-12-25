@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_user/models/cart_model.dart';
 import 'package:ecommerce_user/models/comment_model.dart';
+import 'package:ecommerce_user/models/notification_model.dart';
 import 'package:ecommerce_user/models/order_model.dart';
 import 'package:ecommerce_user/models/rating_model.dart';
 import 'package:ecommerce_user/models/user_model.dart';
@@ -245,4 +246,11 @@ class DbHelper {
           .collection(collectionOrder)
           .where(orderFieldUserId, isEqualTo: uid)
           .snapshots();
+
+  static Future<void> addNotification(NotificationModel notification) {
+    return _db
+        .collection(collectionNotification)
+        .doc(notification.id)
+        .set(notification.toMap());
+  }
 }

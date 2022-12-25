@@ -11,6 +11,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
+import '../models/notification_model.dart';
 import '../models/product_model.dart';
 import '../providers/product_provider.dart';
 import '../utils/constants.dart';
@@ -253,12 +254,22 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         );
                       } else {
                         EasyLoading.show(status: 'Please wait');
-                        await productProvider.addComment(
-                          productModel.productId!,
-                          txtController.text,
-                          userProvider.userModel!,
+                        final commentModel = CommentModel(
+                          userModel: userProvider.userModel!,
+                          productId: productModel.productId!,
+                          comment: txtController.text,
+                          date: getFormattedDate(DateTime.now(), pattern: 'dd/MM/yyyy hh:mm:ss a'),
                         );
-
+                        await productProvider.addComment(
+                          commentModel
+                        );
+                        final notification = NotificationModel(
+                          id: DateTime.now().millisecondsSinceEpoch.toString(),
+                          type: NotificationType.comment,
+                          message: 'A new comment on ${productModel.productName} is waiting for your approval',
+                          commentModel: commentModel,
+                        );
+                        await productProvider.addNotification(notification);
                         EasyLoading.dismiss();
                         focusNode.unfocus();
                         if (mounted)
