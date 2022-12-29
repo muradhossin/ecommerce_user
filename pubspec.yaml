@@ -49,6 +49,9 @@ dependencies:
   pin_code_fields:
   google_sign_in:
   flutter_rating_bar:
+  firebase_messaging:
+  firebase_analytics:
+  flutter_local_notifications:
 
 dev_dependencies:
   flutter_test:

@@ -149,6 +149,7 @@ class DbHelper {
         .doc(commentModel.productId)
         .collection(collectionComment)
         .doc();
+    commentModel.commentId = doc.id;
     return doc.set(commentModel.toMap());
   }
 
