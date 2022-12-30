@@ -2,6 +2,8 @@ import 'package:ecommerce_user/customwidgets/main_drawer.dart';
 import 'package:ecommerce_user/customwidgets/product_grid_item_view.dart';
 import 'package:ecommerce_user/providers/cart_provider.dart';
 import 'package:ecommerce_user/providers/user_provider.dart';
+import 'package:ecommerce_user/utils/notification_service.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +23,20 @@ class ViewProductPage extends StatefulWidget {
 
 class _ViewProductPageState extends State<ViewProductPage> {
   CategoryModel? categoryModel;
+  @override
+  void initState() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Got a message whilst in the foreground!');
+      print('Message data: ${message.data}');
 
+      if (message.notification != null) {
+        //print('Message also contained a notification: ${message.notification}');
+        NotificationService notificationService = NotificationService();
+        notificationService.sendNotification(message);
+      }
+    });
+    super.initState();
+  }
   @override
   void didChangeDependencies() {
     Provider.of<ProductProvider>(context, listen: false).getAllCategories();
