@@ -6,6 +6,7 @@ import 'package:ecommerce_user/pages/order_page.dart';
 import 'package:ecommerce_user/pages/order_successful_page.dart';
 import 'package:ecommerce_user/pages/otp_verification_page.dart';
 import 'package:ecommerce_user/pages/product_details_page.dart';
+import 'package:ecommerce_user/pages/promo_code_page.dart';
 import 'package:ecommerce_user/pages/user_profile_page.dart';
 import 'package:ecommerce_user/pages/view_product_page.dart';
 import 'package:ecommerce_user/providers/cart_provider.dart';
@@ -25,7 +26,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // make sure you call `initializeApp` before using other Firebase services.
 
 
-  print("Handling a background message: ${message.messageId}");
+  print("Handling a background message: ${message.toMap()}");
 }
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +36,8 @@ void main() async {
   final fcmToken = await FirebaseMessaging.instance.getToken();
   print('FCM TOKEN: $fcmToken');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  await FirebaseMessaging.instance.subscribeToTopic("topic");
+  await FirebaseMessaging.instance.subscribeToTopic("promo");
+  await FirebaseMessaging.instance.subscribeToTopic("user");
   runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ProductProvider()),
@@ -70,6 +72,7 @@ class MyApp extends StatelessWidget {
         CartPage.routeName : (_) => const CartPage(),
         CheckoutPage.routeName : (_) => const CheckoutPage(),
         OrderSuccessfulPage.routeName : (_) => const OrderSuccessfulPage(),
+        PromoCodePage.routeName : (_) => const PromoCodePage(),
       },
     );
   }

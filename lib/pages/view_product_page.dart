@@ -1,5 +1,7 @@
 import 'package:ecommerce_user/customwidgets/main_drawer.dart';
 import 'package:ecommerce_user/customwidgets/product_grid_item_view.dart';
+import 'package:ecommerce_user/pages/promo_code_page.dart';
+import 'package:ecommerce_user/pages/user_profile_page.dart';
 import 'package:ecommerce_user/providers/cart_provider.dart';
 import 'package:ecommerce_user/providers/user_provider.dart';
 import 'package:ecommerce_user/utils/notification_service.dart';
@@ -35,6 +37,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
         notificationService.sendNotification(message);
       }
     });
+    setupInteractedMessage();
     super.initState();
   }
   @override
@@ -47,6 +50,32 @@ class _ViewProductPageState extends State<ViewProductPage> {
     Provider.of<CartProvider>(context, listen: false).getAllCartItemsByUser();
     Provider.of<OrderProvider>(context, listen: false).getOrdersByUser();
     super.didChangeDependencies();
+  }
+
+  Future<void> setupInteractedMessage() async {
+    // Get any messages which caused the application to open from
+    // a terminated state.
+    RemoteMessage? initialMessage =
+    await FirebaseMessaging.instance.getInitialMessage();
+
+    // If the message also contains a data property with a "type" of "chat",
+    // navigate to a chat screen
+    if (initialMessage != null) {
+      _handleMessage(initialMessage);
+    }
+
+    // Also handle any interaction when the app is in the background via a
+    // Stream listener
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+  }
+
+  void _handleMessage(RemoteMessage message) {
+    if(message.data['key'] == 'promo'){
+      Navigator.pushNamed(context, PromoCodePage.routeName, arguments: message.data['value']);
+    }else if(message.data['key'] == 'user'){
+      Navigator.pushNamed(context, UserProfilePage.routeName,);
+    }
+
   }
 
   @override
