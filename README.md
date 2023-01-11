@@ -33,7 +33,8 @@ Customer can search and buy product, send feedback of product. Authentication, m
 - Payment option
 - User Profile Update
 - Order Track
-- Order Histry
+- Order History
+- Receive notifications from admin app via REST API, Firebase Cloud Messaging
 
 
 
