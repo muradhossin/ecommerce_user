@@ -57,10 +57,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        useMaterial3: true,
         primarySwatch: Colors.blue,
       ),
       builder: EasyLoading.init(),
       initialRoute: LauncherPage.routeName,
+
       routes: {
         LauncherPage.routeName : (_) => const LauncherPage(),
         LoginPage.routeName : (_) => const LoginPage(),

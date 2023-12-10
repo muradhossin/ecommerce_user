@@ -5,7 +5,7 @@ import 'package:ecommerce_user/utils/helper_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:flutter_pin_code_fields/flutter_pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
 class OtpVerificationPage extends StatefulWidget {
@@ -59,67 +59,15 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
             const SizedBox(
               height: 10,
             ),
-            PinCodeTextField(
-
-              appContext: context,
-              pastedTextStyle: TextStyle(
-                color: Colors.green.shade600,
-                fontWeight: FontWeight.bold,
-              ),
-              length: 6,
-              obscureText: false,
-              obscuringCharacter: '*',
-              // obscuringWidget: const FlutterLogo(
-              //   size: 24,
-              // ),
-              blinkWhenObscuring: true,
-              animationType: AnimationType.fade,
-              validator: (v) {
-                // if (v!.length < 3) {
-                //   return "I'm from validator";
-                // } else {
-                //   return null;
-                // }
-                return null;
-              },
-              pinTheme: PinTheme(
-                shape: PinCodeFieldShape.box,
-                borderRadius: BorderRadius.circular(5),
-                fieldHeight: 50,
-                fieldWidth: 40,
-                activeFillColor: Colors.white,
-              ),
-              cursorColor: Colors.black,
-              animationDuration: const Duration(milliseconds: 300),
-              enableActiveFill: true,
-              // errorAnimationController: errorController,
-              controller: textEditingController,
-              keyboardType: TextInputType.number,
-              boxShadows: const [
-                BoxShadow(
-                  offset: Offset(0, 1),
-                  color: Colors.black12,
-                  blurRadius: 10,
-                )
-              ],
-              onCompleted: (v) {
-                debugPrint("Completed");
-              },
-              // onTap: () {
-              //   print("Pressed");
-              // },
-              onChanged: (value) {
-                debugPrint(value);
+            PinCodeFields(
+              onComplete: (value) {
                 setState(() {
                   incomingOtp = value;
                 });
               },
-              beforeTextPaste: (text) {
-                debugPrint("Allowing to paste $text");
-                //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                //but you can show anything you want here, like your pop up saying wrong paste format or etc
-                return true;
-              },
+              length: 6,
+              controller: textEditingController,
+              keyboardType: TextInputType.number,
             ),
             TextButton(
               onPressed: () {
