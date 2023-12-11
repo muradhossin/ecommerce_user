@@ -1,5 +1,5 @@
 
-import 'category_model.dart';
+import '../../category/models/category_model.dart';
 import 'image_model.dart';
 
 const String collectionProduct = 'Products';

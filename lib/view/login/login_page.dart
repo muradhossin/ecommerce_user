@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecommerce_user/view/profile/models/user_model.dart';
-import 'package:ecommerce_user/view/profile/provider/user_provider.dart';
 import 'package:ecommerce_user/core/utils/helper_functions.dart';
+import 'package:ecommerce_user/view/notification/provider/notification_provider.dart';
+import 'package:ecommerce_user/view/user/models/user_model.dart';
+import 'package:ecommerce_user/view/user/provider/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -26,6 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   late UserProvider userProvider;
+  late NotificationProvider notificationProvider;
   bool isAnonymous = false;
 
   @override
@@ -39,6 +41,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void didChangeDependencies() {
     userProvider = Provider.of<UserProvider>(context, listen: false);
+    notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
     super.didChangeDependencies();
   }
 
@@ -228,7 +231,7 @@ class _LoginPageState extends State<LoginPage> {
           message: 'A new user is created, UserID: ${userModel.userId}',
           userModel: userModel,
         );
-        await userProvider.addNotification(notification);
+        await notificationProvider.addNotification(notification);
         EasyLoading.dismiss();
       }
       if (mounted) {

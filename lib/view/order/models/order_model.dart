@@ -1,6 +1,7 @@
-import 'package:ecommerce_user/view/profile/models/address_model.dart';
+
 import 'package:ecommerce_user/view/cart/models/cart_model.dart';
 import 'package:ecommerce_user/view/order/models/date_model.dart';
+import 'package:ecommerce_user/view/user/models/address_model.dart';
 
 const String collectionOrder = 'Order';
 

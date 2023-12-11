@@ -1,10 +1,12 @@
+import 'package:ecommerce_user/view/cart/repository/cart_repository.dart';
 import 'package:ecommerce_user/view/login/services/auth_service.dart';
 import 'package:ecommerce_user/view/notification/models/notification_model.dart';
+import 'package:ecommerce_user/view/notification/repository/notification_repository.dart';
 import 'package:ecommerce_user/view/order/models/order_item_model.dart';
 import 'package:ecommerce_user/view/order/models/order_model.dart';
+import 'package:ecommerce_user/view/order/repository/order_repository.dart';
 import 'package:flutter/material.dart';
 
-import '../../../core/utils/db_helper.dart';
 import '../models/order_constant_model.dart';
 
 class OrderProvider extends ChangeNotifier {
@@ -13,7 +15,7 @@ class OrderProvider extends ChangeNotifier {
   List<OrderItem> orderItemList = [];
 
   getOrderConstants() {
-    DbHelper.getOrderConstants().listen((snapshot) {
+    OrderRepository.getOrderConstants().listen((snapshot) {
       if (snapshot.exists) {
         orderConstantModel = OrderConstantModel.fromMap(snapshot.data()!);
         notifyListeners();
@@ -22,7 +24,7 @@ class OrderProvider extends ChangeNotifier {
   }
 
   getOrdersByUser() {
-    DbHelper.getOrdersByUser(AuthService.currentUser!.uid).listen((snapshot) {
+    OrderRepository.getOrdersByUser(AuthService.currentUser!.uid).listen((snapshot) {
       orderList = List.generate(snapshot.docs.length, (index) => OrderModel.fromMap(snapshot.docs[index].data()));
       orderItemList = orderList.map((order) => OrderItem(orderModel: order)).toList();
       notifyListeners();
@@ -30,7 +32,7 @@ class OrderProvider extends ChangeNotifier {
   }
 
   Future<void> updateOrderConstants(OrderConstantModel model) {
-    return DbHelper.updateOrderConstants(model);
+    return OrderRepository.updateOrderConstants(model);
   }
 
   int getDiscountAmount(num subtotal) {
@@ -49,12 +51,9 @@ class OrderProvider extends ChangeNotifier {
   }
 
   Future<void> saveOrder(OrderModel orderModel) async {
-    await DbHelper.saveOrder(orderModel);
-    return DbHelper.clearCart(orderModel.userId, orderModel.productDetails);
+    await OrderRepository.saveOrder(orderModel);
+    return CartRepository.clearCart(orderModel.userId, orderModel.productDetails);
   }
 
-  Future<void> addNotification(NotificationModel notification) {
-    return DbHelper.addNotification(notification);
-  }
 
 }

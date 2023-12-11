@@ -1,5 +1,5 @@
+import 'package:ecommerce_user/view/cart/repository/cart_repository.dart';
 import 'package:ecommerce_user/view/login/services/auth_service.dart';
-import 'package:ecommerce_user/core/utils/db_helper.dart';
 import 'package:flutter/material.dart';
 
 import '../models/cart_model.dart';
@@ -12,7 +12,7 @@ class CartProvider extends ChangeNotifier {
   }
 
   getAllCartItemsByUser() {
-    DbHelper.getCartItemsByUser(AuthService.currentUser!.uid)
+    CartRepository.getCartItemsByUser(AuthService.currentUser!.uid)
         .listen((snapshot) {
       cartList = List.generate(snapshot.docs.length,
           (index) => CartModel.fromMap(snapshot.docs[index].data()));
@@ -33,7 +33,7 @@ class CartProvider extends ChangeNotifier {
       productImageUrl: url,
       salePrice: salePrice,
     );
-    return DbHelper.addToCart(AuthService.currentUser!.uid, cartModel);
+    return CartRepository.addToCart(AuthService.currentUser!.uid, cartModel);
   }
 
   bool isProductInCart(String productId){
@@ -48,19 +48,19 @@ class CartProvider extends ChangeNotifier {
   }
 
   Future<void> removeFromCart(String productId) {
-    return DbHelper.removeFromCart(AuthService.currentUser!.uid, productId);
+    return CartRepository.removeFromCart(AuthService.currentUser!.uid, productId);
   }
 
   void decreaseQuantity(CartModel cartModel) {
     if(cartModel.quantity > 1){
       cartModel.quantity -= 1;
-      DbHelper.updateCartQuantity(AuthService.currentUser!.uid, cartModel);
+      CartRepository.updateCartQuantity(AuthService.currentUser!.uid, cartModel);
     }
   }
 
   void increaseQuantity(CartModel cartModel) {
     cartModel.quantity += 1;
-    DbHelper.updateCartQuantity(AuthService.currentUser!.uid, cartModel);
+    CartRepository.updateCartQuantity(AuthService.currentUser!.uid, cartModel);
   }
 
   num getCartSubTotal(){
@@ -72,7 +72,7 @@ class CartProvider extends ChangeNotifier {
   }
 
   Future<void> clearCart() {
-    return DbHelper.clearCart(AuthService.currentUser!.uid, cartList);
+    return CartRepository.clearCart(AuthService.currentUser!.uid, cartList);
   }
 
 }

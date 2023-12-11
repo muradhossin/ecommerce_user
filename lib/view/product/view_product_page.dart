@@ -1,16 +1,18 @@
+import 'package:ecommerce_user/view/category/provider/category_provider.dart';
+import 'package:ecommerce_user/view/checkout/provider/checkout_provider.dart';
 import 'package:ecommerce_user/view/product/widgets/main_drawer.dart';
 import 'package:ecommerce_user/view/product/widgets/product_grid_item_view.dart';
 import 'package:ecommerce_user/view/promo/promo_code_page.dart';
-import 'package:ecommerce_user/view/profile/user_profile_page.dart';
 import 'package:ecommerce_user/view/cart/provider/cart_provider.dart';
-import 'package:ecommerce_user/view/profile/provider/user_provider.dart';
 import 'package:ecommerce_user/view/notification/services/notification_service.dart';
+import 'package:ecommerce_user/view/user/provider/user_provider.dart';
+import 'package:ecommerce_user/view/user/user_profile_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../cart/widget/cart_bubble_view.dart';
-import 'models/category_model.dart';
+import '../category/models/category_model.dart';
 import '../order/provider/order_provider.dart';
 import 'provider/product_provider.dart';
 
@@ -42,9 +44,9 @@ class _ViewProductPageState extends State<ViewProductPage> {
   }
   @override
   void didChangeDependencies() {
-    Provider.of<ProductProvider>(context, listen: false).getAllCategories();
+    Provider.of<CategoryProvider>(context, listen: false).getAllCategories();
     Provider.of<ProductProvider>(context, listen: false).getAllProducts();
-    Provider.of<ProductProvider>(context, listen: false).getAllPurchases();
+    Provider.of<CheckoutProvider>(context, listen: false).getAllPurchases();
     Provider.of<OrderProvider>(context, listen: false).getOrderConstants();
     Provider.of<UserProvider>(context, listen: false).getUserInfo();
     Provider.of<CartProvider>(context, listen: false).getAllCartItemsByUser();
@@ -89,54 +91,57 @@ class _ViewProductPageState extends State<ViewProductPage> {
         ],
       ),
       body: Consumer<ProductProvider>(
-        builder: (context, provider, child) => Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: DropdownButtonFormField<CategoryModel>(
-                isExpanded: true,
-                hint: const Text('Select Category'),
-                value: categoryModel,
-                validator: (value) {
-                  if (value == null) {
-                    return 'Please select a category';
-                  }
-                  return null;
-                },
-                items: provider
-                    .getCategoriesForFiltering()
-                    .map((catModel) => DropdownMenuItem(
-                          value: catModel,
-                          child: Text(catModel.categoryName),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    categoryModel = value;
-                  });
-                  if (categoryModel!.categoryName == 'All') {
-                    provider.getAllProducts();
-                  } else {
-                    provider
-                        .getAllProductsByCategory(categoryModel!.categoryName);
-                  }
-                },
-              ),
-            ),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.65
+        builder: (context, provider, child) => Consumer<CategoryProvider>(
+          builder: (context, categoryProvider, child) =>
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DropdownButtonFormField<CategoryModel>(
+                  isExpanded: true,
+                  hint: const Text('Select Category'),
+                  value: categoryModel,
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Please select a category';
+                    }
+                    return null;
+                  },
+                  items: categoryProvider
+                      .getCategoriesForFiltering()
+                      .map((catModel) => DropdownMenuItem(
+                            value: catModel,
+                            child: Text(catModel.categoryName),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      categoryModel = value;
+                    });
+                    if (categoryModel!.categoryName == 'All') {
+                      provider.getAllProducts();
+                    } else {
+                      provider
+                          .getAllProductsByCategory(categoryModel!.categoryName);
+                    }
+                  },
                 ),
-                itemCount: provider.productList.length,
-                itemBuilder: ((context, index) {
-                  final product = provider.productList[index];
-                  return ProductGridItemView(productModel: product);
-                }),
               ),
-            )
-          ],
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.65
+                  ),
+                  itemCount: provider.productList.length,
+                  itemBuilder: ((context, index) {
+                    final product = provider.productList[index];
+                    return ProductGridItemView(productModel: product);
+                  }),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

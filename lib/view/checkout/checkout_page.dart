@@ -1,15 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_user/view/login/services/auth_service.dart';
-import 'package:ecommerce_user/view/profile/models/address_model.dart';
+import 'package:ecommerce_user/view/notification/provider/notification_provider.dart';
 import 'package:ecommerce_user/view/order/models/date_model.dart';
 import 'package:ecommerce_user/view/notification/models/notification_model.dart';
 import 'package:ecommerce_user/view/order/models/order_model.dart';
 import 'package:ecommerce_user/view/product/view_product_page.dart';
 import 'package:ecommerce_user/view/cart/provider/cart_provider.dart';
 import 'package:ecommerce_user/view/order/provider/order_provider.dart';
-import 'package:ecommerce_user/view/profile/provider/user_provider.dart';
 import 'package:ecommerce_user/core/constants/constants.dart';
 import 'package:ecommerce_user/core/utils/helper_functions.dart';
+import 'package:ecommerce_user/view/user/models/address_model.dart';
+import 'package:ecommerce_user/view/user/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   late OrderProvider orderProvider;
   late CartProvider cartProvider;
   late UserProvider userProvider;
+  late NotificationProvider notificationProvider;
   final addressLine1Controller = TextEditingController();
   final addressLine2Controller = TextEditingController();
   final zipController = TextEditingController();
@@ -40,6 +42,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     orderProvider = Provider.of<OrderProvider>(context, listen: true);
     cartProvider = Provider.of<CartProvider>(context, listen: false);
     userProvider = Provider.of<UserProvider>(context, listen: false);
+    notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
     setAddressIfExists();
     super.didChangeDependencies();
   }
@@ -283,7 +286,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         message: 'You have a new order #${orderModel.orderId}',
         orderModel: orderModel,
       );
-      await orderProvider.addNotification(notification);
+      await notificationProvider.addNotification(notification);
       EasyLoading.dismiss();
       if (mounted) {
         Navigator.pushNamedAndRemoveUntil(
@@ -292,6 +295,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             ModalRoute.withName(ViewProductPage.routeName));
       }
     } catch (error) {
+      debugPrint('-----------------------> order place error ${error.toString()}');
       EasyLoading.dismiss();
       showMsg(context, "Failed to save order");
     }

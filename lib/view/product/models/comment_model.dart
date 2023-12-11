@@ -1,4 +1,6 @@
-import 'package:ecommerce_user/view/profile/models/user_model.dart';
+
+
+import 'package:ecommerce_user/view/user/models/user_model.dart';
 
 const String collectionComment = 'Comment';
 

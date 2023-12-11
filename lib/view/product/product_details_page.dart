@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_user/view/login/services/auth_service.dart';
+import 'package:ecommerce_user/view/notification/provider/notification_provider.dart';
 import 'package:ecommerce_user/view/product/models/comment_model.dart';
 import 'package:ecommerce_user/view/login/login_page.dart';
 import 'package:ecommerce_user/view/cart/provider/cart_provider.dart';
-import 'package:ecommerce_user/view/profile/provider/user_provider.dart';
 import 'package:ecommerce_user/core/utils/helper_functions.dart';
 import 'package:ecommerce_user/core/utils/widget_functions.dart';
+import 'package:ecommerce_user/view/user/provider/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -29,6 +30,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   late ProductModel productModel;
   late ProductProvider productProvider;
   late UserProvider userProvider;
+  late NotificationProvider notificationProvider;
   late Size size;
   String photoUrl = '';
   double userRating = 0.0;
@@ -40,6 +42,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     size = MediaQuery.of(context).size;
     productProvider = Provider.of<ProductProvider>(context, listen: false);
     userProvider = Provider.of<UserProvider>(context, listen: false);
+    notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
     productModel = ModalRoute.of(context)!.settings.arguments as ProductModel;
     photoUrl = productModel.thumbnailImageModel.imageDownloadUrl;
     super.didChangeDependencies();
@@ -269,7 +272,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           message: 'A new comment on ${productModel.productName} is waiting for your approval',
                           commentModel: commentModel,
                         );
-                        await productProvider.addNotification(notification);
+                        await notificationProvider.addNotification(notification);
                         EasyLoading.dismiss();
                         focusNode.unfocus();
                         if (mounted)

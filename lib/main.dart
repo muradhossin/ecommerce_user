@@ -1,18 +1,21 @@
 import 'package:ecommerce_user/view/cart/cart_page.dart';
+import 'package:ecommerce_user/view/category/provider/category_provider.dart';
 import 'package:ecommerce_user/view/checkout/checkout_page.dart';
+import 'package:ecommerce_user/view/checkout/provider/checkout_provider.dart';
 import 'package:ecommerce_user/view/launcher/launcher_page.dart';
 import 'package:ecommerce_user/view/login/login_page.dart';
+import 'package:ecommerce_user/view/notification/provider/notification_provider.dart';
 import 'package:ecommerce_user/view/order/order_page.dart';
 import 'package:ecommerce_user/view/order/order_successful_page.dart';
 import 'package:ecommerce_user/view/login/otp_verification_page.dart';
 import 'package:ecommerce_user/view/product/product_details_page.dart';
 import 'package:ecommerce_user/view/promo/promo_code_page.dart';
-import 'package:ecommerce_user/view/profile/user_profile_page.dart';
 import 'package:ecommerce_user/view/product/view_product_page.dart';
 import 'package:ecommerce_user/view/cart/provider/cart_provider.dart';
 import 'package:ecommerce_user/view/order/provider/order_provider.dart';
 import 'package:ecommerce_user/view/product/provider/product_provider.dart';
-import 'package:ecommerce_user/view/profile/provider/user_provider.dart';
+import 'package:ecommerce_user/view/user/provider/user_provider.dart';
+import 'package:ecommerce_user/view/user/user_profile_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +47,9 @@ void main() async {
         ChangeNotifierProvider(create: (_) => OrderProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProvider(create: (_) => CheckoutProvider()),
+        ChangeNotifierProvider(create: (_) => CategoryProvider()),
       ],
       child: const MyApp()));
 }

@@ -1,5 +1,5 @@
 
-import 'package:ecommerce_user/view/profile/models/user_model.dart';
+import 'package:ecommerce_user/view/user/models/user_model.dart';
 
 import '../../product/models/comment_model.dart';
 import '../../order/models/order_model.dart';

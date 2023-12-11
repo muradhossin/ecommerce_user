@@ -1,19 +1,20 @@
 import 'package:ecommerce_user/view/login/services/auth_service.dart';
-import 'package:ecommerce_user/core/utils/db_helper.dart';
 import 'package:ecommerce_user/view/notification/models/notification_model.dart';
-import 'package:ecommerce_user/view/profile/models/user_model.dart';
+import 'package:ecommerce_user/view/notification/repository/notification_repository.dart';
+import 'package:ecommerce_user/view/user/models/user_model.dart';
+import 'package:ecommerce_user/view/user/repository/user_repository.dart';
 import 'package:flutter/material.dart';
 
 class UserProvider extends ChangeNotifier {
   UserModel? userModel;
   Future<void> addUser(UserModel userModel) =>
-      DbHelper.addUser(userModel);
+      UserRepository.addUser(userModel);
 
   Future<bool> doesUserExist(String uid) =>
-      DbHelper.doesUserExist(uid);
+      UserRepository.doesUserExist(uid);
 
   getUserInfo(){
-    DbHelper.getUserInfo(AuthService.currentUser!.uid).listen((snapshot) {
+    UserRepository.getUserInfo(AuthService.currentUser!.uid).listen((snapshot) {
       if(snapshot.exists){
         userModel = UserModel.fromMap(snapshot.data()!);
         notifyListeners();
@@ -22,10 +23,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<void> updateUserProfileField(String field, dynamic value){
-    return DbHelper.updateUserProfileField(AuthService.currentUser!.uid, {field : value});
+    return UserRepository.updateUserProfileField(AuthService.currentUser!.uid, {field : value});
   }
 
-  addNotification(NotificationModel notification) {
-    return DbHelper.addNotification(notification);
-  }
 }

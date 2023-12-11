@@ -2,7 +2,7 @@ import 'package:ecommerce_user/view/login/services/auth_service.dart';
 import 'package:ecommerce_user/view/cart/cart_page.dart';
 import 'package:ecommerce_user/view/launcher/launcher_page.dart';
 import 'package:ecommerce_user/view/order/order_page.dart';
-import 'package:ecommerce_user/view/profile/user_profile_page.dart';
+import 'package:ecommerce_user/view/user/user_profile_page.dart';
 import 'package:flutter/material.dart';
 
 class MainDrawer extends StatelessWidget {

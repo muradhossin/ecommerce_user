@@ -1,68 +1,39 @@
 import 'dart:io';
 
+import 'package:ecommerce_user/view/checkout/repository/checkout_repository.dart';
 import 'package:ecommerce_user/view/login/services/auth_service.dart';
+import 'package:ecommerce_user/view/notification/repository/notification_repository.dart';
 import 'package:ecommerce_user/view/product/models/comment_model.dart';
 import 'package:ecommerce_user/view/notification/models/notification_model.dart';
 import 'package:ecommerce_user/view/product/models/rating_model.dart';
-import 'package:ecommerce_user/view/profile/models/user_model.dart';
-import 'package:ecommerce_user/core/utils/helper_functions.dart';
+import 'package:ecommerce_user/view/category/repository/category_repository.dart';
+import 'package:ecommerce_user/view/product/repository/product_repository.dart';
+import 'package:ecommerce_user/view/user/models/user_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-import '../../../core/utils/db_helper.dart';
-import '../models/category_model.dart';
+import '../../category/models/category_model.dart';
 import '../models/image_model.dart';
 import '../models/product_model.dart';
 import '../../checkout/models/purchase_model.dart';
 import '../../../core/constants/constants.dart';
 
 class ProductProvider extends ChangeNotifier {
-  List<CategoryModel> categoryList = [];
   List<ProductModel> productList = [];
-  List<PurchaseModel> purchaseList = [];
 
-  Future<void> addCategory(String category) {
-    final categoryModel = CategoryModel(
-      categoryName: category,
-    );
-    return DbHelper.addCategory(categoryModel);
-  }
-
-  getAllCategories() {
-    DbHelper.getAllCategories().listen((snapshot) {
-      categoryList = List.generate(snapshot.docs.length,
-          (index) => CategoryModel.fromMap(snapshot.docs[index].data()));
-      categoryList.sort((model1, model2) =>
-          model1.categoryName.compareTo(model2.categoryName));
-      notifyListeners();
-    });
-  }
-
-  List<CategoryModel> getCategoriesForFiltering() {
-    return <CategoryModel>[
-      CategoryModel(categoryName: "All"),
-      ...categoryList,
-    ];
-  }
 
   getAllProducts() {
-    DbHelper.getAllProducts().listen((snapshot) {
+    ProductRepository.getAllProducts().listen((snapshot) {
       productList = List.generate(snapshot.docs.length,
           (index) => ProductModel.fromMap(snapshot.docs[index].data()));
       notifyListeners();
     });
   }
 
-  getAllPurchases() {
-    DbHelper.getAllPurchases().listen((snapshot) {
-      purchaseList = List.generate(snapshot.docs.length,
-          (index) => PurchaseModel.fromMap(snapshot.docs[index].data()));
-      notifyListeners();
-    });
-  }
+
 
   getAllProductsByCategory(String categoryName) {
-    DbHelper.getAllProductsByCategory(categoryName).listen((snapshot) {
+    ProductRepository.getAllProductsByCategory(categoryName).listen((snapshot) {
       productList = List.generate(snapshot.docs.length,
           (index) => ProductModel.fromMap(snapshot.docs[index].data()));
       notifyListeners();
@@ -70,7 +41,7 @@ class ProductProvider extends ChangeNotifier {
   }
 
   Future<List<CommentModel>> getCommentsByProduct(String productId) async{
-    final snapshot = await DbHelper.getCommentsByProduct(productId);
+    final snapshot = await ProductRepository.getCommentsByProduct(productId);
     final commentList = List.generate(snapshot.docs.length, (index) => CommentModel.fromMap(snapshot.docs[index].data()));
     return commentList;
   }
@@ -95,7 +66,7 @@ class ProductProvider extends ChangeNotifier {
 
   Future<void> addNewProduct(
       ProductModel productModel, PurchaseModel purchaseModel) {
-    return DbHelper.addNewProduct(productModel, purchaseModel);
+    return ProductRepository.addNewProduct(productModel, purchaseModel);
   }
 
   Future<void> addRating(
@@ -106,8 +77,8 @@ class ProductProvider extends ChangeNotifier {
       productId: productId,
       rating: rating,
     );
-    await DbHelper.addRating(ratingModel);
-    final snapshot = await DbHelper.getRatingsByProduct(productId);
+    await ProductRepository.addRating(ratingModel);
+    final snapshot = await ProductRepository.getRatingsByProduct(productId);
     final ratingModelList = List.generate(snapshot.docs.length,
         (index) => RatingModel.fromMap(snapshot.docs[index].data()));
     double totalRating = 0.0;
@@ -121,19 +92,9 @@ class ProductProvider extends ChangeNotifier {
 
   Future<void> updateProductField(
       String productId, String field, dynamic value) {
-    return DbHelper.updateProductField(productId, {field: value});
+    return ProductRepository.updateProductField(productId, {field: value});
   }
 
-  List<PurchaseModel> getPurchaseByProductId(String productId) {
-    return purchaseList
-        .where((element) => element.productId == productId)
-        .toList();
-  }
-
-  Future<void> repurchase(
-      PurchaseModel purchaseModel, ProductModel productModel) {
-    return DbHelper.repurchase(purchaseModel, productModel);
-  }
 
   double priceAfterDiscount(num price, num discount) {
     final discountAmount = (price * discount) / 100;
@@ -141,10 +102,7 @@ class ProductProvider extends ChangeNotifier {
   }
 
   Future<void> addComment(CommentModel commentModel) {
-    return DbHelper.addComment(commentModel);
+    return ProductRepository.addComment(commentModel);
   }
 
-  addNotification(NotificationModel notification) {
-    return DbHelper.addNotification(notification);
-  }
 }
