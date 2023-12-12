@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ecommerce_user/view/login/services/auth_service.dart';
+import 'package:ecommerce_user/view/auth/login_page.dart';
+import 'package:ecommerce_user/view/auth/services/auth_service.dart';
 import 'package:ecommerce_user/view/notification/provider/notification_provider.dart';
 import 'package:ecommerce_user/view/product/models/comment_model.dart';
-import 'package:ecommerce_user/view/login/login_page.dart';
 import 'package:ecommerce_user/view/cart/provider/cart_provider.dart';
 import 'package:ecommerce_user/core/utils/helper_functions.dart';
 import 'package:ecommerce_user/core/utils/widget_functions.dart';

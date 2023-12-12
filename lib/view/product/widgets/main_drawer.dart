@@ -1,4 +1,4 @@
-import 'package:ecommerce_user/view/login/services/auth_service.dart';
+import 'package:ecommerce_user/view/auth/services/auth_service.dart';
 import 'package:ecommerce_user/view/cart/cart_page.dart';
 import 'package:ecommerce_user/view/launcher/launcher_page.dart';
 import 'package:ecommerce_user/view/order/order_page.dart';

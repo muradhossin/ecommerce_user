@@ -1,13 +1,13 @@
+import 'package:ecommerce_user/view/auth/login_page.dart';
+import 'package:ecommerce_user/view/auth/otp_verification_page.dart';
 import 'package:ecommerce_user/view/cart/cart_page.dart';
 import 'package:ecommerce_user/view/category/provider/category_provider.dart';
 import 'package:ecommerce_user/view/checkout/checkout_page.dart';
 import 'package:ecommerce_user/view/checkout/provider/checkout_provider.dart';
 import 'package:ecommerce_user/view/launcher/launcher_page.dart';
-import 'package:ecommerce_user/view/login/login_page.dart';
 import 'package:ecommerce_user/view/notification/provider/notification_provider.dart';
 import 'package:ecommerce_user/view/order/order_page.dart';
 import 'package:ecommerce_user/view/order/order_successful_page.dart';
-import 'package:ecommerce_user/view/login/otp_verification_page.dart';
 import 'package:ecommerce_user/view/product/product_details_page.dart';
 import 'package:ecommerce_user/view/promo/promo_code_page.dart';
 import 'package:ecommerce_user/view/product/view_product_page.dart';

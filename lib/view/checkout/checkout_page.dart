@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ecommerce_user/view/login/services/auth_service.dart';
+import 'package:ecommerce_user/view/auth/services/auth_service.dart';
 import 'package:ecommerce_user/view/notification/provider/notification_provider.dart';
 import 'package:ecommerce_user/view/order/models/date_model.dart';
 import 'package:ecommerce_user/view/notification/models/notification_model.dart';

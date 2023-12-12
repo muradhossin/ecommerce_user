@@ -1,7 +1,5 @@
+import 'package:ecommerce_user/view/auth/services/auth_service.dart';
 import 'package:ecommerce_user/view/cart/repository/cart_repository.dart';
-import 'package:ecommerce_user/view/login/services/auth_service.dart';
-import 'package:ecommerce_user/view/notification/models/notification_model.dart';
-import 'package:ecommerce_user/view/notification/repository/notification_repository.dart';
 import 'package:ecommerce_user/view/order/models/order_item_model.dart';
 import 'package:ecommerce_user/view/order/models/order_model.dart';
 import 'package:ecommerce_user/view/order/repository/order_repository.dart';

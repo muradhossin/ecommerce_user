@@ -1,5 +1,6 @@
-import 'package:ecommerce_user/view/login/services/auth_service.dart';
+
 import 'package:ecommerce_user/core/utils/helper_functions.dart';
+import 'package:ecommerce_user/view/auth/services/auth_service.dart';
 import 'package:ecommerce_user/view/user/models/user_model.dart';
 import 'package:ecommerce_user/view/user/provider/user_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';

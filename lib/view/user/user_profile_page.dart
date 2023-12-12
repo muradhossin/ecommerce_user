@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ecommerce_user/view/login/otp_verification_page.dart';
+import 'package:ecommerce_user/view/auth/otp_verification_page.dart';
 import 'package:ecommerce_user/core/utils/widget_functions.dart';
 import 'package:ecommerce_user/view/user/models/address_model.dart';
 import 'package:ecommerce_user/view/user/models/user_model.dart';

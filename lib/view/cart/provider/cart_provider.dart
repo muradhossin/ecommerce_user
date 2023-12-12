@@ -1,7 +1,7 @@
 import 'package:ecommerce_user/view/cart/repository/cart_repository.dart';
-import 'package:ecommerce_user/view/login/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
+import '../../auth/services/auth_service.dart';
 import '../models/cart_model.dart';
 
 class CartProvider extends ChangeNotifier {

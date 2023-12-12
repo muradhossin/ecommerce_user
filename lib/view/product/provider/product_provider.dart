@@ -1,18 +1,13 @@
 import 'dart:io';
 
-import 'package:ecommerce_user/view/checkout/repository/checkout_repository.dart';
-import 'package:ecommerce_user/view/login/services/auth_service.dart';
-import 'package:ecommerce_user/view/notification/repository/notification_repository.dart';
+import 'package:ecommerce_user/view/auth/services/auth_service.dart';
 import 'package:ecommerce_user/view/product/models/comment_model.dart';
-import 'package:ecommerce_user/view/notification/models/notification_model.dart';
 import 'package:ecommerce_user/view/product/models/rating_model.dart';
-import 'package:ecommerce_user/view/category/repository/category_repository.dart';
 import 'package:ecommerce_user/view/product/repository/product_repository.dart';
 import 'package:ecommerce_user/view/user/models/user_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-import '../../category/models/category_model.dart';
 import '../models/image_model.dart';
 import '../models/product_model.dart';
 import '../../checkout/models/purchase_model.dart';
