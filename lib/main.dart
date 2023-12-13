@@ -1,3 +1,5 @@
+import 'package:ecommerce_user/core/themes/dark_theme.dart';
+import 'package:ecommerce_user/core/themes/light_theme.dart';
 import 'package:ecommerce_user/view/auth/login_page.dart';
 import 'package:ecommerce_user/view/auth/otp_verification_page.dart';
 import 'package:ecommerce_user/view/cart/cart_page.dart';
@@ -61,11 +63,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        useMaterial3: true,
-        primarySwatch: Colors.blue,
-      ),
+      themeMode: ThemeMode.system,
+      theme: LightTheme.theme,
+      darkTheme: DarkTheme.theme,
       builder: EasyLoading.init(),
       initialRoute: LauncherPage.routeName,
 

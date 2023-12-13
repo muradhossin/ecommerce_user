@@ -1,4 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_user/core/components/custom_image.dart';
+import 'package:ecommerce_user/core/constants/app_constants.dart';
+import 'package:ecommerce_user/core/constants/dimensions.dart';
+import 'package:ecommerce_user/core/extensions/context.dart';
+import 'package:ecommerce_user/core/extensions/image_path.dart';
+import 'package:ecommerce_user/core/extensions/style.dart';
 import 'package:ecommerce_user/core/utils/helper_functions.dart';
 import 'package:ecommerce_user/view/notification/provider/notification_provider.dart';
 import 'package:ecommerce_user/view/user/models/user_model.dart';
@@ -14,7 +20,7 @@ import '../../core/constants/constants.dart';
 import '../launcher/launcher_page.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
   static const String routeName = '/loginpage';
 
   @override
@@ -55,19 +61,42 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          child: Form(
+      body: Center(child: Form(
         key: _formKey,
         child: ListView(
           padding: const EdgeInsets.all(16),
           shrinkWrap: true,
           children: [
+
+            CustomImage(imagePath: Images.logo, width: 100, height: 100,),
+            const SizedBox(height: Dimensions.heightMedium,),
+
+            const Text(AppConstants.appName, textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold,),),
+            const SizedBox(height: Dimensions.heightExtraLarge,),
+
             TextFormField(
+              autofillHints: const [AutofillHints.email],
+              enableSuggestions: true,
               controller: _emailController,
               keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
-                labelText: 'Email Address',
-                prefixIcon: Icon(Icons.email),
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: const BorderRadius.all(Radius.circular(Dimensions.radiusMedium)),
+                  borderSide: BorderSide(color: context.theme.primaryColor.withOpacity(.2)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: const BorderRadius.all(Radius.circular(Dimensions.radiusMedium)),
+                  borderSide: BorderSide(color: context.theme.primaryColor),
+                ),
+                errorBorder: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(Dimensions.radiusMedium)),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(Dimensions.radiusMedium)),
+                ),
+                labelText: 'Email',
+                prefixIcon: const Icon(Icons.email),
                 filled: true,
               ),
               validator: (value) {
@@ -77,15 +106,29 @@ class _LoginPageState extends State<LoginPage> {
                 return null;
               },
             ),
-            const SizedBox(
-              height: 5,
-            ),
+            const SizedBox(height: Dimensions.paddingMedium,),
+
             TextFormField(
               controller: _passwordController,
               obscureText: true,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: const BorderRadius.all(Radius.circular(Dimensions.radiusMedium)),
+                  borderSide: BorderSide(color: context.theme.primaryColor.withOpacity(.2)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: const BorderRadius.all(Radius.circular(Dimensions.radiusMedium)),
+                  borderSide: BorderSide(color: context.theme.primaryColor),
+                ),
+                errorBorder: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(Dimensions.radiusMedium)),
+                  borderSide: BorderSide(color: Colors.red),
+                ),
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(Dimensions.radiusMedium)),
+                ),
                 labelText: 'Password',
-                prefixIcon: Icon(Icons.lock),
+                prefixIcon: const Icon(Icons.lock),
                 filled: true,
               ),
               validator: (value) {
@@ -95,14 +138,20 @@ class _LoginPageState extends State<LoginPage> {
                 return null;
               },
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: Dimensions.paddingLarge),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: context.theme.primaryColor,
+                animationDuration: const Duration(milliseconds: 500),
+                padding: const EdgeInsets.all(Dimensions.paddingMedium),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(Dimensions.radiusMedium),
+                ),
+              ),
               onPressed: () {
                 _authenticate(true);
               },
-              child: const Text('Login'),
+              child: Text('Login', style: const TextStyle().regular.copyWith(color: context.theme.colorScheme.onPrimary),),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
