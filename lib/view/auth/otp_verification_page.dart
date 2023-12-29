@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 class OtpVerificationPage extends StatefulWidget {
   static const String routeName = 'otp';
 
-  const OtpVerificationPage({Key? key}) : super(key: key);
+  const OtpVerificationPage({super.key});
 
   @override
   State<OtpVerificationPage> createState() => _OtpVerificationPageState();

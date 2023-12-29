@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecommerce_user/core/components/custom_image.dart';
 import 'package:ecommerce_user/view/product/models/product_model.dart';
 import 'package:ecommerce_user/view/product/product_details_page.dart';
 import 'package:ecommerce_user/core/constants/constants.dart';
@@ -9,27 +10,20 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 class ProductGridItemView extends StatelessWidget {
   final ProductModel productModel;
 
-  const ProductGridItemView({Key? key, required this.productModel})
-      : super(key: key);
+  const ProductGridItemView({super.key, required this.productModel});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.pushNamed(context, ProductDetailsPage.routeName, arguments: productModel);
-      },
+      onTap: () => Navigator.pushNamed(context, ProductDetailsPage.routeName, arguments: productModel),
       child: Card(
         child: Stack(
           children: [
             Column(
               children: [
                 Expanded(
-                  child: CachedNetworkImage(
+                  child: CustomImage(
                     imageUrl: productModel.thumbnailImageModel.imageDownloadUrl,
-                    placeholder: (context, url) => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
                 Padding(

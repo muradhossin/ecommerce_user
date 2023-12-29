@@ -8,21 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class UserProfilePage extends StatelessWidget {
-  const UserProfilePage({Key? key}) : super(key: key);
+  const UserProfilePage({super.key});
   static const String routeName = '/userprofile';
 
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context, listen: true);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Profile'),
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('My Profile'), elevation: 0),
       body: userProvider.userModel == null
-          ? const Center(
-              child: Text('Failed to load user data'),
-            )
+          ? const Center(child: Text('Failed to load user data'))
           : ListView(
               children: [
                 _headerSection(context, userProvider),
@@ -173,7 +168,7 @@ class UserProfilePage extends StatelessWidget {
                 userProvider.userModel!.displayName ?? 'No Display Name',
                 style: Theme.of(context)
                     .textTheme
-                    .headline6!
+                    .titleLarge!
                     .copyWith(color: Colors.white),
               ),
               Text(
