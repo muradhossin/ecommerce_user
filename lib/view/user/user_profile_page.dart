@@ -1,10 +1,17 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecommerce_user/core/components/custom_image.dart';
+import 'package:ecommerce_user/core/constants/dimensions.dart';
 import 'package:ecommerce_user/view/auth/otp_verification_page.dart';
 import 'package:ecommerce_user/core/utils/widget_functions.dart';
 import 'package:ecommerce_user/view/user/models/address_model.dart';
 import 'package:ecommerce_user/view/user/models/user_model.dart';
 import 'package:ecommerce_user/view/user/provider/user_provider.dart';
+import 'package:ecommerce_user/view/user/services/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class UserProfilePage extends StatelessWidget {
@@ -26,13 +33,8 @@ class UserProfilePage extends StatelessWidget {
                   title: Text(userProvider.userModel!.phone ?? 'Not set yet'),
                   trailing: IconButton(
                     onPressed: () {
-                      showSingleTextFieldInputDialog(
-                        context: context,
-                        title: 'Mobile Number',
-                        onSubmit: (value){
-                          Navigator.pushNamed(context, OtpVerificationPage.routeName, arguments: value);
-                        }
-                      );
+                      //Navigator.pushNamed(context, OtpVerificationPage.routeName, arguments: value);
+                      UserService.userProfileInfoUpdate(userProvider, userFieldPhone, 'Mobile Number', context);
                     },
                     icon: const Icon(Icons.edit),
                   ),
@@ -42,7 +44,9 @@ class UserProfilePage extends StatelessWidget {
                   title: Text(userProvider.userModel!.age ?? 'Not set yet'),
                   subtitle: const Text('Date of Birth'),
                   trailing: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      UserService.userProfileInfoUpdate(userProvider, userFieldAge, 'Date of Birth', context);
+                    },
                     icon: const Icon(Icons.edit),
                   ),
                 ),
@@ -51,7 +55,9 @@ class UserProfilePage extends StatelessWidget {
                   title: Text(userProvider.userModel!.gender ?? 'Not set yet'),
                   subtitle: const Text('Gender'),
                   trailing: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      UserService.userProfileInfoUpdate(userProvider, userFieldGender, 'Gender', context);
+                    },
                     icon: const Icon(Icons.edit),
                   ),
                 ),
@@ -63,15 +69,7 @@ class UserProfilePage extends StatelessWidget {
                   subtitle: const Text('Address Line 1'),
                   trailing: IconButton(
                     onPressed: () {
-                      showSingleTextFieldInputDialog(
-                        context: context,
-                        title: 'Set Address Line 1',
-                        onSubmit: (value) {
-                          userProvider.updateUserProfileField(
-                              '$userFieldAddressModel.$addressFieldAddressLine1',
-                              value);
-                        },
-                      );
+                      UserService.userProfileInfoUpdate(userProvider, '$userFieldAddressModel.$addressFieldAddressLine1', 'Address Line 1', context);
                     },
                     icon: const Icon(Icons.edit),
                   ),
@@ -84,15 +82,7 @@ class UserProfilePage extends StatelessWidget {
                   subtitle: const Text('Address Line 2'),
                   trailing: IconButton(
                     onPressed: () {
-                      showSingleTextFieldInputDialog(
-                        context: context,
-                        title: 'Set Address Line 2',
-                        onSubmit: (value) {
-                          userProvider.updateUserProfileField(
-                              '$userFieldAddressModel.$addressFieldAddressLine2',
-                              value);
-                        },
-                      );
+                      UserService.userProfileInfoUpdate(userProvider, '$userFieldAddressModel.$addressFieldAddressLine2', 'Address Line 2', context);
                     },
                     icon: const Icon(Icons.edit),
                   ),
@@ -103,7 +93,9 @@ class UserProfilePage extends StatelessWidget {
                       'Not set yet'),
                   subtitle: const Text('City'),
                   trailing: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      UserService.userProfileInfoUpdate(userProvider, '$userFieldAddressModel.$addressFieldCity', 'City', context);
+                    },
                     icon: const Icon(Icons.edit),
                   ),
                 ),
@@ -114,15 +106,7 @@ class UserProfilePage extends StatelessWidget {
                   subtitle: const Text('Zip Code'),
                   trailing: IconButton(
                     onPressed: () {
-                      showSingleTextFieldInputDialog(
-                        context: context,
-                        title: 'Set Zip Code',
-                        onSubmit: (value) {
-                          userProvider.updateUserProfileField(
-                              '$userFieldAddressModel.$addressFieldZipcode',
-                              value);
-                        },
-                      );
+                      UserService.userProfileInfoUpdate(userProvider, '$userFieldAddressModel.$addressFieldZipcode', 'Zip Code', context);
                     },
                     icon: const Icon(Icons.edit),
                   ),
@@ -138,23 +122,34 @@ class UserProfilePage extends StatelessWidget {
       color: Theme.of(context).primaryColor,
       child: Row(
         children: [
+
+          const SizedBox(width: Dimensions.paddingSmall,),
           Card(
             elevation: 5,
             child: userProvider.userModel!.imageUrl == null
-                ? const Icon(
-                    Icons.person,
-                    size: 90,
-                    color: Colors.grey,
-                  )
-                : CachedNetworkImage(
-                    width: 90,
-                    height: 90,
-                    imageUrl: userProvider.userModel!.imageUrl!,
-                    placeholder: (context, url) => const Center(
-                      child: CircularProgressIndicator(),
+                ? InkWell(
+                    onTap: () {
+                      UserService.userImageUpdate(userProvider);
+                    },
+                  child: const Icon(
+                      Icons.person,
+                      size: 90,
+                      color: Colors.grey,
                     ),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
+                )
+                : InkWell(
+                  onTap: () {
+                    UserService.userImageUpdate(userProvider);
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(Dimensions.radiusSmall),
+                    child: CustomImage(
+                        fit: BoxFit.cover,
+                        imageUrl: userProvider.userModel!.imageUrl!,
+                        height: 90,
+                        width: 90,
+                      ),
+                  ),
                   ),
           ),
           const SizedBox(
@@ -164,12 +159,18 @@ class UserProfilePage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                userProvider.userModel!.displayName ?? 'No Display Name',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: Colors.white),
+              Row(
+                children: [
+                  Text(
+                    userProvider.userModel!.displayName ?? 'No Display Name',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(color: Colors.white),
+                  ),
+
+                  IconButton(onPressed: () => UserService.userProfileInfoUpdate(userProvider, userFieldDisplayName, 'Display Name', context), icon: const Icon(Icons.edit)),
+                ],
               ),
               Text(
                 userProvider.userModel!.email,

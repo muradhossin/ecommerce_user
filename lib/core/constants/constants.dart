@@ -1,4 +1,5 @@
 const String firebaseStorageProductImageDir = 'ProductImages';
+const String firebaseStorageUserImageDir = 'UserImages';
 const String currencySymbol = '৳';
 
 abstract class OrderStatus{
