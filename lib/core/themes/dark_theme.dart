@@ -5,6 +5,7 @@ class DarkTheme {
     return ThemeData(
       useMaterial3: true,
       primaryColor: Colors.blueGrey,
+      cardColor: Colors.black,
     );
   }
 }

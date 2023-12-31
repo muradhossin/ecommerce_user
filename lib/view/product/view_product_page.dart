@@ -12,6 +12,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/constants/dimensions.dart';
 import '../cart/widget/cart_bubble_view.dart';
 import '../category/models/category_model.dart';
 import '../order/provider/order_provider.dart';
@@ -130,9 +131,12 @@ class _ViewProductPageState extends State<ViewProductPage> {
               ),
               provider.productList.isNotEmpty ? Expanded(
                 child: GridView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSmall),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 0.65
+                    childAspectRatio: 0.65,
+                    mainAxisSpacing: Dimensions.paddingExtraSmall,
+                    crossAxisSpacing: Dimensions.paddingExtraSmall,
                   ),
                   itemCount: provider.productList.length,
                   itemBuilder: ((context, index) {

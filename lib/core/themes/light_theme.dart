@@ -6,6 +6,7 @@ class LightTheme {
       useMaterial3: true,
       primaryColor: Colors.cyan,
       disabledColor: Colors.grey,
+      cardColor: Colors.white,
     );
   }
 }

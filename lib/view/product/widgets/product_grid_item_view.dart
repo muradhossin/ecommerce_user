@@ -1,5 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_user/core/components/custom_image.dart';
+import 'package:ecommerce_user/core/constants/dimensions.dart';
+import 'package:ecommerce_user/core/extensions/context.dart';
+import 'package:ecommerce_user/core/extensions/style.dart';
 import 'package:ecommerce_user/view/product/models/product_model.dart';
 import 'package:ecommerce_user/view/product/product_details_page.dart';
 import 'package:ecommerce_user/core/constants/constants.dart';
@@ -17,20 +20,32 @@ class ProductGridItemView extends StatelessWidget {
     return InkWell(
       onTap: () => Navigator.pushNamed(context, ProductDetailsPage.routeName, arguments: productModel),
       child: Card(
+        color: Theme.of(context).primaryColor.withOpacity(0.5),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Dimensions.radiusMedium),
+        ),
         child: Stack(
           children: [
             Column(
               children: [
                 Expanded(
-                  child: CustomImage(
-                    imageUrl: productModel.thumbnailImageModel.imageDownloadUrl,
+                  child: Padding(
+                    padding: const EdgeInsets.all(Dimensions.paddingSmall),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(Dimensions.radiusMedium),
+                      child: CustomImage(
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        imageUrl: productModel.thumbnailImageModel.imageDownloadUrl,
+                      ),
+                    ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
                     productModel.productName,
-                    style: const TextStyle(fontSize: 16, color: Colors.grey),
+                    style: const TextStyle().regular,
                   ),
                 ),
                 Padding(
@@ -39,17 +54,13 @@ class ProductGridItemView extends StatelessWidget {
                     text: TextSpan(
                         text:
                             '$currencySymbol${getPriceAfterDiscount(productModel.salePrice, productModel.productDiscount)}',
-                        style:
-                            const TextStyle(fontSize: 20, color: Colors.black),
+                        style: const TextStyle().regular.copyWith(fontSize: Dimensions.fontSizeSmall, fontWeight: FontWeight.w500),
                         children: [
                           if (productModel.productDiscount > 0)
                             TextSpan(
                                 text:
                                     " $currencySymbol${productModel.salePrice}",
-                                style: const TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.grey,
-                                    decoration: TextDecoration.lineThrough))
+                                style: const TextStyle().regular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: context.theme.colorScheme.error, decoration: TextDecoration.lineThrough)),
                         ]),
                   ),
                 ),
@@ -86,13 +97,19 @@ class ProductGridItemView extends StatelessWidget {
                 left: 0,
                 right: 0,
                 child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(Dimensions.radiusMedium),
+                      topRight: Radius.circular(Dimensions.radiusMedium),
+                    ),
+                    color: context.theme.textTheme.bodyLarge!.color!.withOpacity(.5),
+                  ),
                   padding: const EdgeInsets.all(8),
                   alignment: Alignment.center,
                   height: 60,
-                  color: Colors.black54,
                   child: Text(
                     '${productModel.productDiscount}% OFF',
-                    style: const TextStyle(fontSize: 25, color: Colors.white),
+                    style: const TextStyle().regular.copyWith(color: context.theme.cardColor, fontSize: Dimensions.fontSizeMedium),
                   ),
                 ),
               ),
