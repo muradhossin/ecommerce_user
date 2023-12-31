@@ -1,3 +1,4 @@
+import 'package:ecommerce_user/core/components/no_data_view.dart';
 import 'package:ecommerce_user/view/category/provider/category_provider.dart';
 import 'package:ecommerce_user/view/checkout/provider/checkout_provider.dart';
 import 'package:ecommerce_user/view/product/widgets/main_drawer.dart';
@@ -127,7 +128,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
                   },
                 ),
               ),
-              Expanded(
+              provider.productList.isNotEmpty ? Expanded(
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
@@ -139,7 +140,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
                     return ProductGridItemView(productModel: product);
                   }),
                 ),
-              )
+              ) : const NoDataView(),
             ],
           ),
         ),

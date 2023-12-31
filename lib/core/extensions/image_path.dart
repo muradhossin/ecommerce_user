@@ -8,11 +8,14 @@ extension ImagePath on String {
   String get jpgIcon => 'assets/icons/$this.jpg';
   String get svgIcon => 'assets/icons/$this.svg';
 
+  String get gifImage => 'assets/gif/$this.gif';
+
 }
 
 
 class Images {
   static String logo = 'logo'.pngIcon;
+  static String noData = 'no_data'.gifImage;
 }
 
 
