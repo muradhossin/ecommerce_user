@@ -10,7 +10,7 @@ import 'package:image_picker/image_picker.dart';
 class UserService{
 
   static void userImageUpdate (UserProvider userProvider) {
-    ImagePicker().pickImage(source: ImageSource.camera).then((value) {
+    ImagePicker().pickImage(source: ImageSource.gallery).then((value) {
       if (value != null) {
         EasyLoading.show(status: 'Uploading image...');
         try{
