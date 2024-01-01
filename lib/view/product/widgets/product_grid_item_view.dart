@@ -3,6 +3,7 @@ import 'package:ecommerce_user/core/components/custom_image.dart';
 import 'package:ecommerce_user/core/constants/dimensions.dart';
 import 'package:ecommerce_user/core/extensions/context.dart';
 import 'package:ecommerce_user/core/extensions/style.dart';
+import 'package:ecommerce_user/core/routes/app_router.dart';
 import 'package:ecommerce_user/view/product/models/product_model.dart';
 import 'package:ecommerce_user/view/product/product_details_page.dart';
 import 'package:ecommerce_user/core/constants/constants.dart';
@@ -18,7 +19,7 @@ class ProductGridItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, ProductDetailsPage.routeName, arguments: productModel),
+      onTap: () => Navigator.pushNamed(context, AppRouter.getProductDetailsRoute(), arguments: productModel),
       child: Card(
         color: Theme.of(context).primaryColor.withOpacity(0.5),
         shape: RoundedRectangleBorder(

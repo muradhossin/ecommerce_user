@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 
 class OrderPage extends StatefulWidget {
   const OrderPage({Key? key}) : super(key: key);
-  static const String routeName = '/orderpage';
 
   @override
   State<OrderPage> createState() => _OrderPageState();

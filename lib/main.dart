@@ -1,3 +1,4 @@
+import 'package:ecommerce_user/core/routes/app_router.dart';
 import 'package:ecommerce_user/core/themes/dark_theme.dart';
 import 'package:ecommerce_user/core/themes/light_theme.dart';
 import 'package:ecommerce_user/view/auth/login_page.dart';
@@ -69,20 +70,14 @@ class MyApp extends StatelessWidget {
       theme: LightTheme.theme,
       darkTheme: DarkTheme.theme,
       builder: EasyLoading.init(),
-      initialRoute: LauncherPage.routeName,
-
-      routes: {
-        LauncherPage.routeName : (_) => const LauncherPage(),
-        LoginPage.routeName : (_) => const LoginPage(),
-        ViewProductPage.routeName : (_) => const ViewProductPage(),
-        ProductDetailsPage.routeName : (_) => ProductDetailsPage(),
-        OrderPage.routeName : (_) => const OrderPage(),
-        UserProfilePage.routeName : (_) => const UserProfilePage(),
-        OtpVerificationPage.routeName : (_) => const OtpVerificationPage(),
-        CartPage.routeName : (_) => const CartPage(),
-        CheckoutPage.routeName : (_) => const CheckoutPage(),
-        OrderSuccessfulPage.routeName : (_) => const OrderSuccessfulPage(),
-        PromoCodePage.routeName : (_) => const PromoCodePage(),
+      onGenerateRoute: AppRouter.generateRoute,
+      onGenerateInitialRoutes: (String initialRouteName) {
+        return [
+          MaterialPageRoute(
+            settings: RouteSettings(name: AppRouter.getLauncherRoute()),
+            builder: (context) => const LauncherPage(),
+          ),
+        ];
       },
     );
   }

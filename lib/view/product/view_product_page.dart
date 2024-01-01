@@ -1,4 +1,5 @@
 import 'package:ecommerce_user/core/components/no_data_view.dart';
+import 'package:ecommerce_user/core/routes/app_router.dart';
 import 'package:ecommerce_user/view/category/provider/category_provider.dart';
 import 'package:ecommerce_user/view/checkout/provider/checkout_provider.dart';
 import 'package:ecommerce_user/view/product/widgets/main_drawer.dart';
@@ -19,8 +20,6 @@ import '../order/provider/order_provider.dart';
 import 'provider/product_provider.dart';
 
 class ViewProductPage extends StatefulWidget {
-  static const String routeName = '/viewproduct';
-
   const ViewProductPage({Key? key}) : super(key: key);
 
   @override
@@ -77,7 +76,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
     if(message.data['key'] == 'promo'){
       Navigator.pushNamed(context, PromoCodePage.routeName, arguments: message.data['value']);
     }else if(message.data['key'] == 'user'){
-      Navigator.pushNamed(context, UserProfilePage.routeName,);
+      Navigator.pushNamed(context, AppRouter.getUserProfileRoute());
     }
 
   }

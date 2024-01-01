@@ -1,3 +1,4 @@
+import 'package:ecommerce_user/core/routes/app_router.dart';
 import 'package:ecommerce_user/view/cart/cart_page.dart';
 import 'package:ecommerce_user/view/cart/provider/cart_provider.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class CartBubbleView extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, CartPage.routeName);
+        Navigator.pushNamed(context, AppRouter.getCartRoute());
       },
       child: Stack(
         children: [

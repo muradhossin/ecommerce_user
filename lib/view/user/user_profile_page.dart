@@ -16,7 +16,7 @@ import 'package:provider/provider.dart';
 
 class UserProfilePage extends StatelessWidget {
   const UserProfilePage({super.key});
-  static const String routeName = '/userprofile';
+
 
   @override
   Widget build(BuildContext context) {

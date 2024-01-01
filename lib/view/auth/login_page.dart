@@ -5,6 +5,7 @@ import 'package:ecommerce_user/core/constants/dimensions.dart';
 import 'package:ecommerce_user/core/extensions/context.dart';
 import 'package:ecommerce_user/core/extensions/image_path.dart';
 import 'package:ecommerce_user/core/extensions/style.dart';
+import 'package:ecommerce_user/core/routes/app_router.dart';
 import 'package:ecommerce_user/core/utils/helper_functions.dart';
 import 'package:ecommerce_user/view/notification/provider/notification_provider.dart';
 import 'package:ecommerce_user/view/user/models/user_model.dart';
@@ -21,7 +22,6 @@ import '../launcher/launcher_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
-  static const String routeName = '/loginpage';
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -189,7 +189,7 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () {
                 AuthService.signInAnonymously().then(
                   (value) => Navigator.pushReplacementNamed(
-                      context, LauncherPage.routeName),
+                      context, AppRouter.getLauncherRoute()),
                 );
               },
               icon: const Icon(Icons.account_circle_outlined),
@@ -211,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
           await AuthService.login(email, password);
           EasyLoading.dismiss();
           if (mounted) {
-            Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+            Navigator.pushReplacementNamed(context, AppRouter.getLauncherRoute());
           }
         } else {
           if (AuthService.currentUser != null) {
@@ -236,7 +236,7 @@ class _LoginPageState extends State<LoginPage> {
               if (isAnonymous) {
                 Navigator.pop(context);
               } else {
-                Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+                Navigator.pushReplacementNamed(context, AppRouter.getLauncherRoute());
               }
             }
           }).catchError((error) {
@@ -289,7 +289,7 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.pop(context);
         } else {
           EasyLoading.dismiss();
-          Navigator.pushReplacementNamed(context, LauncherPage.routeName);
+          Navigator.pushReplacementNamed(context, AppRouter.getLauncherRoute());
         }
       }
     } catch (error) {

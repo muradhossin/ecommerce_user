@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecommerce_user/core/routes/app_router.dart';
 import 'package:ecommerce_user/view/cart/widget/cart_item_view.dart';
 import 'package:ecommerce_user/view/checkout/checkout_page.dart';
 import 'package:ecommerce_user/view/cart/provider/cart_provider.dart';
@@ -7,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CartPage extends StatelessWidget {
-  static const String routeName = '/cart';
-
   const CartPage({Key? key}) : super(key: key);
 
   @override
@@ -52,7 +51,7 @@ class CartPage extends StatelessWidget {
                     ),
                     OutlinedButton(
                       onPressed: provider.cartList.isEmpty ? null : () {
-                        Navigator.pushNamed(context, CheckoutPage.routeName);
+                        Navigator.pushNamed(context, AppRouter.getCheckoutRoute());
                       },
                       child: const Text("CHECKOUT"),
                     ),

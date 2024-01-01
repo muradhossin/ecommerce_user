@@ -15,10 +15,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/routes/app_router.dart';
 import '../order/order_successful_page.dart';
 
 class CheckoutPage extends StatefulWidget {
-  static const String routeName = '/checkout';
 
   const CheckoutPage({Key? key}) : super(key: key);
 
@@ -292,7 +292,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         Navigator.pushNamedAndRemoveUntil(
             context,
             OrderSuccessfulPage.routeName,
-            ModalRoute.withName(ViewProductPage.routeName));
+            ModalRoute.withName(AppRouter.getViewProductRoute()));
       }
     } catch (error) {
       debugPrint('-----------------------> order place error ${error.toString()}');

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecommerce_user/core/routes/app_router.dart';
 import 'package:ecommerce_user/view/auth/login_page.dart';
 import 'package:ecommerce_user/view/auth/services/auth_service.dart';
 import 'package:ecommerce_user/view/notification/provider/notification_provider.dart';
@@ -18,16 +19,14 @@ import 'provider/product_provider.dart';
 import '../../core/constants/constants.dart';
 
 class ProductDetailsPage extends StatefulWidget {
-  static const String routeName = '/productdetails';
-
-  ProductDetailsPage({Key? key}) : super(key: key);
+  final ProductModel productModel;
+  const ProductDetailsPage({super.key, required this.productModel});
 
   @override
   State<ProductDetailsPage> createState() => _ProductDetailsPageState();
 }
 
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
-  late ProductModel productModel;
   late ProductProvider productProvider;
   late UserProvider userProvider;
   late NotificationProvider notificationProvider;
@@ -43,8 +42,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     productProvider = Provider.of<ProductProvider>(context, listen: false);
     userProvider = Provider.of<UserProvider>(context, listen: false);
     notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
-    productModel = ModalRoute.of(context)!.settings.arguments as ProductModel;
-    photoUrl = productModel.thumbnailImageModel.imageDownloadUrl;
+    photoUrl = widget.productModel.thumbnailImageModel.imageDownloadUrl;
     super.didChangeDependencies();
   }
 
@@ -52,7 +50,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(productModel.productName),
+        title: Text(widget.productModel.productName),
       ),
       body: ListView(
         children: [
@@ -69,7 +67,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             InkWell(
               onTap: () {
                 setState(() {
-                  photoUrl = productModel.thumbnailImageModel.imageDownloadUrl;
+                  photoUrl = widget.productModel.thumbnailImageModel.imageDownloadUrl;
                 });
               },
               child: Card(
@@ -77,14 +75,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   width: 70,
                   height: 100,
                   fit: BoxFit.cover,
-                  imageUrl: productModel.thumbnailImageModel.imageDownloadUrl,
+                  imageUrl: widget.productModel.thumbnailImageModel.imageDownloadUrl,
                   placeholder: (context, url) =>
                       const Center(child: CircularProgressIndicator()),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
               ),
             ),
-            ...productModel.additionalImageModels.map((url) {
+            ...widget.productModel.additionalImageModels.map((url) {
               return url.isEmpty
                   ? const SizedBox()
                   : InkWell(
@@ -121,19 +119,19 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 child:
                     Consumer<CartProvider>(builder: (context, provider, child) {
                   final isInCart =
-                      provider.isProductInCart(productModel.productId!);
+                      provider.isProductInCart(widget.productModel.productId!);
                   return TextButton.icon(
                     onPressed: () async{
                       EasyLoading.show(status: "Please wait");
                       if (isInCart) {
-                        await provider.removeFromCart(productModel.productId!);
+                        await provider.removeFromCart(widget.productModel.productId!);
                         if(mounted) showMsg(context, "Removed from Cart");
                       } else {
                         await provider.addToCart(
-                          productId: productModel.productId!,
-                          productName: productModel.productName,
-                          url: productModel.thumbnailImageModel.imageDownloadUrl,
-                          salePrice: num.parse(getPriceAfterDiscount(productModel.salePrice, productModel.productDiscount)),
+                          productId: widget.productModel.productId!,
+                          productName: widget.productModel.productName,
+                          url: widget.productModel.thumbnailImageModel.imageDownloadUrl,
+                          salePrice: num.parse(getPriceAfterDiscount(widget.productModel.salePrice, widget.productModel.productDiscount)),
                         );
 
                         if(mounted) showMsg(context, "Added to Cart");
@@ -150,14 +148,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             ],
           ),
           ListTile(
-            title: Text(productModel.productName),
-            subtitle: Text(productModel.category.categoryName),
+            title: Text(widget.productModel.productName),
+            subtitle: Text(widget.productModel.category.categoryName),
           ),
           ListTile(
-            title: Text('Sale Price: $currencySymbol${productModel.salePrice}'),
-            subtitle: Text('Discount: ${productModel.productDiscount}%'),
+            title: Text('Sale Price: $currencySymbol${widget.productModel.salePrice}'),
+            subtitle: Text('Discount: ${widget.productModel.productDiscount}%'),
             trailing: Text(
-                '$currencySymbol${productProvider.priceAfterDiscount(productModel.salePrice, productModel.productDiscount)}'),
+                '$currencySymbol${productProvider.priceAfterDiscount(widget.productModel.salePrice, widget.productModel.productDiscount)}'),
           ),
           Card(
             child: Padding(
@@ -195,13 +193,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           content:
                               'To rate this product, you need to login with your email and password or Google account. To login with your account, go to Login Page',
                           onPressed: () {
-                            Navigator.pushNamed(context, LoginPage.routeName);
+                            Navigator.pushNamed(context, AppRouter.getLoginRoute());
                           },
                         );
                       } else {
                         EasyLoading.show(status: 'Please wait');
                         await productProvider.addRating(
-                          productModel.productId!,
+                          widget.productModel.productId!,
                           userRating,
                           userProvider.userModel!,
                         );
@@ -252,14 +250,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           content:
                               'To comment this product, you need to login with your email and password or Google account. To login with your account, go to Login Page',
                           onPressed: () {
-                            Navigator.pushNamed(context, LoginPage.routeName);
+                            Navigator.pushNamed(context, AppRouter.getLoginRoute());
                           },
                         );
                       } else {
                         EasyLoading.show(status: 'Please wait');
                         final commentModel = CommentModel(
                           userModel: userProvider.userModel!,
-                          productId: productModel.productId!,
+                          productId: widget.productModel.productId!,
                           comment: txtController.text,
                           date: getFormattedDate(DateTime.now(), pattern: 'dd/MM/yyyy hh:mm:ss a'),
                         );
@@ -269,7 +267,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         final notification = NotificationModel(
                           id: DateTime.now().millisecondsSinceEpoch.toString(),
                           type: NotificationType.comment,
-                          message: 'A new comment on ${productModel.productName} is waiting for your approval',
+                          message: 'A new comment on ${widget.productModel.productName} is waiting for your approval',
                           commentModel: commentModel,
                         );
                         await notificationProvider.addNotification(notification);
@@ -295,7 +293,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           ),
           FutureBuilder<List<CommentModel>>(
             future:
-                productProvider.getCommentsByProduct(productModel.productId!),
+                productProvider.getCommentsByProduct(widget.productModel.productId!),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 final commentList = snapshot.data!;
