@@ -8,6 +8,7 @@ import 'package:ecommerce_user/view/cart/provider/cart_provider.dart';
 import 'package:ecommerce_user/core/utils/helper_functions.dart';
 import 'package:ecommerce_user/core/utils/widget_functions.dart';
 import 'package:ecommerce_user/view/user/provider/user_provider.dart';
+import 'package:ecommerce_user/view/wishlist/provider/wishlist_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -109,10 +110,34 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           Row(
             children: [
               Expanded(
-                child: TextButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.favorite),
-                  label: const Text('Add to Favorite'),
+                child: Consumer<WishListProvider>(
+                  builder: (context, provider, child) {
+                    final isInWishList = provider.isProductInWishList(widget.productModel.productId!);
+                    return TextButton.icon(
+                      onPressed: () async {
+                        EasyLoading.show(status: "Please wait");
+                        if (isInWishList) {
+                          await provider.removeFromWishList(widget.productModel.productId!);
+                          if(mounted) showMsg(context, "Removed from Wishlist");
+                        } else {
+                          await provider.addToWishList(widget.productModel);
+                          if(mounted) showMsg(context, "Added to Wishlist");
+                        }
+                        EasyLoading.dismiss();
+                      },
+                      icon: Icon(isInWishList
+                          ? Icons.favorite
+                          : Icons.favorite_border),
+                      label: Text(isInWishList
+                          ? 'Remove from Wishlist'
+                          : 'Add to Wishlist'),
+                    );
+                  },
+                  child: TextButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(Icons.favorite),
+                    label: const Text('Add to Favorite'),
+                  ),
                 ),
               ),
               Expanded(

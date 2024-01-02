@@ -28,7 +28,7 @@ class AppRouter {
   static String getWishListRoute() => wishListRouteName;
   static String getLauncherRoute() => launcherRouteName;
   static String getViewProductRoute() => viewProductRouteName;
-  static String getProductDetailsRoute(ProductModel productModel) => productDetailsRouteName;
+  static String getProductDetailsRoute() => productDetailsRouteName;
   static String getCheckoutRoute() => checkoutRouteName;
   static String getLoginRoute() => loginRouteName;
 

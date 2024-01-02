@@ -1,6 +1,7 @@
 const String firebaseStorageProductImageDir = 'ProductImages';
 const String firebaseStorageUserImageDir = 'UserImages';
 const String currencySymbol = '৳';
+const String collectionWishlist = 'WishList';
 
 abstract class OrderStatus{
   static const String pending = 'Pending';

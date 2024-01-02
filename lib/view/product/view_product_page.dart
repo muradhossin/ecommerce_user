@@ -9,6 +9,7 @@ import 'package:ecommerce_user/view/cart/provider/cart_provider.dart';
 import 'package:ecommerce_user/view/notification/services/notification_service.dart';
 import 'package:ecommerce_user/view/user/provider/user_provider.dart';
 import 'package:ecommerce_user/view/user/user_profile_page.dart';
+import 'package:ecommerce_user/view/wishlist/provider/wishlist_provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -52,6 +53,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
     Provider.of<UserProvider>(context, listen: false).getUserInfo();
     Provider.of<CartProvider>(context, listen: false).getAllCartItemsByUser();
     Provider.of<OrderProvider>(context, listen: false).getOrdersByUser();
+    Provider.of<WishListProvider>(context, listen: false).getAllWishListProductsByUser();
     super.didChangeDependencies();
   }
 

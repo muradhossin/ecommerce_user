@@ -19,6 +19,7 @@ import 'package:ecommerce_user/view/order/provider/order_provider.dart';
 import 'package:ecommerce_user/view/product/provider/product_provider.dart';
 import 'package:ecommerce_user/view/user/provider/user_provider.dart';
 import 'package:ecommerce_user/view/user/user_profile_page.dart';
+import 'package:ecommerce_user/view/wishlist/provider/wishlist_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => NotificationProvider()),
         ChangeNotifierProvider(create: (_) => CheckoutProvider()),
         ChangeNotifierProvider(create: (_) => CategoryProvider()),
+        ChangeNotifierProvider(create: (_) => WishListProvider()),
       ],
       child: const MyApp()));
 }
