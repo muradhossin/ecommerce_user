@@ -2,9 +2,12 @@ import 'package:ecommerce_user/core/constants/constants.dart';
 import 'package:ecommerce_user/core/constants/dimensions.dart';
 import 'package:ecommerce_user/core/extensions/context.dart';
 import 'package:ecommerce_user/core/extensions/style.dart';
+import 'package:ecommerce_user/core/utils/helper_functions.dart';
 import 'package:ecommerce_user/view/product/models/product_model.dart';
 import 'package:ecommerce_user/view/product/provider/product_provider.dart';
+import 'package:ecommerce_user/view/wishlist/provider/wishlist_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 
 class WishListView extends StatelessWidget {
@@ -69,7 +72,11 @@ class WishListView extends StatelessWidget {
 
               const SizedBox(width: Dimensions.paddingLarge),
               IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  EasyLoading.show(status: 'Removing from wishlist...');
+                  await Provider.of<WishListProvider>(context, listen: false).removeFromWishList(productModel.productId!);
+                  EasyLoading.dismiss();
+                },
                 icon: const Icon(Icons.delete),
               ),
 
