@@ -2,11 +2,14 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-showMsg(BuildContext context, String msg) =>
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(msg)));
+SnackBar showMsg(BuildContext context, String msg, {bool isError = false}) =>
+    SnackBar(
+      backgroundColor: isError ? Colors.red : Colors.green,
+      content: Text(msg),
+      duration: const Duration(seconds: 1),
+    );
 
-getFormattedDate(DateTime dt, {String pattern = 'dd/MM/yyyy'}) =>
+String getFormattedDate(DateTime dt, {String pattern = 'dd/MM/yyyy'}) =>
     DateFormat(pattern).format(dt);
 
 Future<bool> isConnectedToInternet() async{

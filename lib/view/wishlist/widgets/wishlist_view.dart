@@ -1,3 +1,4 @@
+
 import 'package:ecommerce_user/core/constants/constants.dart';
 import 'package:ecommerce_user/core/constants/dimensions.dart';
 import 'package:ecommerce_user/core/extensions/context.dart';
@@ -74,7 +75,9 @@ class WishListView extends StatelessWidget {
               IconButton(
                 onPressed: () async {
                   EasyLoading.show(status: 'Removing from wishlist...');
-                  await Provider.of<WishListProvider>(context, listen: false).removeFromWishList(productModel.productId!);
+                  await Provider.of<WishListProvider>(context, listen: false).removeFromWishList(productModel.productId!).then((value) => {
+                    showMsg(context, 'Removed from wishlist'),
+                  });
                   EasyLoading.dismiss();
                 },
                 icon: const Icon(Icons.delete),
