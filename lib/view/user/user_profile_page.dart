@@ -66,23 +66,10 @@ class UserProfilePage extends StatelessWidget {
                   title: Text(
                       userProvider.userModel!.addressModel?.addressLine1 ??
                           'Not set yet'),
-                  subtitle: const Text('Address Line 1'),
+                  subtitle: const Text('Address'),
                   trailing: IconButton(
                     onPressed: () {
                       UserService.userProfileInfoUpdate(userProvider, '$userFieldAddressModel.$addressFieldAddressLine1', 'Address Line 1', context);
-                    },
-                    icon: const Icon(Icons.edit),
-                  ),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.location_on),
-                  title: Text(
-                      userProvider.userModel!.addressModel?.addressLine2 ??
-                          'Not set yet'),
-                  subtitle: const Text('Address Line 2'),
-                  trailing: IconButton(
-                    onPressed: () {
-                      UserService.userProfileInfoUpdate(userProvider, '$userFieldAddressModel.$addressFieldAddressLine2', 'Address Line 2', context);
                     },
                     icon: const Icon(Icons.edit),
                   ),
