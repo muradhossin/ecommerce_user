@@ -64,7 +64,7 @@ class UserProfilePage extends StatelessWidget {
                 ListTile(
                   leading: const Icon(Icons.location_on),
                   title: Text(
-                      userProvider.userModel!.addressModel?.addressLine1 ??
+                      userProvider.userModel!.addressModel?.address ??
                           'Not set yet'),
                   subtitle: const Text('Address'),
                   trailing: IconButton(

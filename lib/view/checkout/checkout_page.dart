@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_user/core/constants/dimensions.dart';
 import 'package:ecommerce_user/view/auth/services/auth_service.dart';
 import 'package:ecommerce_user/view/notification/provider/notification_provider.dart';
 import 'package:ecommerce_user/view/order/models/date_model.dart';
@@ -32,9 +33,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
   late UserProvider userProvider;
   late NotificationProvider notificationProvider;
   final addressLine1Controller = TextEditingController();
-  final addressLine2Controller = TextEditingController();
+  final cityController = TextEditingController();
   final zipController = TextEditingController();
-  String? city;
+  final nameController = TextEditingController();
+  final phoneController = TextEditingController();
   String paymentMethodGroupValue = PaymentMethod.cod;
 
   @override
@@ -62,6 +64,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
           buildOrderSummarySection(),
           buildHeader('Delivery Address'),
           buildDeliveryAddressSection(),
+          buildHeader('Contact Info'),
+          buildContactInfoSection(),
           buildHeader('Payment Method'),
           buildPaymentMethodSection(),
           buildOrderButtonSection(),
@@ -150,41 +154,63 @@ class _CheckoutPageState extends State<CheckoutPage> {
         padding: const EdgeInsets.all(8),
         child: Column(
           children: [
+
             TextField(
               controller: addressLine1Controller,
               decoration: const InputDecoration(
-                hintText: 'Address Line 1',
+                hintText: 'Enter Address',
+                labelText: 'Address',
               ),
             ),
+
             TextField(
-              controller: addressLine2Controller,
+              controller: cityController,
               decoration: const InputDecoration(
-                hintText: 'Address Line 2',
+                hintText: 'Enter City',
+                labelText: 'City'
               ),
             ),
+
             TextField(
               controller: zipController,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
-                hintText: 'Zip Code',
+                hintText: 'Enter Zip Code',
+                labelText: 'Zip Code'
               ),
             ),
-            DropdownButton<String>(
-              value: city,
-              isExpanded: true,
-              hint: const Text('Select your city'),
-              items: cities
-                  .map((city) => DropdownMenuItem<String>(
-                        value: city,
-                        child: Text(city),
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                setState(() {
-                  city = value;
-                });
-              },
+            const SizedBox(height: Dimensions.paddingSmall),
+
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildContactInfoSection() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: [
+
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                hintText: 'Enter Name',
+                labelText: 'Name',
+              ),
             ),
+
+            TextField(
+              controller: phoneController,
+              decoration: const InputDecoration(
+                  hintText: 'Enter Phone Number',
+                  labelText: 'Phone Number'
+              ),
+            ),
+            const SizedBox(height: Dimensions.paddingSmall),
+
           ],
         ),
       ),
@@ -194,7 +220,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   void dispose() {
     addressLine1Controller.dispose();
-    addressLine2Controller.dispose();
+    cityController.dispose();
     zipController.dispose();
     super.dispose();
   }
@@ -215,16 +241,16 @@ class _CheckoutPageState extends State<CheckoutPage> {
               },
             ),
             const Text(PaymentMethod.cod),
-            Radio<String>(
-              value: PaymentMethod.online,
-              groupValue: paymentMethodGroupValue,
-              onChanged: (value) {
-                setState(() {
-                  paymentMethodGroupValue = value!;
-                });
-              },
-            ),
-            const Text(PaymentMethod.online),
+            // Radio<String>(
+            //   value: PaymentMethod.online,
+            //   groupValue: paymentMethodGroupValue,
+            //   onChanged: (value) {
+            //     setState(() {
+            //       paymentMethodGroupValue = value!;
+            //     });
+            //   },
+            // ),
+            // const Text(PaymentMethod.online),
           ],
         ),
       ),
@@ -242,15 +268,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   Future<void> _saveOrder() async {
     if (addressLine1Controller.text.isEmpty) {
-      showMsg(context, "Please provide address line 1");
+      showMsg(context, "Please provide delivery address", isError: true);
       return;
     }
-    if (zipController.text.isEmpty) {
-      showMsg(context, "Please provide zipcode");
-      return;
-    }
-    if (city == null) {
-      showMsg(context, "Please provide your city");
+    if (cityController.text.isEmpty) {
+      showMsg(context, "Please delivery city");
       return;
     }
     EasyLoading.show(status: 'Please Wait');
@@ -270,10 +292,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
         year: DateTime.now().year,
       ),
       deliveryAddress: AddressModel(
-          addressLine1: addressLine1Controller.text,
-          addressLine2: addressLine2Controller.text,
-          zipcode: zipController.text,
-          city: city),
+          address: addressLine1Controller.text.trim(),
+          zipcode: zipController.text.trim(),
+          city: cityController.text.trim(),
+      ),
       productDetails: cartProvider.cartList,
     );
 
@@ -306,10 +328,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
     if (userModel != null) {
       if (userModel.addressModel != null) {
         final address = userModel.addressModel!;
-        addressLine1Controller.text = address.addressLine1!;
-        addressLine2Controller.text = address.addressLine2!;
-        zipController.text = address.zipcode!;
-        city = address.city;
+        addressLine1Controller.text = address.address ?? 'Enter address';
+        cityController.text = address.city ?? 'Enter city';
+        zipController.text = address.zipcode ?? 'Enter zip code';
+        phoneController.text = userModel.phone ?? 'Enter phone number';
+        nameController.text = userModel.displayName ?? 'Enter name';
       }
     }
   }

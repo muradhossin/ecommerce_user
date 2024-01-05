@@ -1,34 +1,29 @@
 
-const String addressFieldAddressLine1='addressLine1';
-const String addressFieldAddressLine2='addressLine2';
+const String addressFieldAddressLine1='address';
 const String addressFieldCity='city';
 const String addressFieldZipcode='zipcode';
 
 class AddressModel{
-  String? addressLine1;
-  String? addressLine2;
+  String? address;
   String? city;
   String? zipcode;
 
   AddressModel({
-    this.addressLine1,
-    this.addressLine2,
+    this.address,
     this.city,
     this.zipcode
   });
 
   Map<String,dynamic>toMap(){
     return <String,dynamic>{
-      addressFieldAddressLine1:addressLine1,
-      addressFieldAddressLine2:addressLine2,
+      addressFieldAddressLine1:address,
       addressFieldCity:city,
       addressFieldZipcode:zipcode,
     };
   }
 
   factory AddressModel.fromMap(Map<String,dynamic>map)=>AddressModel(
-    addressLine1: map[addressFieldAddressLine1],
-    addressLine2:map[addressFieldAddressLine2],
+    address: map[addressFieldAddressLine1],
     city: map[addressFieldCity],
     zipcode: map[addressFieldZipcode],
   );
