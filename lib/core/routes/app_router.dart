@@ -1,5 +1,6 @@
 import 'package:ecommerce_user/view/auth/login_page.dart';
 import 'package:ecommerce_user/view/checkout/checkout_page.dart';
+import 'package:ecommerce_user/view/order/order_successful_page.dart';
 import 'package:ecommerce_user/view/product/models/product_model.dart';
 import 'package:ecommerce_user/view/product/product_details_page.dart';
 import 'package:ecommerce_user/view/product/view_product_page.dart';
@@ -21,6 +22,7 @@ class AppRouter {
   static const String productDetailsRouteName = '/product-details';
   static const String checkoutRouteName = '/checkout';
   static const String loginRouteName = '/login';
+  static const String orderSuccess = '/order-successful';
 
   static String getUserProfileRoute() => userProfile;
   static String getCartRoute() => cartRouteName;
@@ -31,6 +33,7 @@ class AppRouter {
   static String getProductDetailsRoute() => productDetailsRouteName;
   static String getCheckoutRoute() => checkoutRouteName;
   static String getLoginRoute() => loginRouteName;
+  static String getOrderSuccessRoute() => orderSuccess;
 
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -57,6 +60,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const CheckoutPage());
       case loginRouteName:
         return MaterialPageRoute(builder: (_) => const LoginPage());
+      case orderSuccess:
+        return MaterialPageRoute(builder: (_) => const OrderSuccessfulPage());
 
       default:
         return MaterialPageRoute(builder: (_) => Scaffold(

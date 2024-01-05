@@ -290,56 +290,56 @@ class _CheckoutPageState extends State<CheckoutPage> {
       showMsg(context, "Please provide name");
       return;
     }
-    // EasyLoading.show(status: 'Please Wait');
-    // final orderModel = OrderModel(
-    //   orderId: generateOrderId,
-    //   userId: AuthService.currentUser!.uid,
-    //   orderStatus: OrderStatus.pending,
-    //   paymentMethod: paymentMethodGroupValue,
-    //   grandTotal: orderProvider.getGrandTotal(cartProvider.getCartSubTotal()),
-    //   discount: orderProvider.orderConstantModel.discount,
-    //   VAT: orderProvider.orderConstantModel.vat,
-    //   deliveryCharge: orderProvider.orderConstantModel.deliveryCharge,
-    //   orderDate: DateModel(
-    //     timestamp: Timestamp.fromDate(DateTime.now()),
-    //     day: DateTime.now().day,
-    //     month: DateTime.now().month,
-    //     year: DateTime.now().year,
-    //   ),
-    //   deliveryAddress: AddressModel(
-    //       address: addressLine1Controller.text.trim(),
-    //       zipcode: zipController.text.trim(),
-    //       city: cityController.text.trim(),
-    //   ),
-    //   contactInfo: ContactInfoModel(
-    //     name: nameController.text.trim(),
-    //     phoneNumber: phoneController.text.trim(),
-    //   ),
-    //   productDetails: cartProvider.cartList,
-    // );
-    //
-    // try {
-    //   await orderProvider.saveOrder(orderModel);
-    //
-    //   final notification = NotificationModel(
-    //     id: DateTime.now().millisecondsSinceEpoch.toString(),
-    //     type: NotificationType.order,
-    //     message: 'You have a new order #${orderModel.orderId}',
-    //     orderModel: orderModel,
-    //   );
-    //   await notificationProvider.addNotification(notification);
-    //   EasyLoading.dismiss();
-    //   if (mounted) {
-    //     Navigator.pushNamedAndRemoveUntil(
-    //         context,
-    //         OrderSuccessfulPage.routeName,
-    //         ModalRoute.withName(AppRouter.getViewProductRoute()));
-    //   }
-    // } catch (error) {
-    //   debugPrint('-----------------------> order place error ${error.toString()}');
-    //   EasyLoading.dismiss();
-    //   if(mounted) showMsg(context, "Failed to save order");
-    // }
+    EasyLoading.show(status: 'Please Wait');
+    final orderModel = OrderModel(
+      orderId: generateOrderId,
+      userId: AuthService.currentUser!.uid,
+      orderStatus: OrderStatus.pending,
+      paymentMethod: paymentMethodGroupValue,
+      grandTotal: orderProvider.getGrandTotal(cartProvider.getCartSubTotal()),
+      discount: orderProvider.orderConstantModel.discount,
+      VAT: orderProvider.orderConstantModel.vat,
+      deliveryCharge: orderProvider.orderConstantModel.deliveryCharge,
+      orderDate: DateModel(
+        timestamp: Timestamp.fromDate(DateTime.now()),
+        day: DateTime.now().day,
+        month: DateTime.now().month,
+        year: DateTime.now().year,
+      ),
+      deliveryAddress: AddressModel(
+          address: addressLine1Controller.text.trim(),
+          zipcode: zipController.text.trim(),
+          city: cityController.text.trim(),
+      ),
+      contactInfo: ContactInfoModel(
+        name: nameController.text.trim(),
+        phoneNumber: phoneController.text.trim(),
+      ),
+      productDetails: cartProvider.cartList,
+    );
+
+    try {
+      await orderProvider.saveOrder(orderModel);
+
+      final notification = NotificationModel(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        type: NotificationType.order,
+        message: 'You have a new order #${orderModel.orderId}',
+        orderModel: orderModel,
+      );
+      await notificationProvider.addNotification(notification);
+      EasyLoading.dismiss();
+      if (mounted) {
+        Navigator.pushNamedAndRemoveUntil(
+            context,
+            AppRouter.getOrderSuccessRoute(),
+            ModalRoute.withName(AppRouter.getViewProductRoute()));
+      }
+    } catch (error) {
+      debugPrint('-----------------------> order place error ${error.toString()}');
+      EasyLoading.dismiss();
+      if(mounted) showMsg(context, "Failed to save order");
+    }
   }
 
   void setAddressIfExists() {
