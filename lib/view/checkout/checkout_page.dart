@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce_user/core/components/custom_button.dart';
 import 'package:ecommerce_user/core/constants/dimensions.dart';
 import 'package:ecommerce_user/view/auth/services/auth_service.dart';
+import 'package:ecommerce_user/view/checkout/models/contact_info_model.dart';
 import 'package:ecommerce_user/view/notification/provider/notification_provider.dart';
 import 'package:ecommerce_user/view/order/models/date_model.dart';
 import 'package:ecommerce_user/view/notification/models/notification_model.dart';
 import 'package:ecommerce_user/view/order/models/order_model.dart';
-import 'package:ecommerce_user/view/product/view_product_page.dart';
 import 'package:ecommerce_user/view/cart/provider/cart_provider.dart';
 import 'package:ecommerce_user/view/order/provider/order_provider.dart';
 import 'package:ecommerce_user/core/constants/constants.dart';
@@ -21,7 +22,7 @@ import '../order/order_successful_page.dart';
 
 class CheckoutPage extends StatefulWidget {
 
-  const CheckoutPage({Key? key}) : super(key: key);
+  const CheckoutPage({super.key});
 
   @override
   State<CheckoutPage> createState() => _CheckoutPageState();
@@ -53,7 +54,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Checkout Page'),
+        title: const Text('Checkout'),
       ),
       body: ListView(
         padding: const EdgeInsets.all(9),
@@ -68,6 +69,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
           buildContactInfoSection(),
           buildHeader('Payment Method'),
           buildPaymentMethodSection(),
+
+          const SizedBox(height: Dimensions.paddingSmall),
           buildOrderButtonSection(),
         ],
       ),
@@ -222,6 +225,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
     addressLine1Controller.dispose();
     cityController.dispose();
     zipController.dispose();
+    nameController.dispose();
+    phoneController.dispose();
     super.dispose();
   }
 
@@ -258,15 +263,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   Widget buildOrderButtonSection() {
-    return ElevatedButton(
-      onPressed: () {
-        _saveOrder();
-      },
-      child: const Text('PLACE ORDER'),
+    return CustomButton(
+      text: 'Place Order',
+      onPressed: _saveOrder,
+      color: Theme.of(context).primaryColor,
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
     );
   }
 
   Future<void> _saveOrder() async {
+    print('-----------------------> addressLine1Controller ${addressLine1Controller.text}');
     if (addressLine1Controller.text.isEmpty) {
       showMsg(context, "Please provide delivery address", isError: true);
       return;
@@ -275,52 +282,64 @@ class _CheckoutPageState extends State<CheckoutPage> {
       showMsg(context, "Please delivery city");
       return;
     }
-    EasyLoading.show(status: 'Please Wait');
-    final orderModel = OrderModel(
-      orderId: generateOrderId,
-      userId: AuthService.currentUser!.uid,
-      orderStatus: OrderStatus.pending,
-      paymentMethod: paymentMethodGroupValue,
-      grandTotal: orderProvider.getGrandTotal(cartProvider.getCartSubTotal()),
-      discount: orderProvider.orderConstantModel.discount,
-      VAT: orderProvider.orderConstantModel.vat,
-      deliveryCharge: orderProvider.orderConstantModel.deliveryCharge,
-      orderDate: DateModel(
-        timestamp: Timestamp.fromDate(DateTime.now()),
-        day: DateTime.now().day,
-        month: DateTime.now().month,
-        year: DateTime.now().year,
-      ),
-      deliveryAddress: AddressModel(
-          address: addressLine1Controller.text.trim(),
-          zipcode: zipController.text.trim(),
-          city: cityController.text.trim(),
-      ),
-      productDetails: cartProvider.cartList,
-    );
-
-    try {
-      await orderProvider.saveOrder(orderModel);
-
-      final notification = NotificationModel(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        type: NotificationType.order,
-        message: 'You have a new order #${orderModel.orderId}',
-        orderModel: orderModel,
-      );
-      await notificationProvider.addNotification(notification);
-      EasyLoading.dismiss();
-      if (mounted) {
-        Navigator.pushNamedAndRemoveUntil(
-            context,
-            OrderSuccessfulPage.routeName,
-            ModalRoute.withName(AppRouter.getViewProductRoute()));
-      }
-    } catch (error) {
-      debugPrint('-----------------------> order place error ${error.toString()}');
-      EasyLoading.dismiss();
-      showMsg(context, "Failed to save order");
+    if (phoneController.text.isEmpty) {
+      showMsg(context, "Please provide phone number");
+      return;
     }
+    if (nameController.text.isEmpty) {
+      showMsg(context, "Please provide name");
+      return;
+    }
+    // EasyLoading.show(status: 'Please Wait');
+    // final orderModel = OrderModel(
+    //   orderId: generateOrderId,
+    //   userId: AuthService.currentUser!.uid,
+    //   orderStatus: OrderStatus.pending,
+    //   paymentMethod: paymentMethodGroupValue,
+    //   grandTotal: orderProvider.getGrandTotal(cartProvider.getCartSubTotal()),
+    //   discount: orderProvider.orderConstantModel.discount,
+    //   VAT: orderProvider.orderConstantModel.vat,
+    //   deliveryCharge: orderProvider.orderConstantModel.deliveryCharge,
+    //   orderDate: DateModel(
+    //     timestamp: Timestamp.fromDate(DateTime.now()),
+    //     day: DateTime.now().day,
+    //     month: DateTime.now().month,
+    //     year: DateTime.now().year,
+    //   ),
+    //   deliveryAddress: AddressModel(
+    //       address: addressLine1Controller.text.trim(),
+    //       zipcode: zipController.text.trim(),
+    //       city: cityController.text.trim(),
+    //   ),
+    //   contactInfo: ContactInfoModel(
+    //     name: nameController.text.trim(),
+    //     phoneNumber: phoneController.text.trim(),
+    //   ),
+    //   productDetails: cartProvider.cartList,
+    // );
+    //
+    // try {
+    //   await orderProvider.saveOrder(orderModel);
+    //
+    //   final notification = NotificationModel(
+    //     id: DateTime.now().millisecondsSinceEpoch.toString(),
+    //     type: NotificationType.order,
+    //     message: 'You have a new order #${orderModel.orderId}',
+    //     orderModel: orderModel,
+    //   );
+    //   await notificationProvider.addNotification(notification);
+    //   EasyLoading.dismiss();
+    //   if (mounted) {
+    //     Navigator.pushNamedAndRemoveUntil(
+    //         context,
+    //         OrderSuccessfulPage.routeName,
+    //         ModalRoute.withName(AppRouter.getViewProductRoute()));
+    //   }
+    // } catch (error) {
+    //   debugPrint('-----------------------> order place error ${error.toString()}');
+    //   EasyLoading.dismiss();
+    //   if(mounted) showMsg(context, "Failed to save order");
+    // }
   }
 
   void setAddressIfExists() {
@@ -328,11 +347,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
     if (userModel != null) {
       if (userModel.addressModel != null) {
         final address = userModel.addressModel!;
-        addressLine1Controller.text = address.address ?? 'Enter address';
-        cityController.text = address.city ?? 'Enter city';
-        zipController.text = address.zipcode ?? 'Enter zip code';
-        phoneController.text = userModel.phone ?? 'Enter phone number';
-        nameController.text = userModel.displayName ?? 'Enter name';
+        addressLine1Controller.text = address.address ?? '';
+        cityController.text = address.city ?? '';
+        zipController.text = address.zipcode ?? '';
+        phoneController.text = userModel.phone ?? '';
+        nameController.text = userModel.displayName ?? '';
       }
     }
   }
