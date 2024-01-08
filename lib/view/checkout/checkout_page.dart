@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_user/core/components/custom_button.dart';
 import 'package:ecommerce_user/core/constants/dimensions.dart';
@@ -13,9 +15,11 @@ import 'package:ecommerce_user/core/constants/constants.dart';
 import 'package:ecommerce_user/core/utils/helper_functions.dart';
 import 'package:ecommerce_user/view/user/models/address_model.dart';
 import 'package:ecommerce_user/view/user/provider/user_provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import '../../core/routes/app_router.dart';
 import '../order/order_successful_page.dart';
@@ -335,6 +339,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
             AppRouter.getOrderSuccessRoute(),
             ModalRoute.withName(AppRouter.getViewProductRoute()));
       }
+      sendNotification();
+
+
+
     } catch (error) {
       debugPrint('-----------------------> order place error ${error.toString()}');
       EasyLoading.dismiss();
@@ -354,5 +362,31 @@ class _CheckoutPageState extends State<CheckoutPage> {
         nameController.text = userModel.displayName ?? '';
       }
     }
+  }
+}
+
+Future<void> sendNotification({String? deviceToken, String? serverKey}) async {
+  final url = Uri.parse('https://fcm.googleapis.com/fcm/send');
+  final headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'key=${"AAAAEB3kOrU:APA91bG5c9G3BoNe4OXrwep0T6Vgu2Jk16-Qhv9hmEFr97DuiOwwgQrXD3osw-of-3zIqs7u3PARHUAiY6rY1TeGJLq11xcft-XzyQElZqV-sGdVEX6Lu4ZA4SrCEjfGNRRuv26iLoWd"}', // replace with your server key
+  };
+  final body = jsonEncode({
+    'to': "czgWxzFYQTOsihLTNOvEp2:APA91bEuuLYoAolmf6ps2vp5cS-gxVWcJ7yAcsJpxOCEDD_S783La0mqTxvLxbIB9H7zqUuO63Rgzgf2jEXqkOJ1cI26P-1Dq271Jq5XXsLxQbdrCQBgpbBMddPJVQx4GfZOKHYaRP0H", // replace with the device token
+    'notification': {
+      'title': 'Notification title',
+      'body': 'Notification body',
+    },
+    'data': {
+      'extra': 'extra data',
+    },
+  });
+
+  final response = await http.post(url, headers: headers, body: body);
+
+  if (response.statusCode == 200) {
+    print('Notification sent successfully');
+  } else {
+    print('Failed to send notification: ${response.body}');
   }
 }

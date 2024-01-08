@@ -7,8 +7,7 @@ class NotificationService{
 
   NotificationService() {
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('app_icon');
+     var initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
 
     InitializationSettings initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid,);
@@ -16,17 +15,27 @@ class NotificationService{
     flutterLocalNotificationsPlugin.initialize(initializationSettings,);
   }
 
-  Future<void> sendNotification(RemoteMessage message) async{
-    AndroidNotificationDetails androidNotificationDetails =
-    AndroidNotificationDetails('your channel id', 'your channel name',
-        channelDescription: 'your channel description',
-        importance: Importance.max,
-        priority: Priority.high,
-        ticker: 'ticker');
-    NotificationDetails notificationDetails =
-    NotificationDetails(android: androidNotificationDetails);
+  //show notification
+  Future<void> showNotification(RemoteMessage message) async {
+    var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
+      'channelId',
+      'channelName',
+      importance: Importance.max,
+      priority: Priority.high,
+      playSound: true,
+      icon: 'app_icon',
+      largeIcon: DrawableResourceAndroidBitmap('app_icon'),
+    );
+
+    var platformChannelSpecifics =
+    NotificationDetails(android: androidPlatformChannelSpecifics);
+
     await flutterLocalNotificationsPlugin.show(
-        0, message.notification!.title, message.notification!.body, notificationDetails,
-        payload: 'item x');
+      0,
+      message.notification!.title,
+      message.notification!.body,
+      platformChannelSpecifics,
+      payload: 'Default_Sound',
+    );
   }
 }

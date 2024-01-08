@@ -36,9 +36,9 @@ class _ViewProductPageState extends State<ViewProductPage> {
       print('Message data: ${message.data}');
 
       if (message.notification != null) {
-        //print('Message also contained a notification: ${message.notification}');
+        print('Message also contained a notification: ${message.notification}');
         NotificationService notificationService = NotificationService();
-        notificationService.sendNotification(message);
+        notificationService.showNotification(message);
       }
     });
     setupInteractedMessage();

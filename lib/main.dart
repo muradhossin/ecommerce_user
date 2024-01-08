@@ -1,6 +1,7 @@
 import 'package:ecommerce_user/core/routes/app_router.dart';
 import 'package:ecommerce_user/core/themes/dark_theme.dart';
 import 'package:ecommerce_user/core/themes/light_theme.dart';
+import 'package:ecommerce_user/core/utils/notification_helper.dart';
 import 'package:ecommerce_user/view/auth/login_page.dart';
 import 'package:ecommerce_user/view/auth/otp_verification_page.dart';
 import 'package:ecommerce_user/view/cart/cart_page.dart';
@@ -45,6 +46,9 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await FirebaseMessaging.instance.subscribeToTopic("promo");
   await FirebaseMessaging.instance.subscribeToTopic("user");
+
+  NotificationHelper notificationHelper = NotificationHelper();
+  await notificationHelper.initNotifications();
   runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ProductProvider()),
