@@ -339,7 +339,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             AppRouter.getOrderSuccessRoute(),
             ModalRoute.withName(AppRouter.getViewProductRoute()));
       }
-      sendNotification();
+      notificationProvider.sendNotification(notification);
 
 
 
@@ -365,28 +365,3 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 }
 
-Future<void> sendNotification({String? deviceToken, String? serverKey}) async {
-  final url = Uri.parse('https://fcm.googleapis.com/fcm/send');
-  final headers = {
-    'Content-Type': 'application/json',
-    'Authorization': 'key=${"AAAAEB3kOrU:APA91bG5c9G3BoNe4OXrwep0T6Vgu2Jk16-Qhv9hmEFr97DuiOwwgQrXD3osw-of-3zIqs7u3PARHUAiY6rY1TeGJLq11xcft-XzyQElZqV-sGdVEX6Lu4ZA4SrCEjfGNRRuv26iLoWd"}', // replace with your server key
-  };
-  final body = jsonEncode({
-    'to': "czgWxzFYQTOsihLTNOvEp2:APA91bEuuLYoAolmf6ps2vp5cS-gxVWcJ7yAcsJpxOCEDD_S783La0mqTxvLxbIB9H7zqUuO63Rgzgf2jEXqkOJ1cI26P-1Dq271Jq5XXsLxQbdrCQBgpbBMddPJVQx4GfZOKHYaRP0H", // replace with the device token
-    'notification': {
-      'title': 'Notification title',
-      'body': 'Notification body',
-    },
-    'data': {
-      'extra': 'extra data',
-    },
-  });
-
-  final response = await http.post(url, headers: headers, body: body);
-
-  if (response.statusCode == 200) {
-    print('Notification sent successfully');
-  } else {
-    print('Failed to send notification: ${response.body}');
-  }
-}

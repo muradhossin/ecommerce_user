@@ -22,6 +22,7 @@ class UserProvider extends ChangeNotifier {
         notifyListeners();
       }
     });
+
   }
 
   Future<void> updateUserProfileField(String field, dynamic value){
