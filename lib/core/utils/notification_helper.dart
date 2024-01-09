@@ -14,14 +14,13 @@ class NotificationHelper {
 
   Future<void> _configureFirebaseMessaging() async {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      _handleForegroundNotification(message.data);
+      _handleForegroundNotification(message);
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      _handleBackgroundNotification(message.data);
+      _handleBackgroundNotification(message);
     });
 
-    FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
   }
 
   Future<void> initNotifications() async {
@@ -41,19 +40,13 @@ class NotificationHelper {
 
     );
 
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings, onDidReceiveNotificationResponse: (payload) async {
-      if (payload != null) {
-        debugPrint('notification payload: $payload');
-        onSelectNotification(payload);
-      }
-    },
-      onDidReceiveBackgroundNotificationResponse: (payload) async {
-        if (payload != null) {
-          debugPrint('background notification payload: $payload');
-          onSelectNotification(payload);
-        }
-      },
-    );
+    NotificationAppLaunchDetails? notificationAppLaunchDetails = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+    if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+      debugPrint('App was opened by a notification');
+    }
+
+
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings, onDidReceiveNotificationResponse: onSelectNotification);
 
   }
 
@@ -69,6 +62,7 @@ class NotificationHelper {
       importance: Importance.max,
       priority: Priority.high,
       showWhen: false,
+
     );
 
      const DarwinNotificationDetails iOSPlatformChannelSpecifics = DarwinNotificationDetails(
@@ -91,31 +85,33 @@ class NotificationHelper {
     );
   }
 
-  void _handleForegroundNotification(Map<String, dynamic> data) {
-    final String title = data['title'] ?? 'Foreground Title';
-    final String body = data['body'] ?? 'Foreground Body';
 
-    showNotification(title: title, body: body);
-  }
 
-  void _handleBackgroundNotification(Map<String, dynamic> data) {
-    final String title = data['title'] ?? 'Background Title';
-    final String body = data['body'] ?? 'Background Body';
-
-    showNotification(title: title, body: body);
-  }
-
-  Future<void> _handleBackgroundMessage(RemoteMessage message) async {
-    final String title = message.data['title'] ?? 'Background Title';
-    final String body = message.data['body'] ?? 'Background Body';
-
-    showNotification(title: title, body: body);
-  }
 
   //handle onTap notification
   Future<void> onSelectNotification(NotificationResponse? payload) async {
     if (payload != null) {
       debugPrint('notification payload: $payload');
     }
+  }
+
+  //handle notification when app is in background
+  Future<void> _handleBackgroundNotification(RemoteMessage remoteMessage) async {
+    debugPrint('onBackgroundMessage: $remoteMessage');
+    // showNotification(
+    //   id: 0,
+    //   title: remoteMessage.notification!.title!,
+    //   body: remoteMessage.notification!.body!,
+    // );
+  }
+
+  //handle notification when app is in foreground
+  Future<void> _handleForegroundNotification(RemoteMessage remoteMessage) async {
+    debugPrint('onMessage: $remoteMessage');
+    showNotification(
+      id: 0,
+      title: remoteMessage.notification!.title!,
+      body: remoteMessage.notification!.body!,
+    );
   }
 }
