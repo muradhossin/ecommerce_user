@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -54,6 +56,7 @@ class NotificationHelper {
     int id = 0,
     String title = 'Title',
     String body = 'Body',
+    String? payload,
   }) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
     AndroidNotificationDetails(
@@ -62,7 +65,6 @@ class NotificationHelper {
       importance: Importance.max,
       priority: Priority.high,
       showWhen: false,
-
     );
 
      const DarwinNotificationDetails iOSPlatformChannelSpecifics = DarwinNotificationDetails(
@@ -81,7 +83,9 @@ class NotificationHelper {
       title,
       body,
       platformChannelSpecifics,
-      payload: 'item x',
+      payload: payload,
+
+
     );
   }
 
@@ -91,13 +95,13 @@ class NotificationHelper {
   //handle onTap notification
   Future<void> onSelectNotification(NotificationResponse? payload) async {
     if (payload != null) {
-      debugPrint('notification payload: $payload');
+      debugPrint('notification payload: ${jsonDecode(payload.payload!)}}');
     }
   }
 
   //handle notification when app is in background
   Future<void> _handleBackgroundNotification(RemoteMessage remoteMessage) async {
-    debugPrint('onBackgroundMessage: $remoteMessage');
+    debugPrint('onBackgroundMessage: ${remoteMessage.toMap()}');
     // showNotification(
     //   id: 0,
     //   title: remoteMessage.notification!.title!,
@@ -107,11 +111,18 @@ class NotificationHelper {
 
   //handle notification when app is in foreground
   Future<void> _handleForegroundNotification(RemoteMessage remoteMessage) async {
-    debugPrint('onMessage: $remoteMessage');
+    debugPrint('onMessage: ${remoteMessage.toMap()}');
+    Map<String, dynamic> notificationData = {
+      'title': remoteMessage.notification!.title!,
+      'body': remoteMessage.notification!.body!,
+      'data': remoteMessage.data,
+    };
     showNotification(
       id: 0,
       title: remoteMessage.notification!.title!,
       body: remoteMessage.notification!.body!,
+      payload: jsonEncode(notificationData),
     );
   }
+
 }

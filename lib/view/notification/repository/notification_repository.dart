@@ -37,12 +37,16 @@ class NotificationRepository {
       'notification': {
         'title': 'Order Placed',
         'body': 'your order ${notificationModel.orderModel?.orderId} is placed successfully',
-        'type' : 'order',
-        'order_id' : '${notificationModel.orderModel?.orderId}',
+        'type' : '',
+        'id' : '${notificationModel.orderModel?.orderId}',
       },
       'data': {
         //pass order model here
-        'order_model': '${notificationModel.orderModel?.toMap()}',
+        'id' : '${notificationModel.orderModel?.orderId}',
+        'type' : '${notificationModel.type}}',
+        'status' : '${notificationModel.orderModel?.orderStatus}',
+        'data' : '${notificationModel.orderModel?.toMap()}',
+
 
       },
     });
