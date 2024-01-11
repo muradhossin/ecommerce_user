@@ -48,11 +48,11 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
           children: [
             Text(
               phone,
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
             Text(
               'Verify Phone Number',
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const Text(
               'An OTP code is sent to your mobile number. Enter the OTP code below',
@@ -107,14 +107,14 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     AuthService.currentUser!.linkWithCredential(credential).then((value) async{
       await Provider.of<UserProvider>(context, listen: false).updateUserProfileField(userFieldPhone, phone);
       EasyLoading.dismiss();
-      Navigator.pop(context);
+      if(mounted) Navigator.pop(context);
     }).catchError((error) {
-      print(error.toString());
+      debugPrint(error.toString());
     });
     if (incomingOtp == textEditingController.text) {
-      print('OTP MATCHED');
+      debugPrint('OTP MATCHED');
     } else {
-      print('OTP MISMATCHED');
+      debugPrint('OTP MISMATCHED');
     }
   }
 

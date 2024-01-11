@@ -9,8 +9,7 @@ class CartItemView extends StatelessWidget {
   final CartProvider cartProvider;
 
   const CartItemView(
-      {Key? key, required this.cartModel, required this.cartProvider})
-      : super(key: key);
+      {super.key, required this.cartModel, required this.cartProvider});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,7 @@ class CartItemView extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     "${cartModel.quantity}",
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
                 IconButton(
@@ -68,7 +67,7 @@ class CartItemView extends StatelessWidget {
                 const Spacer(),
                 Text(
                   '$currencySymbol${cartProvider.priceWithQuantity(cartModel)}',
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 )
               ],
             ),

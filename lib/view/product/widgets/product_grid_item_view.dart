@@ -1,11 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_user/core/components/custom_image.dart';
 import 'package:ecommerce_user/core/constants/dimensions.dart';
 import 'package:ecommerce_user/core/extensions/context.dart';
 import 'package:ecommerce_user/core/extensions/style.dart';
 import 'package:ecommerce_user/core/routes/app_router.dart';
 import 'package:ecommerce_user/view/product/models/product_model.dart';
-import 'package:ecommerce_user/view/product/product_details_page.dart';
 import 'package:ecommerce_user/core/constants/constants.dart';
 import 'package:ecommerce_user/core/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -78,13 +76,13 @@ class ProductGridItemView extends StatelessWidget {
                         itemCount: 5,
                         ignoreGestures: true,
                         itemSize: 20,
-                        itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
+                        itemPadding: const EdgeInsets.symmetric(horizontal: 0.0),
                         itemBuilder: (context, _) => const Icon(
                           Icons.star,
                           color: Colors.amber,
                         ),
                         onRatingUpdate: (rating) {
-                          print(rating);
+                          debugPrint(rating.toString());
                         },
                       ),
                       Text(" ${productModel.avgRating.toStringAsFixed(1)}"),

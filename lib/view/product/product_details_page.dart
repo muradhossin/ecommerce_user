@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_user/core/routes/app_router.dart';
-import 'package:ecommerce_user/view/auth/login_page.dart';
 import 'package:ecommerce_user/view/auth/services/auth_service.dart';
 import 'package:ecommerce_user/view/notification/provider/notification_provider.dart';
 import 'package:ecommerce_user/view/product/models/comment_model.dart';
@@ -62,7 +61,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             imageUrl: photoUrl,
             placeholder: (context, url) =>
                 const Center(child: CircularProgressIndicator()),
-            errorWidget: (context, url, error) => Icon(Icons.error),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
           ),
           Row(children: [
             InkWell(
@@ -79,7 +78,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   imageUrl: widget.productModel.thumbnailImageModel.imageDownloadUrl,
                   placeholder: (context, url) =>
                       const Center(child: CircularProgressIndicator()),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
             ),
@@ -105,7 +104,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         ),
                       ),
                     );
-            }).toList(),
+            }),
           ]),
           Row(
             children: [
@@ -243,7 +242,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             padding: const EdgeInsets.all(8),
             child: Text(
               'Comments',
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
           Card(
@@ -298,9 +297,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         await notificationProvider.addNotification(notification);
                         EasyLoading.dismiss();
                         focusNode.unfocus();
-                        if (mounted)
+                        if (mounted) {
                           showMsg(context,
                               'Thanks for your comment. Your comment is waiting for admin approval');
+                        }
                       }
                     },
                     child: const Text('SUBMIT'),
@@ -313,7 +313,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             padding: const EdgeInsets.all(8),
             child: Text(
               'All Comments',
-              style: Theme.of(context).textTheme.subtitle1,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
           FutureBuilder<List<CommentModel>>(

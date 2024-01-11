@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_user/core/constants/app_constants.dart';
 import 'package:ecommerce_user/view/notification/models/notification_model.dart';
 import 'package:ecommerce_user/view/user/models/user_model.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
@@ -33,7 +32,7 @@ class NotificationRepository {
       'Authorization': 'key=${AppConstants.serverKey}', // replace with your server key
     };
     final body = jsonEncode({
-      'to': "$fcmToken", // replace with the device token
+      'to': fcmToken, // replace with the device token
       'notification': {
         'title': 'Order Placed',
         'body': 'your order ${notificationModel.orderModel?.orderId} is placed successfully',

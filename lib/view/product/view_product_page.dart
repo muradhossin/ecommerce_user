@@ -1,18 +1,12 @@
 import 'package:ecommerce_user/core/components/no_data_view.dart';
-import 'package:ecommerce_user/core/routes/app_router.dart';
 import 'package:ecommerce_user/view/category/provider/category_provider.dart';
 import 'package:ecommerce_user/view/checkout/provider/checkout_provider.dart';
 import 'package:ecommerce_user/view/notification/provider/notification_provider.dart';
 import 'package:ecommerce_user/view/product/widgets/main_drawer.dart';
 import 'package:ecommerce_user/view/product/widgets/product_grid_item_view.dart';
-import 'package:ecommerce_user/view/promo/promo_code_page.dart';
 import 'package:ecommerce_user/view/cart/provider/cart_provider.dart';
-import 'package:ecommerce_user/view/notification/services/notification_service.dart';
 import 'package:ecommerce_user/view/user/provider/user_provider.dart';
-import 'package:ecommerce_user/view/user/user_profile_page.dart';
 import 'package:ecommerce_user/view/wishlist/provider/wishlist_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +18,7 @@ import '../order/provider/order_provider.dart';
 import 'provider/product_provider.dart';
 
 class ViewProductPage extends StatefulWidget {
-  const ViewProductPage({Key? key}) : super(key: key);
+  const ViewProductPage({super.key});
 
   @override
   State<ViewProductPage> createState() => _ViewProductPageState();

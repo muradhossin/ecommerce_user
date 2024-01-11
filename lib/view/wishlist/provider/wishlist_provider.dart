@@ -1,5 +1,4 @@
 import 'package:ecommerce_user/view/auth/services/auth_service.dart';
-import 'package:ecommerce_user/view/cart/models/cart_model.dart';
 import 'package:ecommerce_user/view/product/models/product_model.dart';
 import 'package:ecommerce_user/view/wishlist/repository/wishlist_repository.dart';
 import 'package:flutter/cupertino.dart';

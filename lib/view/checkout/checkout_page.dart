@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_user/core/components/custom_button.dart';
@@ -15,14 +14,11 @@ import 'package:ecommerce_user/core/constants/constants.dart';
 import 'package:ecommerce_user/core/utils/helper_functions.dart';
 import 'package:ecommerce_user/view/user/models/address_model.dart';
 import 'package:ecommerce_user/view/user/provider/user_provider.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 import '../../core/routes/app_router.dart';
-import '../order/order_successful_page.dart';
 
 class CheckoutPage extends StatefulWidget {
 
@@ -277,7 +273,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   Future<void> _saveOrder() async {
-    print('-----------------------> addressLine1Controller ${addressLine1Controller.text}');
+    debugPrint('-----------------------> addressLine1Controller ${addressLine1Controller.text}');
     if (addressLine1Controller.text.isEmpty) {
       showMsg(context, "Please provide delivery address", isError: true);
       return;
@@ -302,7 +298,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       paymentMethod: paymentMethodGroupValue,
       grandTotal: orderProvider.getGrandTotal(cartProvider.getCartSubTotal()),
       discount: orderProvider.orderConstantModel.discount,
-      VAT: orderProvider.orderConstantModel.vat,
+      vat: orderProvider.orderConstantModel.vat,
       deliveryCharge: orderProvider.orderConstantModel.deliveryCharge,
       orderDate: DateModel(
         timestamp: Timestamp.fromDate(DateTime.now()),

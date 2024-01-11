@@ -6,10 +6,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 class NotificationHelper {
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-  late FirebaseMessaging _firebaseMessaging;
 
   NotificationHelper() {
-    _firebaseMessaging = FirebaseMessaging.instance;
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     _configureFirebaseMessaging();
   }

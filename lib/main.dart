@@ -4,24 +4,14 @@ import 'package:ecommerce_user/core/routes/app_router.dart';
 import 'package:ecommerce_user/core/themes/dark_theme.dart';
 import 'package:ecommerce_user/core/themes/light_theme.dart';
 import 'package:ecommerce_user/core/utils/notification_helper.dart';
-import 'package:ecommerce_user/view/auth/login_page.dart';
-import 'package:ecommerce_user/view/auth/otp_verification_page.dart';
-import 'package:ecommerce_user/view/cart/cart_page.dart';
 import 'package:ecommerce_user/view/category/provider/category_provider.dart';
-import 'package:ecommerce_user/view/checkout/checkout_page.dart';
 import 'package:ecommerce_user/view/checkout/provider/checkout_provider.dart';
 import 'package:ecommerce_user/view/launcher/launcher_page.dart';
 import 'package:ecommerce_user/view/notification/provider/notification_provider.dart';
-import 'package:ecommerce_user/view/order/order_page.dart';
-import 'package:ecommerce_user/view/order/order_successful_page.dart';
-import 'package:ecommerce_user/view/product/product_details_page.dart';
-import 'package:ecommerce_user/view/promo/promo_code_page.dart';
-import 'package:ecommerce_user/view/product/view_product_page.dart';
 import 'package:ecommerce_user/view/cart/provider/cart_provider.dart';
 import 'package:ecommerce_user/view/order/provider/order_provider.dart';
 import 'package:ecommerce_user/view/product/provider/product_provider.dart';
 import 'package:ecommerce_user/view/user/provider/user_provider.dart';
-import 'package:ecommerce_user/view/user/user_profile_page.dart';
 import 'package:ecommerce_user/view/wishlist/provider/wishlist_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -37,7 +27,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // make sure you call `initializeApp` before using other Firebase services.
 
 
-  print("Handling a background message: ${message.toMap()}");
+  debugPrint("Handling a background message: ${message.toMap()}");
 }
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,7 +35,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   final fcmToken = await FirebaseMessaging.instance.getToken();
-  print('FCM TOKEN: $fcmToken');
+  debugPrint('FCM TOKEN: $fcmToken');
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await FirebaseMessaging.instance.subscribeToTopic("promo");
   await FirebaseMessaging.instance.subscribeToTopic("user");

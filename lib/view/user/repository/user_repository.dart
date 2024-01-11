@@ -10,7 +10,7 @@ class UserRepository {
   }
 
   static Future<void> addUser(UserModel userModel) {
-    final doc = _db.collection(collectionUser).doc(userModel.userId!);
+    final doc = _db.collection(collectionUser).doc(userModel.userId);
     return doc.set(userModel.toMap());
   }
 

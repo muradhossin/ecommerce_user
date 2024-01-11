@@ -1,14 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_user/core/routes/app_router.dart';
 import 'package:ecommerce_user/view/cart/widget/cart_item_view.dart';
-import 'package:ecommerce_user/view/checkout/checkout_page.dart';
 import 'package:ecommerce_user/view/cart/provider/cart_provider.dart';
 import 'package:ecommerce_user/core/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CartPage extends StatelessWidget {
-  const CartPage({Key? key}) : super(key: key);
+  const CartPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +44,7 @@ class CartPage extends StatelessWidget {
                     Expanded(
                       child: Text(
                         'SUBTOTAL: $currencySymbol${provider.getCartSubTotal()}',
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                     ),
                     OutlinedButton(

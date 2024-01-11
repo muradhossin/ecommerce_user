@@ -1,17 +1,11 @@
-import 'dart:developer';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_user/core/components/custom_image.dart';
 import 'package:ecommerce_user/core/constants/dimensions.dart';
-import 'package:ecommerce_user/view/auth/otp_verification_page.dart';
-import 'package:ecommerce_user/core/utils/widget_functions.dart';
 import 'package:ecommerce_user/view/user/models/address_model.dart';
 import 'package:ecommerce_user/view/user/models/user_model.dart';
 import 'package:ecommerce_user/view/user/provider/user_provider.dart';
 import 'package:ecommerce_user/view/user/services/user_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class UserProfilePage extends StatelessWidget {

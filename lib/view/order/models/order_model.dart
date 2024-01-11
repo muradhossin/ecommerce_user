@@ -26,7 +26,7 @@ class OrderModel {
   String paymentMethod;
   num grandTotal;
   num discount;
-  num VAT;
+  num vat;
   num deliveryCharge;
   DateModel orderDate;
   AddressModel deliveryAddress;
@@ -40,7 +40,7 @@ class OrderModel {
       required this.paymentMethod,
       required this.grandTotal,
       required this.discount,
-      required this.VAT,
+      required this.vat,
       required this.deliveryCharge,
       required this.orderDate,
       required this.deliveryAddress,
@@ -56,7 +56,7 @@ class OrderModel {
       orderFieldPaymentMethod: paymentMethod,
       orderFieldGrandTotal: grandTotal,
       orderFieldDiscount: discount,
-      orderFieldVAT: VAT,
+      orderFieldVAT: vat,
       orderFieldDeliveryCharge: deliveryCharge,
       orderFieldOrderDate: orderDate.toMap(),
       orderFieldDeliveryAddress: deliveryAddress.toMap(),
@@ -73,7 +73,7 @@ class OrderModel {
         paymentMethod: map[orderFieldPaymentMethod],
         grandTotal: map[orderFieldGrandTotal],
         discount: map[orderFieldDiscount],
-        VAT: map[orderFieldVAT],
+        vat: map[orderFieldVAT],
         deliveryCharge: map[orderFieldDeliveryCharge],
         orderDate: DateModel.fromMap(map[orderFieldOrderDate]),
         deliveryAddress: AddressModel.fromMap(map[orderFieldDeliveryAddress]),

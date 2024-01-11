@@ -1,13 +1,9 @@
 import 'package:ecommerce_user/core/routes/app_router.dart';
 import 'package:ecommerce_user/view/auth/services/auth_service.dart';
-import 'package:ecommerce_user/view/cart/cart_page.dart';
-import 'package:ecommerce_user/view/launcher/launcher_page.dart';
-import 'package:ecommerce_user/view/order/order_page.dart';
-import 'package:ecommerce_user/view/user/user_profile_page.dart';
 import 'package:flutter/material.dart';
 
 class MainDrawer extends StatelessWidget {
-  const MainDrawer({Key? key}) : super(key: key);
+  const MainDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {

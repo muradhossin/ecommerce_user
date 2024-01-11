@@ -1,11 +1,10 @@
 import 'package:ecommerce_user/core/routes/app_router.dart';
-import 'package:ecommerce_user/view/cart/cart_page.dart';
 import 'package:ecommerce_user/view/cart/provider/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CartBubbleView extends StatelessWidget {
-  const CartBubbleView({Key? key}) : super(key: key);
+  const CartBubbleView({super.key});
 
   @override
   Widget build(BuildContext context) {

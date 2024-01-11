@@ -1,14 +1,12 @@
 
 import 'package:ecommerce_user/core/routes/app_router.dart';
-import 'package:ecommerce_user/view/auth/login_page.dart';
 import 'package:ecommerce_user/view/auth/services/auth_service.dart';
-import 'package:ecommerce_user/view/product/view_product_page.dart';
 import 'package:flutter/material.dart';
 
 
 
 class LauncherPage extends StatelessWidget {
-  const LauncherPage({Key? key}) : super(key: key);
+  const LauncherPage({super.key});
 
   @override
   Widget build(BuildContext context) {
