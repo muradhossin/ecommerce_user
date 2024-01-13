@@ -29,6 +29,7 @@ class OrderProvider extends ChangeNotifier {
     });
   }
 
+
   Future<void> updateOrderConstants(OrderConstantModel model) {
     return OrderRepository.updateOrderConstants(model);
   }
@@ -51,6 +52,11 @@ class OrderProvider extends ChangeNotifier {
   Future<void> saveOrder(OrderModel orderModel) async {
     await OrderRepository.saveOrder(orderModel);
     return CartRepository.clearCart(orderModel.userId, orderModel.productDetails);
+  }
+
+  void toggleExpansion(int panelIndex) {
+    orderItemList[panelIndex].isExpanded = !orderItemList[panelIndex].isExpanded;
+    notifyListeners();
   }
 
 

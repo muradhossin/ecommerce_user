@@ -1,3 +1,5 @@
+import 'package:ecommerce_user/core/constants/dimensions.dart';
+import 'package:ecommerce_user/core/extensions/style.dart';
 import 'package:ecommerce_user/view/order/provider/order_provider.dart';
 import 'package:ecommerce_user/core/constants/constants.dart';
 import 'package:ecommerce_user/core/utils/helper_functions.dart';
@@ -16,7 +18,7 @@ class _OrderPageState extends State<OrderPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Orders'),
+        title: const Text('My Orders'),
       ),
       body: SingleChildScrollView(
         child: Consumer<OrderProvider>(
@@ -24,16 +26,23 @@ class _OrderPageState extends State<OrderPage> {
             final itemList = provider.orderItemList;
             return ExpansionPanelList(
               expansionCallback: (panelIndex, isExpanded) {
-                setState(() {
-                  itemList[panelIndex].isExpanded = !isExpanded;
-                });
+                debugPrint('panelIndex: $panelIndex');
+                debugPrint('isExpanded: $isExpanded');
+                provider.toggleExpansion(panelIndex);
               },
               children: itemList.map<ExpansionPanel>((item) => ExpansionPanel(
                       isExpanded: item.isExpanded,
                       headerBuilder: (context, isExpanded) => ListTile(
-                        title: Text(getFormattedDate(
-                            item.orderModel.orderDate.timestamp.toDate(),
-                            pattern: 'dd/MM/yyyy HH:mm:ss')),
+                        title: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Order ID: ${item.orderModel.orderId}'),
+                            Text(getFormattedDate(
+                                item.orderModel.orderDate.timestamp.toDate(),
+                                pattern: 'dd MMM yyyy hh:mm a', ),
+                              style: const TextStyle().regular.copyWith(fontSize: Dimensions.fontSizeExtraSmall),
+                            ),
+                          ],
+                        ),
                         subtitle: Text(item.orderModel.orderStatus),
                         trailing: Text('$currencySymbol${item.orderModel.grandTotal}'),
                       ),
