@@ -35,7 +35,7 @@ class NotificationRepository {
       'to': fcmToken, // replace with the device token
       'notification': {
         'title': 'Order Placed',
-        'body': 'your order ${notificationModel.orderModel?.orderId} is placed successfully',
+        'body': 'your order ID: ${notificationModel.orderModel?.orderId} is placed successfully',
         'type' : '',
         'id' : '${notificationModel.orderModel?.orderId}',
       },

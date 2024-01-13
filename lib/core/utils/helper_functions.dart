@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -21,4 +23,4 @@ String getPriceAfterDiscount(num price, num discount){
   return (price - discountAmount).toStringAsFixed(0);
 }
 
-String get generateOrderId => 'PB_${getFormattedDate(DateTime.now(), pattern: 'yyyyMMdd_HH:mm:ss')}';
+String get generateOrderId => '${getFormattedDate(DateTime.now(), pattern: 'yyyyMMdd-HHmmss')}${Random().nextInt(10)}';
