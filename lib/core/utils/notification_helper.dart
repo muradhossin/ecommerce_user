@@ -114,6 +114,10 @@ class NotificationHelper {
   //handle notification when app is in background
   Future<void> _handleBackgroundNotification(RemoteMessage remoteMessage) async {
     debugPrint('onBackgroundMessage: ${remoteMessage.toMap()}');
+    NotificationBody notificationModel = NotificationBody.fromMap(remoteMessage.data);
+
+    onSelectNotification(NotificationResponse(payload: jsonEncode(notificationModel.toMap()), notificationResponseType: NotificationResponseType.selectedNotification));
+
     // showNotification(
     //   id: 0,
     //   title: remoteMessage.notification!.title!,

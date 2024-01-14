@@ -27,7 +27,7 @@ class DateModel{
   }
 
   factory DateModel.fromMap(Map<String,dynamic>map)=>DateModel(
-    timestamp: map[dateFieldTimestamp]?.toString() ?? '',
+    timestamp: map[dateFieldTimestamp].toString(),
     day: map[dateFieldDay],
     month:map[dateFieldMonth],
     year: map[dateFieldYear],
