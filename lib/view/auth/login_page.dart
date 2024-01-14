@@ -226,8 +226,7 @@ class _LoginPageState extends State<LoginPage> {
           final userModel = UserModel(
             userId: AuthService.currentUser!.uid,
             email: AuthService.currentUser!.email!,
-            userCreationTime: Timestamp.fromDate(
-                AuthService.currentUser!.metadata.creationTime!),
+            userCreationTime: AuthService.currentUser!.metadata.creationTime.toString(),
           );
           userProvider.addUser(userModel).then((value) {
             EasyLoading.dismiss();
@@ -267,7 +266,7 @@ class _LoginPageState extends State<LoginPage> {
         final userModel = UserModel(
           userId: credential.user!.uid,
           email: credential.user!.email!,
-          userCreationTime: Timestamp.fromDate(DateTime.now()),
+          userCreationTime: Timestamp.fromDate(DateTime.now()).toString(),
           displayName: credential.user!.displayName,
           imageUrl: credential.user!.photoURL,
           phone: credential.user!.phoneNumber,

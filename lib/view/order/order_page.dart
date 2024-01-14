@@ -24,6 +24,7 @@ class _OrderPageState extends State<OrderPage> {
         child: Consumer<OrderProvider>(
           builder: (context, provider, child) {
             final itemList = provider.orderItemList;
+            debugPrint('----------------->ordertime: ${itemList[0].orderModel.orderDate.timestamp}');
             return ExpansionPanelList(
               expansionCallback: (panelIndex, isExpanded) {
                 debugPrint('panelIndex: $panelIndex');
@@ -37,7 +38,7 @@ class _OrderPageState extends State<OrderPage> {
                           children: [
                             Text('Order ID: ${item.orderModel.orderId}'),
                             Text(getFormattedDate(
-                                item.orderModel.orderDate.timestamp.toDate(),
+                                getDateTimeFromTimeStampString(item.orderModel.orderDate.timestamp),
                                 pattern: 'dd MMM yyyy hh:mm a', ),
                               style: const TextStyle().regular.copyWith(fontSize: Dimensions.fontSizeExtraSmall),
                             ),

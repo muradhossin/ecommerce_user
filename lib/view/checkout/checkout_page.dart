@@ -301,7 +301,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       vat: orderProvider.orderConstantModel.vat,
       deliveryCharge: orderProvider.orderConstantModel.deliveryCharge,
       orderDate: DateModel(
-        timestamp: Timestamp.fromDate(DateTime.now()),
+        timestamp: Timestamp.fromDate(DateTime.now()).toString(),
         day: DateTime.now().day,
         month: DateTime.now().month,
         year: DateTime.now().year,

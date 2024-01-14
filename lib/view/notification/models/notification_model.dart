@@ -50,7 +50,9 @@ class NotificationModel {
         id: map[notificationFieldId],
         type: map[notificationFieldType],
         message: map[notificationFieldMessage],
-        status: map[notificationFieldStatus],
+        status: map[notificationFieldStatus] is bool
+            ? map[notificationFieldStatus] as bool
+            : map[notificationFieldStatus] == 'true',
         commentModel: map[notificationFieldComment] == null
             ? null
             : CommentModel.fromMap(map[notificationFieldComment]),

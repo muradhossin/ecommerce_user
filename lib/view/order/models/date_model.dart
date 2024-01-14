@@ -7,7 +7,7 @@ const String dateFieldMonth='month';
 const String dateFieldYear='year';
 
 class DateModel{
-  Timestamp timestamp;
+  String timestamp;
   num day,month,year;
 
   DateModel({
@@ -27,7 +27,7 @@ class DateModel{
   }
 
   factory DateModel.fromMap(Map<String,dynamic>map)=>DateModel(
-    timestamp: map[dateFieldTimestamp],
+    timestamp: map[dateFieldTimestamp]?.toString() ?? '',
     day: map[dateFieldDay],
     month:map[dateFieldMonth],
     year: map[dateFieldYear],

@@ -24,3 +24,24 @@ String getPriceAfterDiscount(num price, num discount){
 }
 
 String get generateOrderId => '${getFormattedDate(DateTime.now(), pattern: 'yyyyMMdd-HHmmss')}${Random().nextInt(10)}';
+
+DateTime getDateTimeFromTimeStampString(String timestamp) {
+  RegExp regExp = RegExp(r'seconds=(\d+), nanoseconds=(\d+)');
+  RegExpMatch? match = regExp.firstMatch(timestamp);
+  DateTime dateTime = DateTime.now();
+
+  if (match != null && match.groupCount == 2) {
+    int seconds = int.parse(match.group(1)!);
+    int nanoseconds = int.parse(match.group(2)!);
+
+    // Converting to DateTime
+    int milliseconds = seconds * 1000 + (nanoseconds / 1000000).round();
+    dateTime = DateTime.fromMillisecondsSinceEpoch(milliseconds);
+
+    // Output: 2023-02-10 09:29:59.780
+    print(dateTime);
+  } else {
+    print("Invalid timestamp string format");
+  }
+  return dateTime;
+}

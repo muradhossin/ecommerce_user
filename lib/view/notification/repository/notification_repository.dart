@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_user/core/constants/app_constants.dart';
+import 'package:ecommerce_user/view/notification/models/notification_body.dart';
 import 'package:ecommerce_user/view/notification/models/notification_model.dart';
 import 'package:ecommerce_user/view/user/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,6 +32,12 @@ class NotificationRepository {
       'Content-Type': 'application/json',
       'Authorization': 'key=${AppConstants.serverKey}', // replace with your server key
     };
+    NotificationBody notification = NotificationBody(
+      id: notificationModel.orderModel?.orderId ?? '',
+      type: notificationModel.type,
+      body: 'your order ID: ${notificationModel.orderModel?.orderId} is placed successfully',
+      title: 'Order Placed',
+    );
     final body = jsonEncode({
       'to': fcmToken, // replace with the device token
       'notification': {
@@ -39,15 +46,7 @@ class NotificationRepository {
         'type' : '',
         'id' : '${notificationModel.orderModel?.orderId}',
       },
-      'data': {
-        //pass order model here
-        'id' : '${notificationModel.orderModel?.orderId}',
-        'type' : '${notificationModel.type}}',
-        'status' : '${notificationModel.orderModel?.orderStatus}',
-        'data' : '${notificationModel.orderModel?.toMap()}',
-
-
-      },
+      'data': notification.toMap(),
     });
 
     final response = await http.post(url, headers: headers, body: body);
