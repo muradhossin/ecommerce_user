@@ -31,6 +31,8 @@ class _LoginPageState extends State<LoginPage> {
   String _errMsg = '';
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
   late UserProvider userProvider;
   late NotificationProvider notificationProvider;
   bool isAnonymous = false;
@@ -74,9 +76,13 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: Dimensions.heightExtraLarge,),
 
             TextFormField(
+              onFieldSubmitted: (value) {
+                _passwordFocusNode.requestFocus();
+              },
               autofillHints: const [AutofillHints.email],
               enableSuggestions: true,
               controller: _emailController,
+              focusNode: _emailFocusNode,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
@@ -108,8 +114,13 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: Dimensions.paddingMedium,),
 
             TextFormField(
+              onFieldSubmitted: (value) {
+                _authenticate(true);
+              },
               controller: _passwordController,
+              focusNode: _passwordFocusNode,
               obscureText: true,
+              autofocus: true,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderRadius: const BorderRadius.all(Radius.circular(Dimensions.radiusMedium)),
