@@ -85,7 +85,7 @@ class ProductGridItemView extends StatelessWidget {
                           debugPrint(rating.toString());
                         },
                       ),
-                      Text(" ${productModel.avgRating.toStringAsFixed(1)}"),
+                      Text(" ${productModel.avgRating.toStringAsFixed(1)} (${productModel.ratingCount?.toInt()})"),
                     ],
                   ),
                 ),

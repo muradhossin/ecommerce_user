@@ -77,17 +77,19 @@ class ProductProvider extends ChangeNotifier {
     final ratingModelList = List.generate(snapshot.docs.length,
         (index) => RatingModel.fromMap(snapshot.docs[index].data()));
     double totalRating = 0.0;
+    double ratingCount = 0.0;
     for (var model in ratingModelList) {
       totalRating += model.rating;
+      ratingCount += 1;
     }
     final avgRating = totalRating / ratingModelList.length;
     return updateProductField(
-        ratingModel.productId, productFieldAvgRating, avgRating);
+        ratingModel.productId, productFieldAvgRating, productFieldRatingCount, avgRating, ratingCount);
   }
 
   Future<void> updateProductField(
-      String productId, String field, dynamic value) {
-    return ProductRepository.updateProductField(productId, {field: value});
+      String productId, String fieldAvgRating, fieldRatingCount,  dynamic avgRate, dynamic ratingCount) {
+    return ProductRepository.updateProductField(productId, {fieldAvgRating: avgRate, fieldRatingCount: ratingCount});
   }
 
 

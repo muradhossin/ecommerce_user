@@ -1,3 +1,4 @@
+import 'package:ecommerce_user/core/components/no_data_view.dart';
 import 'package:ecommerce_user/core/routes/app_router.dart';
 import 'package:ecommerce_user/view/cart/widget/cart_item_view.dart';
 import 'package:ecommerce_user/view/cart/provider/cart_provider.dart';
@@ -24,7 +25,7 @@ class CartPage extends StatelessWidget {
         ],
       ),
       body: Consumer<CartProvider>(
-        builder: (context, provider, child) => Column(
+        builder: (context, provider, child) => provider.cartList.isNotEmpty ? Column(
           children: [
             Expanded(
               child: ListView.builder(
@@ -58,7 +59,7 @@ class CartPage extends StatelessWidget {
               ),
             ),
           ],
-        ),
+        ) : const NoDataView(),
       ),
     );
   }

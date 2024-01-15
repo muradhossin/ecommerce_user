@@ -16,6 +16,7 @@ const String productFieldAdditionalImages = 'productAdditionalImages';
 const String productFieldAvailable = 'productAvailable';
 const String productFieldFeatured = 'productFeatured';
 const String productFieldAvgRating = 'avgRating';
+const String productFieldRatingCount = 'ratingCount';
 
 class ProductModel {
   String? productId;
@@ -31,6 +32,7 @@ class ProductModel {
   bool available;
   bool featured;
   num avgRating;
+  num? ratingCount;
 
   ProductModel({
     this.productId,
@@ -46,6 +48,7 @@ class ProductModel {
     required this.additionalImageModels,
     this.available = true,
     this.featured = false,
+    this.ratingCount,
   });
 
   Map<String, dynamic> toMap() {
@@ -63,6 +66,7 @@ class ProductModel {
       productFieldAdditionalImages: additionalImageModels,
       productFieldAvailable: available,
       productFieldFeatured: featured,
+      productFieldRatingCount: ratingCount,
     };
   }
 
@@ -80,5 +84,6 @@ class ProductModel {
     additionalImageModels: (map[productFieldAdditionalImages] as List).map((e) => e as String).toList(),
     available: map[productFieldAvailable],
     featured: map[productFieldFeatured],
+    ratingCount: map[productFieldRatingCount],
   );
 }
