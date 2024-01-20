@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecommerce_user/core/components/not_available.dart';
 import 'package:ecommerce_user/core/routes/app_router.dart';
 import 'package:ecommerce_user/view/auth/services/auth_service.dart';
 import 'package:ecommerce_user/view/notification/provider/notification_provider.dart';
@@ -48,20 +49,29 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.productModel.productName),
       ),
       body: ListView(
         children: [
-          CachedNetworkImage(
-            width: double.infinity,
-            height: 200,
-            fit: BoxFit.cover,
-            imageUrl: photoUrl,
-            placeholder: (context, url) =>
-                const Center(child: CircularProgressIndicator()),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
+          Stack(
+            children: [
+              CachedNetworkImage(
+                width: double.infinity,
+                height: 200,
+                fit: BoxFit.cover,
+                imageUrl: photoUrl,
+                placeholder: (context, url) =>
+                    const Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              ),
+
+              if(widget.productModel.stock.toInt() < 1) const NotAvailable(
+                height: 200,
+              ),
+            ],
           ),
           Row(children: [
             InkWell(

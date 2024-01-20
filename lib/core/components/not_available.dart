@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 
 class NotAvailable extends StatelessWidget {
   final double? borderRadius;
-  const NotAvailable({super.key, this.borderRadius});
+  final double? height;
+  final double? width;
+  const NotAvailable({super.key, this.borderRadius, this.width, this.height});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: context.height,
-      width: context.width,
+      height: height ?? context.height,
+      width: width ?? context.width,
       decoration: BoxDecoration(
         color: Colors.black.withOpacity(0.5),
         borderRadius: BorderRadius.circular(borderRadius ?? 0),
