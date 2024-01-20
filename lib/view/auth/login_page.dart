@@ -122,7 +122,6 @@ class _LoginPageState extends State<LoginPage> {
               controller: _passwordController,
               focusNode: _passwordFocusNode,
               obscureText: true,
-              autofocus: true,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderRadius: const BorderRadius.all(Radius.circular(Dimensions.radiusMedium)),
