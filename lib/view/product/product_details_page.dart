@@ -156,6 +156,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       provider.isProductInCart(widget.productModel.productId!);
                   return TextButton.icon(
                     onPressed: () async{
+                      if(widget.productModel.stock.toInt() < 1) {
+                        showMsg(context, 'Product is not available', isError: true);
+                        return;
+                      }
                       EasyLoading.show(status: "Please wait");
                       if (isInCart) {
                         await provider.removeFromCart(widget.productModel.productId!);
