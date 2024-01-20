@@ -1,4 +1,5 @@
 import 'package:ecommerce_user/core/components/custom_image.dart';
+import 'package:ecommerce_user/core/components/not_available.dart';
 import 'package:ecommerce_user/core/constants/dimensions.dart';
 import 'package:ecommerce_user/core/extensions/context.dart';
 import 'package:ecommerce_user/core/extensions/style.dart';
@@ -112,6 +113,8 @@ class ProductGridItemView extends StatelessWidget {
                   ),
                 ),
               ),
+
+            if(productModel.stock < 1) const NotAvailable(borderRadius: Dimensions.radiusMedium,),
           ],
         ),
       ),
