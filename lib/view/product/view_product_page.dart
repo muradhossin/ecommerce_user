@@ -1,4 +1,6 @@
 import 'package:ecommerce_user/core/components/no_data_view.dart';
+import 'package:ecommerce_user/core/routes/app_router.dart';
+import 'package:ecommerce_user/core/utils/notification_helper.dart';
 import 'package:ecommerce_user/view/category/provider/category_provider.dart';
 import 'package:ecommerce_user/view/checkout/provider/checkout_provider.dart';
 import 'package:ecommerce_user/view/notification/provider/notification_provider.dart';
@@ -7,6 +9,7 @@ import 'package:ecommerce_user/view/product/widgets/product_grid_item_view.dart'
 import 'package:ecommerce_user/view/cart/provider/cart_provider.dart';
 import 'package:ecommerce_user/view/user/provider/user_provider.dart';
 import 'package:ecommerce_user/view/wishlist/provider/wishlist_provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +18,8 @@ import '../auth/services/auth_service.dart';
 import '../cart/widget/cart_bubble_view.dart';
 import '../category/models/category_model.dart';
 import '../order/provider/order_provider.dart';
+import '../promo/promo_code_page.dart';
+import '../user/user_profile_page.dart';
 import 'provider/product_provider.dart';
 
 class ViewProductPage extends StatefulWidget {
@@ -29,7 +34,9 @@ class _ViewProductPageState extends State<ViewProductPage> {
 
   @override
   void initState() {
+    setupInteractedMessage();
     updateFcmtoken();
+    notificationPermission();
     super.initState();
   }
 
@@ -53,6 +60,24 @@ class _ViewProductPageState extends State<ViewProductPage> {
     });
   }
 
+  Future<void> setupInteractedMessage() async {
+    // Get any messages which caused the application to open from
+    // a terminated state.
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+
+    // If the message also contains a data property with a "type" of "chat",
+    // navigate to a chat screen
+    if (initialMessage != null) {
+      NotificationHelper.handleBackgroundNotification(initialMessage);
+    }
+
+  }
+
+  void notificationPermission() async {
+    if (!await NotificationHelper.checkNotificationPermission()) {
+      await NotificationHelper.requestNotificationPermission();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -9,6 +9,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../../main.dart';
+import '../../view/promo/promo_code_page.dart';
 
 class NotificationHelper {
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
@@ -18,39 +19,11 @@ class NotificationHelper {
     _configureFirebaseMessaging();
   }
 
-  Future<void> _configureFirebaseMessaging() async {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      _handleForegroundNotification(message);
-    });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      _handleBackgroundNotification(message);
-    });
-
-  }
-
   Future<void> initNotifications() async {
-    const AndroidInitializationSettings androidInitializationSettings =
-    AndroidInitializationSettings('app_icon');
+    const AndroidInitializationSettings androidInitializationSettings = AndroidInitializationSettings('app_icon');
+    const DarwinInitializationSettings initializationSettingsDarwin = DarwinInitializationSettings();
 
-    final DarwinInitializationSettings initializationSettingsDarwin =
-    DarwinInitializationSettings(
-        onDidReceiveLocalNotification: (id, title, body, payload) {
-
-        },);
-
-    final InitializationSettings initializationSettings =
-    InitializationSettings(
-        android: androidInitializationSettings,
-        iOS: initializationSettingsDarwin,
-
-    );
-
-    NotificationAppLaunchDetails? notificationAppLaunchDetails = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-    if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
-      debugPrint('App was opened by a notification');
-    }
-
+    const InitializationSettings initializationSettings = InitializationSettings(android: androidInitializationSettings, iOS: initializationSettingsDarwin,);
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings, onDidReceiveNotificationResponse: onSelectNotification);
 
@@ -94,7 +67,16 @@ class NotificationHelper {
   }
 
 
+  Future<void> _configureFirebaseMessaging() async {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      _handleForegroundNotification(message);
+    });
 
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      handleBackgroundNotification(message);
+    });
+
+  }
 
   //handle onTap notification
   Future<void> onSelectNotification(NotificationResponse? payload) async {
@@ -106,24 +88,9 @@ class NotificationHelper {
       if(notificationModel.type == NotificationType.order){
         navigatorKey.currentState!.pushNamed(AppRouter.getOrderRoute());
       }
-      
-
     }
   }
 
-  //handle notification when app is in background
-  Future<void> _handleBackgroundNotification(RemoteMessage remoteMessage) async {
-    debugPrint('onBackgroundMessage: ${remoteMessage.toMap()}');
-    NotificationBody notificationModel = NotificationBody.fromMap(remoteMessage.data);
-
-    onSelectNotification(NotificationResponse(payload: jsonEncode(notificationModel.toMap()), notificationResponseType: NotificationResponseType.selectedNotification));
-
-    // showNotification(
-    //   id: 0,
-    //   title: remoteMessage.notification!.title!,
-    //   body: remoteMessage.notification!.body!,
-    // );
-  }
 
   //handle notification when app is in foreground
   Future<void> _handleForegroundNotification(RemoteMessage remoteMessage) async {
@@ -141,5 +108,44 @@ class NotificationHelper {
       payload: jsonEncode(notificationModel.toMap()),
     );
   }
+
+  static Future<void> handleBackgroundNotification(RemoteMessage remoteMessage) async{
+    debugPrint('onMessageOpenedApp: ${remoteMessage.toMap()}');
+
+    if(remoteMessage.data['type'] == NotificationType.order){
+      navigatorKey.currentState!.pushNamed(AppRouter.getOrderRoute());
+    }
+    if(remoteMessage.data['key'] == 'promo'){
+      navigatorKey.currentState!.pushNamed(PromoCodePage.routeName, arguments: remoteMessage.data['value']);
+    }else if(remoteMessage.data['key'] == 'user'){
+      navigatorKey.currentState!.pushNamed(AppRouter.getUserProfileRoute());
+    }
+
+  }
+
+  static Future<bool> checkNotificationPermission() async{
+    NotificationSettings settings = await FirebaseMessaging.instance.getNotificationSettings();
+    if(settings.authorizationStatus == AuthorizationStatus.authorized){
+      return true;
+    }
+    return false;
+  }
+
+  static Future<void> requestNotificationPermission() async{
+    NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    debugPrint('User granted permission: ${settings.authorizationStatus}');
+  }
+
+
+
+
 
 }
