@@ -37,14 +37,16 @@ class NotificationRepository {
       type: notificationModel.type,
       body: 'your order ID: ${notificationModel.orderModel?.orderId} is placed successfully',
       title: 'Order Placed',
+      typeData: notificationModel.typedata ?? '',
     );
     final body = jsonEncode({
       'to': fcmToken, // replace with the device token
       'notification': {
         'title': 'Order Placed',
         'body': 'your order ID: ${notificationModel.orderModel?.orderId} is placed successfully',
-        'type' : '',
+        'type' : notificationModel.type,
         'id' : '${notificationModel.orderModel?.orderId}',
+        'type_data' : '${notificationModel.typedata}'
       },
       'data': notification.toMap(),
     });

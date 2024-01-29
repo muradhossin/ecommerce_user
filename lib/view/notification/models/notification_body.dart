@@ -3,12 +3,14 @@ class NotificationBody {
   String body;
   String id;
   String type;
+  String typeData;
 
   NotificationBody({
     required this.title,
     required this.body,
     required this.id,
     required this.type,
+    required this.typeData,
   });
 
   Map<String, dynamic> toMap() {
@@ -17,6 +19,7 @@ class NotificationBody {
       'body': body,
       'id': id,
       'type': type,
+      'type_data': typeData,
     };
   }
 
@@ -26,5 +29,6 @@ class NotificationBody {
         body: map['body'],
         id: map['id'],
         type: map['type'],
+        typeData: map['type_data'],
       );
 }

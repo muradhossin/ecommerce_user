@@ -114,8 +114,7 @@ class NotificationHelper {
 
     if(remoteMessage.data['type'] == NotificationType.order){
       navigatorKey.currentState!.pushNamed(AppRouter.getOrderRoute());
-    }
-    if(remoteMessage.data['key'] == 'promo'){
+    }else if(remoteMessage.data['key'] == 'promo'){
       navigatorKey.currentState!.pushNamed(PromoCodePage.routeName, arguments: remoteMessage.data['value']);
     }else if(remoteMessage.data['key'] == 'user'){
       navigatorKey.currentState!.pushNamed(AppRouter.getUserProfileRoute());

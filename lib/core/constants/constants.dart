@@ -17,9 +17,9 @@ abstract class PaymentMethod{
 }
 
 abstract class NotificationType{
-  static const String comment = 'New Comment';
-  static const String order = 'New Order';
-  static const String user = 'New User';
+  static const String comment = 'new_comment';
+  static const String order = 'order';
+  static const String user = 'new_user';
 }
 
 const cities = [

@@ -326,6 +326,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         type: NotificationType.order,
         message: 'You have a new order #${orderModel.orderId}',
         orderModel: orderModel,
+        typedata: OrderStatus.pending,
       );
       await notificationProvider.addNotification(notification);
       EasyLoading.dismiss();

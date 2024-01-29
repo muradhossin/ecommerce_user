@@ -13,6 +13,7 @@ const String notificationFieldStatus = 'status';
 const String notificationFieldComment = 'comment';
 const String notificationFieldUser = 'user';
 const String notificationFieldOrder = 'order';
+const String notificationFieldTypeData = 'typeData';
 
 class NotificationModel {
   String id;
@@ -22,6 +23,7 @@ class NotificationModel {
   CommentModel? commentModel;
   UserModel? userModel;
   OrderModel? orderModel;
+  String? typedata;
 
   NotificationModel({
     required this.id,
@@ -31,6 +33,8 @@ class NotificationModel {
     this.commentModel,
     this.userModel,
     this.orderModel,
+    this.typedata,
+
   });
 
   Map<String, dynamic> toMap() {
@@ -42,6 +46,7 @@ class NotificationModel {
       notificationFieldComment: commentModel?.toMap(),
       notificationFieldUser: userModel?.toMap(),
       notificationFieldOrder: orderModel?.toMap(),
+      notificationFieldTypeData: typedata,
     };
   }
 
@@ -62,5 +67,6 @@ class NotificationModel {
         orderModel: map[notificationFieldOrder] == null
             ? null
             : OrderModel.fromMap(map[notificationFieldOrder]),
+        typedata: map[notificationFieldTypeData],
       );
 }
