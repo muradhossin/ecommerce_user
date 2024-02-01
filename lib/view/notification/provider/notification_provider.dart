@@ -27,6 +27,11 @@ class NotificationProvider extends ChangeNotifier {
     return NotificationRepository.sendNotification(notificationModel, _fcmToken);
   }
 
+  //send topic notification
+  Future<void> sendTopicNotification(NotificationModel notificationModel, String topic) {
+    return NotificationRepository.sendTopicNotification(notificationModel, topic);
+  }
+
 
 
 }

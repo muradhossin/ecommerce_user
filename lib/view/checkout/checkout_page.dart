@@ -337,6 +337,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             ModalRoute.withName(AppRouter.getViewProductRoute()));
       }
       notificationProvider.sendNotification(notification);
+      notificationProvider.sendTopicNotification(notification, NotificationTopic.order);
 
 
 

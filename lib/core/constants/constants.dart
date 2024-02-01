@@ -22,6 +22,12 @@ abstract class NotificationType{
   static const String user = 'new_user';
 }
 
+abstract class NotificationTopic{
+  static const String order = 'order';
+  static const String promo = 'promo';
+  static const String user = 'user';
+}
+
 const cities = [
   'Dhaka',
   'Chittagong',

@@ -40,7 +40,7 @@ class NotificationRepository {
       typeData: notificationModel.typedata ?? '',
     );
     final body = jsonEncode({
-      'to': fcmToken, // replace with the device token
+      'to': fcmToken,
       'notification': {
         'title': 'Order Placed',
         'body': 'your order ID: ${notificationModel.orderModel?.orderId} is placed successfully',
@@ -59,4 +59,40 @@ class NotificationRepository {
       debugPrint('Failed to send notification: ${response.body}');
     }
   }
+
+  static Future<void> sendTopicNotification(NotificationModel notificationModel, String topic) async {
+    final url = Uri.parse('https://fcm.googleapis.com/fcm/send');
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'key=${AppConstants.serverKey}',
+    };
+    NotificationBody notification = NotificationBody(
+      id: notificationModel.orderModel?.orderId ?? '',
+      type: notificationModel.type,
+      body: 'your order ID: ${notificationModel.orderModel?.orderId} is placed successfully',
+      title: 'Order Placed',
+      typeData: notificationModel.typedata ?? '',
+    );
+    final body = jsonEncode({
+      'to': '/topics/$topic',
+      'notification': {
+        'title': 'New order',
+        'body': 'You have a new order #ID: ${notificationModel.orderModel?.orderId}',
+        'type' : notificationModel.type,
+        'id' : '${notificationModel.orderModel?.orderId}',
+        'type_data' : '${notificationModel.typedata}'
+      },
+      'data': notification.toMap(),
+    });
+
+    final response = await http.post(url, headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      debugPrint('Notification sent successfully');
+    } else {
+      debugPrint('Failed to send notification: ${response.body}');
+    }
+  }
 }
+
+
