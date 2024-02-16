@@ -303,6 +303,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           commentModel
                         );
                         final notification = NotificationModel(
+                          createdAt: DateTime.now(),
                           id: DateTime.now().millisecondsSinceEpoch.toString(),
                           type: NotificationType.comment,
                           message: 'A new comment on ${widget.productModel.productName} is waiting for your approval',

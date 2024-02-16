@@ -322,6 +322,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       await orderProvider.saveOrder(orderModel);
 
       final notification = NotificationModel(
+        createdAt: DateTime.now(),
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         type: NotificationType.order,
         title: 'New Order',

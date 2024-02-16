@@ -11,19 +11,19 @@ class NoDataView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CustomImage(
-            height: 200,
-            width: 200,
-            fit: BoxFit.fitWidth,
-            imagePath: Images.noDataImage,
-          ),
-          const SizedBox(height: Dimensions.paddingMedium),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CustomImage(
+              height: 100,
+              width: 100,
+              fit: BoxFit.fitWidth,
+              imagePath: Images.noDataImage,
+            ),
+            const SizedBox(height: Dimensions.paddingMedium),
 
-          Text(message, style: const TextStyle().regular.copyWith(fontSize: Dimensions.fontSizeSmall)),
-        ],
-      )
+            Text(message, style: const TextStyle().regular.copyWith(fontSize: Dimensions.fontSizeExtraSmall)),
+          ],
+        )
     );
   }
 }

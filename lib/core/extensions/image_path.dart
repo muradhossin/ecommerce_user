@@ -16,7 +16,7 @@ extension ImagePath on String {
 class Images {
   static String logo = 'logo'.pngIcon;
   static String noData = 'no_data'.gifImage;
-  static String noDataImage = 'no_data'.jpgImage;
+  static String noDataImage = 'no-data'.pngImage;
 }
 
 

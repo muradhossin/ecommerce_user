@@ -289,6 +289,7 @@ class _LoginPageState extends State<LoginPage> {
           type: NotificationType.user,
           message: 'A new user is created, UserID: ${userModel.userId}',
           userModel: userModel,
+          createdAt: DateTime.now(),
         );
         await notificationProvider.addNotification(notification);
         EasyLoading.dismiss();

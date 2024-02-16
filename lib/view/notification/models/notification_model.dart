@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_user/view/user/models/user_model.dart';
 
 import '../../product/models/comment_model.dart';
@@ -15,6 +16,7 @@ const String notificationFieldUser = 'user';
 const String notificationFieldOrder = 'order';
 const String notificationFieldTypeData = 'typeData';
 const String notificationFieldTitle = 'title';
+const String notificationFieldCreatedAt = 'createdAt';
 
 class NotificationModel {
   String id;
@@ -26,6 +28,7 @@ class NotificationModel {
   OrderModel? orderModel;
   String? typedata;
   String? title;
+  DateTime? createdAt;
 
   NotificationModel({
     required this.id,
@@ -37,6 +40,7 @@ class NotificationModel {
     this.orderModel,
     this.typedata,
     this.title,
+    this.createdAt,
 
   });
 
@@ -51,6 +55,7 @@ class NotificationModel {
       notificationFieldOrder: orderModel?.toMap(),
       notificationFieldTypeData: typedata,
       notificationFieldTitle: title,
+      notificationFieldCreatedAt: createdAt,
     };
   }
 
@@ -73,5 +78,8 @@ class NotificationModel {
             : OrderModel.fromMap(map[notificationFieldOrder]),
         typedata: map[notificationFieldTypeData],
         title: map[notificationFieldTitle],
+        createdAt: map[notificationFieldCreatedAt] == null
+            ? null
+            : (map[notificationFieldCreatedAt] as Timestamp).toDate(),
       );
 }
