@@ -14,6 +14,7 @@ const String notificationFieldComment = 'comment';
 const String notificationFieldUser = 'user';
 const String notificationFieldOrder = 'order';
 const String notificationFieldTypeData = 'typeData';
+const String notificationFieldTitle = 'title';
 
 class NotificationModel {
   String id;
@@ -24,6 +25,7 @@ class NotificationModel {
   UserModel? userModel;
   OrderModel? orderModel;
   String? typedata;
+  String? title;
 
   NotificationModel({
     required this.id,
@@ -34,6 +36,7 @@ class NotificationModel {
     this.userModel,
     this.orderModel,
     this.typedata,
+    this.title,
 
   });
 
@@ -47,6 +50,7 @@ class NotificationModel {
       notificationFieldUser: userModel?.toMap(),
       notificationFieldOrder: orderModel?.toMap(),
       notificationFieldTypeData: typedata,
+      notificationFieldTitle: title,
     };
   }
 
@@ -68,5 +72,6 @@ class NotificationModel {
             ? null
             : OrderModel.fromMap(map[notificationFieldOrder]),
         typedata: map[notificationFieldTypeData],
+        title: map[notificationFieldTitle],
       );
 }

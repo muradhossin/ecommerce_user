@@ -324,6 +324,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       final notification = NotificationModel(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         type: NotificationType.order,
+        title: 'New Order',
         message: 'You have a new order #${orderModel.orderId}',
         orderModel: orderModel,
         typedata: OrderStatus.pending,
