@@ -1,5 +1,6 @@
 
 
+import 'package:ecommerce_user/core/constants/app_constants.dart';
 import 'package:ecommerce_user/core/routes/app_router.dart';
 import 'package:ecommerce_user/core/themes/dark_theme.dart';
 import 'package:ecommerce_user/core/themes/light_theme.dart';
@@ -66,7 +67,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: AppConstants.appName,
       themeMode: ThemeMode.system,
       theme: LightTheme.theme,
       darkTheme: DarkTheme.theme,

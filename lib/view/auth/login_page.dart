@@ -36,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   late UserProvider userProvider;
   late NotificationProvider notificationProvider;
   bool isAnonymous = false;
+  bool _showPassword = false;
 
   @override
   void initState() {
@@ -49,6 +50,10 @@ class _LoginPageState extends State<LoginPage> {
   void didChangeDependencies() {
     userProvider = Provider.of<UserProvider>(context, listen: false);
     notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
+
+    _passwordController.addListener(() {
+      setState(() {});
+    });
     super.didChangeDependencies();
   }
 
@@ -121,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
               },
               controller: _passwordController,
               focusNode: _passwordFocusNode,
-              obscureText: true,
+              obscureText: !_showPassword,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderRadius: const BorderRadius.all(Radius.circular(Dimensions.radiusMedium)),
@@ -141,6 +146,14 @@ class _LoginPageState extends State<LoginPage> {
                 labelText: 'Password',
                 prefixIcon: const Icon(Icons.lock),
                 filled: true,
+                suffixIcon: _passwordController.text.isNotEmpty ? IconButton(
+                  icon: Icon(!_showPassword ? Icons.visibility : Icons.visibility_off),
+                  onPressed: () {
+                    setState(() {
+                    _showPassword = !_showPassword;
+                    });
+                  },
+                ) : null,
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
