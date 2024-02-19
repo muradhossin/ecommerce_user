@@ -180,12 +180,12 @@ class _LoginPageState extends State<LoginPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('New User? '),
+                const Text('New Here? '),
                 TextButton(
                   onPressed: () {
                     _authenticate(false);
                   },
-                  child: const Text("Register here"),
+                  child: const Text("Register Now"),
                 ),
               ],
             ),
