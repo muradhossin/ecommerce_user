@@ -126,7 +126,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
                   },
                 ),
               ),
-              provider.productList.isNotEmpty ? Expanded(
+              provider.productList != null ? provider.productList!.isNotEmpty ? Expanded(
                 child: GridView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: Dimensions.paddingSmall),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -135,13 +135,13 @@ class _ViewProductPageState extends State<ViewProductPage> {
                     mainAxisSpacing: Dimensions.paddingExtraSmall,
                     crossAxisSpacing: Dimensions.paddingExtraSmall,
                   ),
-                  itemCount: provider.productList.length,
+                  itemCount: provider.productList!.length,
                   itemBuilder: ((context, index) {
-                    final product = provider.productList[index];
+                    final product = provider.productList![index];
                     return ProductGridItemView(productModel: product);
                   }),
                 ),
-              ) : const NoDataView(),
+              ) : const Center(heightFactor: 5, child: NoDataView()) : const Center(child: CircularProgressIndicator()),
             ],
           ),
         ),

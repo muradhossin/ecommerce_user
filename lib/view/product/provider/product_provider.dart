@@ -14,10 +14,11 @@ import '../../checkout/models/purchase_model.dart';
 import '../../../core/constants/constants.dart';
 
 class ProductProvider extends ChangeNotifier {
-  List<ProductModel> productList = [];
+  List<ProductModel>? productList;
 
 
   getAllProducts() {
+    productList = [];
     ProductRepository.getAllProducts().listen((snapshot) {
       productList = List.generate(snapshot.docs.length,
           (index) => ProductModel.fromMap(snapshot.docs[index].data()));
@@ -28,6 +29,7 @@ class ProductProvider extends ChangeNotifier {
 
 
   getAllProductsByCategory(String categoryName) {
+    productList = [];
     ProductRepository.getAllProductsByCategory(categoryName).listen((snapshot) {
       productList = List.generate(snapshot.docs.length,
           (index) => ProductModel.fromMap(snapshot.docs[index].data()));
