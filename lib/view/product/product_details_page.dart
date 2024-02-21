@@ -14,6 +14,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/constants/dimensions.dart';
 import '../notification/models/notification_model.dart';
 import 'models/product_model.dart';
 import 'provider/product_provider.dart';
@@ -195,60 +196,63 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             trailing: Text(
                 '$currencySymbol${productProvider.priceAfterDiscount(widget.productModel.salePrice, widget.productModel.productDiscount)}'),
           ),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text('Rate this product'),
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: RatingBar.builder(
-                      initialRating: 3,
-                      minRating: 0.0,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      ignoreGestures: false,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 0.0),
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: Colors.amber,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text('Rate this product'),
+                    Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: RatingBar.builder(
+                        initialRating: 3,
+                        minRating: 0.0,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        ignoreGestures: false,
+                        itemPadding: const EdgeInsets.symmetric(horizontal: 0.0),
+                        itemBuilder: (context, _) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        onRatingUpdate: (rating) {
+                          userRating = rating;
+                        },
                       ),
-                      onRatingUpdate: (rating) {
-                        userRating = rating;
-                      },
                     ),
-                  ),
-                  OutlinedButton(
-                    onPressed: () async {
-                      if (AuthService.currentUser!.isAnonymous) {
-                        showCustomDialog(
-                          context: context,
-                          title: 'Unregistered User',
-                          positiveButtonText: 'Login',
-                          content:
-                              'To rate this product, you need to login with your email and password or Google account. To login with your account, go to Login Page',
-                          onPressed: () {
-                            Navigator.pushNamed(context, AppRouter.getLoginRoute());
-                          },
-                        );
-                      } else {
-                        EasyLoading.show(status: 'Please wait');
-                        await productProvider.addRating(
-                          widget.productModel.productId!,
-                          userRating,
-                          userProvider.userModel!,
-                        );
+                    OutlinedButton(
+                      onPressed: () async {
+                        if (AuthService.currentUser!.isAnonymous) {
+                          showCustomDialog(
+                            context: context,
+                            title: 'Unregistered User',
+                            positiveButtonText: 'Login',
+                            content:
+                                'To rate this product, you need to login with your email and password or Google account. To login with your account, go to Login Page',
+                            onPressed: () {
+                              Navigator.pushNamed(context, AppRouter.getLoginRoute());
+                            },
+                          );
+                        } else {
+                          EasyLoading.show(status: 'Please wait');
+                          await productProvider.addRating(
+                            widget.productModel.productId!,
+                            userRating,
+                            userProvider.userModel!,
+                          );
 
-                        EasyLoading.dismiss();
-                        if (mounted) showMsg(context, 'Thanks for your rating');
-                      }
-                    },
-                    child: const Text('SUBMIT'),
-                  ),
-                ],
+                          EasyLoading.dismiss();
+                          if (mounted) showMsg(context, 'Thanks for your rating');
+                        }
+                      },
+                      child: const Text('SUBMIT'),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -259,68 +263,71 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text('Add your comment'),
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: TextField(
-                      focusNode: focusNode,
-                      controller: txtController,
-                      maxLines: 3,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text('Add your comment'),
+                    Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: TextField(
+                        focusNode: focusNode,
+                        controller: txtController,
+                        maxLines: 3,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                        ),
                       ),
                     ),
-                  ),
-                  OutlinedButton(
-                    onPressed: () async {
-                      if (txtController.text.isEmpty) return;
-                      if (AuthService.currentUser!.isAnonymous) {
-                        showCustomDialog(
-                          context: context,
-                          title: 'Unregistered User',
-                          positiveButtonText: 'Login',
-                          content:
-                              'To comment this product, you need to login with your email and password or Google account. To login with your account, go to Login Page',
-                          onPressed: () {
-                            Navigator.pushNamed(context, AppRouter.getLoginRoute());
-                          },
-                        );
-                      } else {
-                        EasyLoading.show(status: 'Please wait');
-                        final commentModel = CommentModel(
-                          userModel: userProvider.userModel!,
-                          productId: widget.productModel.productId!,
-                          comment: txtController.text,
-                          date: getFormattedDate(DateTime.now(), pattern: 'dd/MM/yyyy hh:mm:ss a'),
-                        );
-                        await productProvider.addComment(
-                          commentModel
-                        );
-                        final notification = NotificationModel(
-                          createdAt: DateTime.now(),
-                          id: DateTime.now().millisecondsSinceEpoch.toString(),
-                          type: NotificationType.comment,
-                          message: 'A new comment on ${widget.productModel.productName} is waiting for your approval',
-                          commentModel: commentModel,
-                        );
-                        await notificationProvider.addNotification(notification);
-                        EasyLoading.dismiss();
-                        focusNode.unfocus();
-                        if (mounted) {
-                          showMsg(context,
-                              'Thanks for your comment. Your comment is waiting for admin approval');
+                    OutlinedButton(
+                      onPressed: () async {
+                        if (txtController.text.isEmpty) return;
+                        if (AuthService.currentUser!.isAnonymous) {
+                          showCustomDialog(
+                            context: context,
+                            title: 'Unregistered User',
+                            positiveButtonText: 'Login',
+                            content:
+                                'To comment this product, you need to login with your email and password or Google account. To login with your account, go to Login Page',
+                            onPressed: () {
+                              Navigator.pushNamed(context, AppRouter.getLoginRoute());
+                            },
+                          );
+                        } else {
+                          EasyLoading.show(status: 'Please wait');
+                          final commentModel = CommentModel(
+                            userModel: userProvider.userModel!,
+                            productId: widget.productModel.productId!,
+                            comment: txtController.text,
+                            date: getFormattedDate(DateTime.now(), pattern: 'dd/MM/yyyy hh:mm:ss a'),
+                          );
+                          await productProvider.addComment(
+                            commentModel
+                          );
+                          final notification = NotificationModel(
+                            createdAt: DateTime.now(),
+                            id: DateTime.now().millisecondsSinceEpoch.toString(),
+                            type: NotificationType.comment,
+                            message: 'A new comment on ${widget.productModel.productName} is waiting for your approval',
+                            commentModel: commentModel,
+                          );
+                          await notificationProvider.addNotification(notification);
+                          EasyLoading.dismiss();
+                          focusNode.unfocus();
+                          if (mounted) {
+                            showMsg(context,
+                                'Thanks for your comment. Your comment is waiting for admin approval');
+                          }
                         }
-                      }
-                    },
-                    child: const Text('SUBMIT'),
-                  ),
-                ],
+                      },
+                      child: const Text('SUBMIT'),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -368,7 +375,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                         ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(8),
+                                  padding: const EdgeInsets.only(left: Dimensions.paddingExtraLarge * 1.7,  bottom: Dimensions.paddingSmall),
                                   child: Text(
                                     comment.comment,
                                   ),
