@@ -1,4 +1,5 @@
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce_user/core/constants/constants.dart';
 import 'package:ecommerce_user/core/constants/dimensions.dart';
 import 'package:ecommerce_user/core/extensions/context.dart';
@@ -31,15 +32,17 @@ class WishListView extends StatelessWidget {
           Row(
             children: [
 
-              Container(
-                height: 100,
-                width: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(Dimensions.radiusMedium),
-                  image: DecorationImage(
-                    image: NetworkImage(productModel.thumbnailImageModel.imageDownloadUrl),
-                    fit: BoxFit.cover,
-                  ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(Dimensions.radiusMedium),
+                child: CachedNetworkImage(
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                  imageUrl: productModel.thumbnailImageModel.imageDownloadUrl ?? '',
+                  placeholder: (context, url) =>
+                  const Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) =>
+                  const Icon(Icons.error),
                 ),
               ),
               const SizedBox(width: Dimensions.paddingLarge),
@@ -76,7 +79,10 @@ class WishListView extends StatelessWidget {
                 onPressed: () async {
                   EasyLoading.show(status: 'Removing from wishlist...');
                   await Provider.of<WishListProvider>(context, listen: false).removeFromWishList(productModel.productId!).then((value) => {
-                    showMsg(context, 'Removed from wishlist'),
+                    if(context.mounted){
+                      showMsg(context, 'Removed from wishlist'),
+                    }
+
                   });
                   EasyLoading.dismiss();
                 },
