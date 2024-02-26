@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:ecommerce_user/core/constants/constants.dart';
 import 'package:ecommerce_user/core/routes/app_router.dart';
 import 'package:ecommerce_user/view/notification/models/notification_body.dart';
-import 'package:ecommerce_user/view/notification/models/notification_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -100,7 +99,7 @@ class NotificationHelper {
     NotificationBody notificationModel = NotificationBody.fromMap(remoteMessage.data);
     debugPrint('----------> notificationModel: ${notificationModel.toMap()}');
 
-    debugPrint('----------> notificationModelBG: ${notificationModel?.toMap()}');
+    debugPrint('----------> notificationModelBG: ${notificationModel.toMap()}');
     showNotification(
       id: 0,
       title: remoteMessage.notification!.title!,

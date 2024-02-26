@@ -38,7 +38,7 @@ class WishListView extends StatelessWidget {
                   width: 100,
                   height: 100,
                   fit: BoxFit.cover,
-                  imageUrl: productModel.thumbnailImageModel.imageDownloadUrl ?? '',
+                  imageUrl: productModel.thumbnailImageModel.imageDownloadUrl,
                   placeholder: (context, url) =>
                   const Center(child: CircularProgressIndicator()),
                   errorWidget: (context, url, error) =>

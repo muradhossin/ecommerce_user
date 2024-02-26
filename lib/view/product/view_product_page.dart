@@ -1,5 +1,4 @@
 import 'package:ecommerce_user/core/components/no_data_view.dart';
-import 'package:ecommerce_user/core/routes/app_router.dart';
 import 'package:ecommerce_user/core/utils/notification_helper.dart';
 import 'package:ecommerce_user/view/category/provider/category_provider.dart';
 import 'package:ecommerce_user/view/checkout/provider/checkout_provider.dart';
@@ -18,8 +17,6 @@ import '../auth/services/auth_service.dart';
 import '../cart/widget/cart_bubble_view.dart';
 import '../category/models/category_model.dart';
 import '../order/provider/order_provider.dart';
-import '../promo/promo_code_page.dart';
-import '../user/user_profile_page.dart';
 import 'provider/product_provider.dart';
 
 class ViewProductPage extends StatefulWidget {

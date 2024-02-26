@@ -39,9 +39,9 @@ DateTime getDateTimeFromTimeStampString(String timestamp) {
     dateTime = DateTime.fromMillisecondsSinceEpoch(milliseconds);
 
     // Output: 2023-02-10 09:29:59.780
-    print(dateTime);
+
   } else {
-    print("Invalid timestamp string format");
+
   }
   return dateTime;
 }
