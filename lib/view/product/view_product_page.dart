@@ -138,7 +138,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
                     return ProductGridItemView(productModel: product);
                   }),
                 ),
-              ) : const Center(heightFactor: 5, child: NoDataView()) : const Center(child: CircularProgressIndicator()),
+              ) : const Center(heightFactor: 5, child: NoDataView()) : const Expanded(child: Center(child: CircularProgressIndicator())),
             ],
           ),
         ),

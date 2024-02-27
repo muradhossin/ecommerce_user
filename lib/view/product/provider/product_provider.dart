@@ -18,10 +18,13 @@ class ProductProvider extends ChangeNotifier {
 
 
   getAllProducts() {
-    productList = [];
     ProductRepository.getAllProducts().listen((snapshot) {
-      productList = List.generate(snapshot.docs.length,
-          (index) => ProductModel.fromMap(snapshot.docs[index].data()));
+      if(snapshot.docs.isNotEmpty){
+        productList = List.generate(snapshot.docs.length,
+                (index) => ProductModel.fromMap(snapshot.docs[index].data()));
+      }else {
+        productList = [];
+      }
       notifyListeners();
     });
   }
@@ -29,10 +32,14 @@ class ProductProvider extends ChangeNotifier {
 
 
   getAllProductsByCategory(String categoryName) {
-    productList = [];
+
     ProductRepository.getAllProductsByCategory(categoryName).listen((snapshot) {
-      productList = List.generate(snapshot.docs.length,
-          (index) => ProductModel.fromMap(snapshot.docs[index].data()));
+      if(snapshot.docs.isNotEmpty){
+        productList = List.generate(snapshot.docs.length,
+                (index) => ProductModel.fromMap(snapshot.docs[index].data()));
+      }else {
+        productList = [];
+      }
       notifyListeners();
     });
   }
