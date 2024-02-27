@@ -24,6 +24,7 @@ class OrderProvider extends ChangeNotifier {
   getOrdersByUser() {
     OrderRepository.getOrdersByUser(AuthService.currentUser!.uid).listen((snapshot) {
       orderList = List.generate(snapshot.docs.length, (index) => OrderModel.fromMap(snapshot.docs[index].data()));
+      orderList.sort((a, b) => b.orderDate.timestamp.compareTo(a.orderDate.timestamp));
       orderItemList = orderList.map((order) => OrderItem(orderModel: order)).toList();
       notifyListeners();
     });
