@@ -28,7 +28,7 @@ class UserProfilePage extends StatelessWidget {
                   trailing: IconButton(
                     onPressed: () {
                       //Navigator.pushNamed(context, OtpVerificationPage.routeName, arguments: value);
-                      UserService.userProfileInfoUpdate(userProvider, userFieldPhone, 'Mobile Number', context);
+                      UserService.userProfileInfoUpdate(userProvider, userFieldPhone, 'Mobile Number', context, userProvider.userModel!.phone);
                     },
                     icon: const Icon(Icons.edit),
                   ),
@@ -39,7 +39,7 @@ class UserProfilePage extends StatelessWidget {
                   subtitle: const Text('Date of Birth'),
                   trailing: IconButton(
                     onPressed: () {
-                      UserService.userProfileInfoUpdate(userProvider, userFieldAge, 'Date of Birth', context);
+                      UserService.userProfileInfoUpdate(userProvider, userFieldAge, 'Date of Birth', context, userProvider.userModel!.age);
                     },
                     icon: const Icon(Icons.edit),
                   ),
@@ -50,7 +50,7 @@ class UserProfilePage extends StatelessWidget {
                   subtitle: const Text('Gender'),
                   trailing: IconButton(
                     onPressed: () {
-                      UserService.userProfileInfoUpdate(userProvider, userFieldGender, 'Gender', context);
+                      UserService.userProfileInfoUpdate(userProvider, userFieldGender, 'Gender', context, userProvider.userModel!.gender);
                     },
                     icon: const Icon(Icons.edit),
                   ),
@@ -63,7 +63,7 @@ class UserProfilePage extends StatelessWidget {
                   subtitle: const Text('Address'),
                   trailing: IconButton(
                     onPressed: () {
-                      UserService.userProfileInfoUpdate(userProvider, '$userFieldAddressModel.$addressFieldAddressLine1', 'Address Line 1', context);
+                      UserService.userProfileInfoUpdate(userProvider, '$userFieldAddressModel.$addressFieldAddressLine1', 'Address Line 1', context, userProvider.userModel!.addressModel?.address);
                     },
                     icon: const Icon(Icons.edit),
                   ),
@@ -75,7 +75,7 @@ class UserProfilePage extends StatelessWidget {
                   subtitle: const Text('City'),
                   trailing: IconButton(
                     onPressed: () {
-                      UserService.userProfileInfoUpdate(userProvider, '$userFieldAddressModel.$addressFieldCity', 'City', context);
+                      UserService.userProfileInfoUpdate(userProvider, '$userFieldAddressModel.$addressFieldCity', 'City', context, userProvider.userModel!.addressModel?.city);
                     },
                     icon: const Icon(Icons.edit),
                   ),
@@ -87,7 +87,7 @@ class UserProfilePage extends StatelessWidget {
                   subtitle: const Text('Zip Code'),
                   trailing: IconButton(
                     onPressed: () {
-                      UserService.userProfileInfoUpdate(userProvider, '$userFieldAddressModel.$addressFieldZipcode', 'Zip Code', context);
+                      UserService.userProfileInfoUpdate(userProvider, '$userFieldAddressModel.$addressFieldZipcode', 'Zip Code', context, userProvider.userModel!.addressModel?.zipcode);
                     },
                     icon: const Icon(Icons.edit),
                   ),
@@ -150,7 +150,7 @@ class UserProfilePage extends StatelessWidget {
                         .copyWith(color: Colors.white),
                   ),
 
-                  IconButton(onPressed: () => UserService.userProfileInfoUpdate(userProvider, userFieldDisplayName, 'Display Name', context), icon: const Icon(Icons.edit)),
+                  IconButton(onPressed: () => UserService.userProfileInfoUpdate(userProvider, userFieldDisplayName, 'Display Name', context, userProvider.userModel!.displayName), icon: const Icon(Icons.edit)),
                 ],
               ),
               Text(

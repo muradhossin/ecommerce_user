@@ -1,13 +1,15 @@
+import 'package:ecommerce_user/core/utils/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 void showSingleTextFieldInputDialog({
   required BuildContext context,
   required String title,
+  String? body,
   String positiveButton = 'OK',
   String negativeButton = 'CLOSE',
   required Function(String) onSubmit,
 }) {
-  final txtController = TextEditingController();
+  final txtController = TextEditingController(text: body);
   showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -31,8 +33,13 @@ void showSingleTextFieldInputDialog({
               ),
               TextButton(
                 onPressed: () {
-                  if (txtController.text.isEmpty) return;
                   Navigator.pop(context);
+                  if (txtController.text.isEmpty) {
+                    if(context.mounted) {
+                      showMsg(context, 'Please enter $title', isError: true);
+                    }
+                    return;
+                  }
                   onSubmit(txtController.text);
                 },
                 child: Text(positiveButton),

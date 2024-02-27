@@ -25,9 +25,10 @@ class UserService{
     }});
   }
 
-  static void userProfileInfoUpdate (UserProvider userProvider, String field, String title, BuildContext context) {
+  static void userProfileInfoUpdate (UserProvider userProvider, String field, String title, BuildContext context, String? body) {
     showSingleTextFieldInputDialog(
       title: title,
+      body: body,
       context: context,
       onSubmit: (value) async{
         EasyLoading.show(status: 'Updating...');
