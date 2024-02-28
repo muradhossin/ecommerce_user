@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: AppConstants.appName,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.dark,
       theme: LightTheme.theme,
       darkTheme: DarkTheme.theme,
       builder: EasyLoading.init(),
