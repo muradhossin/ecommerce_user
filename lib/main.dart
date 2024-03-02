@@ -4,6 +4,7 @@ import 'package:ecommerce_user/core/constants/app_constants.dart';
 import 'package:ecommerce_user/core/routes/app_router.dart';
 import 'package:ecommerce_user/core/themes/dark_theme.dart';
 import 'package:ecommerce_user/core/themes/light_theme.dart';
+import 'package:ecommerce_user/core/themes/themes_provider.dart';
 import 'package:ecommerce_user/core/utils/notification_helper.dart';
 import 'package:ecommerce_user/view/category/provider/category_provider.dart';
 import 'package:ecommerce_user/view/checkout/provider/checkout_provider.dart';
@@ -13,6 +14,7 @@ import 'package:ecommerce_user/view/cart/provider/cart_provider.dart';
 import 'package:ecommerce_user/view/order/provider/order_provider.dart';
 import 'package:ecommerce_user/view/product/provider/product_provider.dart';
 import 'package:ecommerce_user/view/user/provider/user_provider.dart';
+import 'package:ecommerce_user/view/user/services/user_service.dart';
 import 'package:ecommerce_user/view/wishlist/provider/wishlist_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -33,6 +35,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  bool isLightTheme = await UserService.getThemeFromSharedPref();
+  ThemeProvider(isLightTheme);
+  
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -46,6 +51,7 @@ void main() async {
   await notificationHelper.initNotifications();
   runApp(MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider(isLightTheme)),
         ChangeNotifierProvider(create: (_) => ProductProvider()),
         ChangeNotifierProvider(create: (_) => OrderProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
@@ -55,11 +61,12 @@ void main() async {
         ChangeNotifierProvider(create: (_) => CategoryProvider()),
         ChangeNotifierProvider(create: (_) => WishListProvider()),
       ],
-      child: const MyApp()));
+      child: Consumer<ThemeProvider>(builder: (context, value, child) =>  MyApp(isLightTheme: value.isLightTheme))));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLightTheme;
+  const MyApp({super.key, required this.isLightTheme});
 
   // This widget is the root of your application.
   @override
@@ -68,7 +75,7 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: AppConstants.appName,
-      themeMode: ThemeMode.dark,
+      themeMode: isLightTheme ? ThemeMode.light : ThemeMode.dark,
       theme: LightTheme.theme,
       darkTheme: DarkTheme.theme,
       builder: EasyLoading.init(),

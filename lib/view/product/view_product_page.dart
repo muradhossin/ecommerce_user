@@ -1,4 +1,5 @@
 import 'package:ecommerce_user/core/components/no_data_view.dart';
+import 'package:ecommerce_user/core/themes/themes_provider.dart';
 import 'package:ecommerce_user/core/utils/notification_helper.dart';
 import 'package:ecommerce_user/view/category/provider/category_provider.dart';
 import 'package:ecommerce_user/view/checkout/provider/checkout_provider.dart';
@@ -39,7 +40,7 @@ class _ViewProductPageState extends State<ViewProductPage> {
 
   @override
   void didChangeDependencies() {
-
+    Provider.of<ThemeProvider>(context, listen: false).getTheme();
     Provider.of<CategoryProvider>(context, listen: false).getAllCategories();
     Provider.of<ProductProvider>(context, listen: false).getAllProducts();
     Provider.of<CheckoutProvider>(context, listen: false).getAllPurchases();
@@ -82,8 +83,18 @@ class _ViewProductPageState extends State<ViewProductPage> {
       drawer: const MainDrawer(),
       appBar: AppBar(
         title: const Text('All Product'),
-        actions: const [
-          CartBubbleView(),
+        actions: [
+
+          Consumer<ThemeProvider>(
+            builder: (context, themeProvider, child) =>
+            IconButton(
+              onPressed: () => themeProvider.toggleTheme(),
+              icon: themeProvider.isLightTheme ? const Icon(Icons.light_mode) : const Icon(Icons.dark_mode),
+            ),
+          ),
+
+          const CartBubbleView(),
+
         ],
       ),
       body: Consumer<ProductProvider>(
