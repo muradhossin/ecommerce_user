@@ -279,17 +279,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
       return;
     }
     if (cityController.text.isEmpty) {
-      showMsg(context, "Please delivery city");
-      return;
-    }
-    if (phoneController.text.isEmpty) {
-      showMsg(context, "Please provide phone number");
+      showMsg(context, "Please provide delivery city", isError: true);
       return;
     }
     if (nameController.text.isEmpty) {
-      showMsg(context, "Please provide name");
+      showMsg(context, "Please provide name", isError: true);
       return;
     }
+    if (phoneController.text.isEmpty) {
+      showMsg(context, "Please provide phone number", isError: true);
+      return;
+    }
+
     EasyLoading.show(status: 'Please Wait');
     final orderModel = OrderModel(
       orderId: generateOrderId,
@@ -346,7 +347,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     } catch (error) {
       debugPrint('-----------------------> order place error ${error.toString()}');
       EasyLoading.dismiss();
-      if(mounted) showMsg(context, "Failed to save order");
+      if(mounted) showMsg(context, "Failed to place order", isError: true);
     }
   }
 
