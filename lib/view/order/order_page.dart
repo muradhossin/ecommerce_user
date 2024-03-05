@@ -1,5 +1,7 @@
+import 'package:ecommerce_user/core/components/no_data_view.dart';
 import 'package:ecommerce_user/core/constants/dimensions.dart';
 import 'package:ecommerce_user/core/extensions/style.dart';
+import 'package:ecommerce_user/view/order/models/order_item_model.dart';
 import 'package:ecommerce_user/view/order/provider/order_provider.dart';
 import 'package:ecommerce_user/core/constants/constants.dart';
 import 'package:ecommerce_user/core/utils/helper_functions.dart';
@@ -20,12 +22,11 @@ class _OrderPageState extends State<OrderPage> {
       appBar: AppBar(
         title: const Text('My Orders'),
       ),
-      body: SingleChildScrollView(
-        child: Consumer<OrderProvider>(
-          builder: (context, provider, child) {
-            final itemList = provider.orderItemList;
-            debugPrint('----------------->ordertime: ${itemList[0].orderModel.orderDate.timestamp}');
-            return ExpansionPanelList(
+      body: Consumer<OrderProvider>(
+        builder: (context, provider, child) {
+          List<OrderItem>? itemList = provider.orderItemList;
+          return itemList != null ? itemList.isNotEmpty ? SingleChildScrollView(
+            child: ExpansionPanelList(
               expansionCallback: (panelIndex, isExpanded) {
                 debugPrint('panelIndex: $panelIndex');
                 debugPrint('isExpanded: $isExpanded');
@@ -56,10 +57,10 @@ class _OrderPageState extends State<OrderPage> {
                         }).toList(),
                       ),
                     )).toList(),
-
-            );
-          },
-        ),
+                  
+            ),
+          ) : const NoDataView(message: 'No orders yet') : const Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }

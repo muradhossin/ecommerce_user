@@ -10,7 +10,7 @@ import '../models/order_constant_model.dart';
 class OrderProvider extends ChangeNotifier {
   OrderConstantModel orderConstantModel = OrderConstantModel();
   List<OrderModel> orderList = [];
-  List<OrderItem> orderItemList = [];
+  List<OrderItem>? orderItemList;
 
   getOrderConstants() {
     OrderRepository.getOrderConstants().listen((snapshot) {
@@ -25,7 +25,11 @@ class OrderProvider extends ChangeNotifier {
     OrderRepository.getOrdersByUser(AuthService.currentUser!.uid).listen((snapshot) {
       orderList = List.generate(snapshot.docs.length, (index) => OrderModel.fromMap(snapshot.docs[index].data()));
       orderList.sort((a, b) => b.orderDate.timestamp.compareTo(a.orderDate.timestamp));
-      orderItemList = orderList.map((order) => OrderItem(orderModel: order)).toList();
+      if(snapshot.docs.isNotEmpty){
+        orderItemList = orderList.map((order) => OrderItem(orderModel: order)).toList();
+      }else{
+        orderItemList = [];
+      }
       notifyListeners();
     });
   }
@@ -56,7 +60,9 @@ class OrderProvider extends ChangeNotifier {
   }
 
   void toggleExpansion(int panelIndex) {
-    orderItemList[panelIndex].isExpanded = !orderItemList[panelIndex].isExpanded;
+    if(orderItemList != null && orderItemList!.isNotEmpty){
+      orderItemList![panelIndex].isExpanded = !orderItemList![panelIndex].isExpanded;
+    }
     notifyListeners();
   }
 
